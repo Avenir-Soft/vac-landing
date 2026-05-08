@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 // import Preloader from './components/Preloader';
+import About from './pages/about';
+import AboutGallery from './pages/about-gallery';
+import AboutOffice from './pages/about-office';
 import Catalog from './pages/catalog';
 import Contacts from './pages/contacts';
 import Home from './pages/home';
@@ -54,6 +57,9 @@ function App() {
         <ScrollToHash />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/about/office" element={<AboutOffice />} />
+          <Route path="/about/gallery" element={<AboutGallery />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/contacts" element={<Contacts />} />
         </Routes>

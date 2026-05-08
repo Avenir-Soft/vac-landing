@@ -18,9 +18,25 @@ const calculatorLinks = [
 	},
 ]
 
+const aboutLinks = [
+	{
+		label: 'О компании',
+		to: '/about',
+	},
+	{
+		label: 'Наш офис',
+		to: '/about/office',
+	},
+	{
+		label: 'Фото галерея',
+		to: '/about/gallery',
+	},
+]
+
 const links = [
 	{ label: 'Главная', to: '/' },
 	{ label: 'Калькулятор', type: 'calculator' as const },
+	{ label: 'О компании', type: 'about' as const },
 	{ label: 'Каталог', to: '/catalog' },
 	{ label: 'Контакты', to: '/contacts' },
 ]
@@ -28,6 +44,7 @@ const links = [
 const NavbarForPages = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [isCalculatorOpen, setIsCalculatorOpen] = useState(false)
+	const [isAboutOpen, setIsAboutOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 	const { theme, toggleTheme } = useTheme()
 	const location = useLocation()
@@ -70,7 +87,7 @@ const NavbarForPages = () => {
 									<div key={link.label} className='group relative'>
 										<button
 											type='button'
-											className='liquid-button liquid-button-nav px-4 py-2 text-sm font-medium'
+											className='liquid-button liquid-button-nav liquid-button-calculator px-4 py-2 text-sm font-medium'
 										>
 											{link.label}
 											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
@@ -94,6 +111,38 @@ const NavbarForPages = () => {
 																{item.description}
 															</p>
 														</a>
+													))}
+												</div>
+											</div>
+										</div>
+									</div>
+								) : link.type === 'about' ? (
+									<div key={link.label} className='group relative'>
+										<button
+											type='button'
+											className={`liquid-button liquid-button-nav px-4 py-2 text-sm font-medium ${
+												location.pathname === '/about'
+													? 'liquid-button-active'
+													: ''
+											}`}
+										>
+											{link.label}
+											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
+										</button>
+
+										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[210px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
+											<div className='translate-y-2 rounded-[20px] border border-sky-100 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(44,95,159,0.28)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-slate-700/80 dark:bg-[#122033]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
+												<div className='space-y-1'>
+													{aboutLinks.map(item => (
+														<Link
+															key={item.label}
+															to={item.to}
+															className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+														>
+															<p className='text-sm font-semibold text-slate-900 dark:text-white'>
+																{item.label}
+															</p>
+														</Link>
 													))}
 												</div>
 											</div>
@@ -153,7 +202,7 @@ const NavbarForPages = () => {
 										<button
 											type='button'
 											onClick={() => setIsCalculatorOpen(!isCalculatorOpen)}
-											className='liquid-button liquid-button-panel justify-between px-3 py-3 text-left text-sm font-medium'
+											className='liquid-button liquid-button-panel liquid-button-calculator justify-between px-3 py-3 text-left text-sm font-medium'
 										>
 											<span>{link.label}</span>
 											<ChevronDown
@@ -182,6 +231,46 @@ const NavbarForPages = () => {
 															{item.description}
 														</p>
 													</a>
+												))}
+											</div>
+										)}
+									</div>
+								) : link.type === 'about' ? (
+									<div
+										key={link.label}
+										className='rounded-2xl border border-slate-200/80 bg-white/75 p-2 dark:border-slate-800 dark:bg-slate-900/70'
+									>
+										<button
+											type='button'
+											onClick={() => setIsAboutOpen(!isAboutOpen)}
+											className={`liquid-button liquid-button-panel justify-between px-3 py-2.5 text-left text-sm font-medium ${
+												location.pathname === '/about'
+													? 'liquid-button-active'
+													: ''
+											}`}
+										>
+											<span>{link.label}</span>
+											<ChevronDown
+												className={`h-4 w-4 transition-transform duration-300 ${isAboutOpen ? 'rotate-180' : ''}`}
+											/>
+										</button>
+
+										{isAboutOpen && (
+											<div className='mt-2 space-y-1 px-1 pb-1'>
+												{aboutLinks.map(item => (
+													<Link
+														key={item.label}
+														to={item.to}
+														onClick={() => {
+															setIsAboutOpen(false)
+															setIsMenuOpen(false)
+														}}
+														className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+													>
+														<p className='text-sm font-semibold text-slate-800 dark:text-white'>
+															{item.label}
+														</p>
+													</Link>
 												))}
 											</div>
 										)}

@@ -1,9 +1,67 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@font-face {
+	font-family: 'IBM Plex Sans';
+	src: url('/fonts/ibm-plex-sans-400.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	src: url('/fonts/ibm-plex-sans-500.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	src: url('/fonts/ibm-plex-sans-600.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	src: url('/fonts/ibm-plex-sans-700.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	src: url('/fonts/ibm-plex-sans-italic-400.ttf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans Condensed';
+	src: url('/fonts/ibm-plex-sans-condensed-600.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans Condensed';
+	src: url('/fonts/ibm-plex-sans-condensed-700.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+	--font-sans: var(--app-font-sans);
+	--font-display: var(--app-font-display);
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -42,6 +100,8 @@
 }
 
 :root {
+	--app-font-sans: 'Noto Sans Mono', 'DejaVu Sans Mono', 'IBM Plex Sans', monospace;
+	--app-font-display: 'IBM Plex Sans Condensed', 'Noto Sans Mono', 'DejaVu Sans Mono', monospace;
 	--radius: 0.625rem;
 	--background: oklch(0.985 0.003 250);
 	--foreground: oklch(0.26 0.024 255);
@@ -113,6 +173,7 @@
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
+		font-family: inherit;
 	}
 	body {
 		@apply bg-background text-foreground;
@@ -125,7 +186,7 @@
 	}
 
 	body {
-		font-family: 'Manrope', 'Segoe UI', sans-serif;
+		font-family: var(--app-font-sans);
 		background:
 			radial-gradient(circle at top left, rgb(0 112 192 / 0.09), transparent 24%),
 			linear-gradient(180deg, #fbfdff 0%, #f1f6fb 100%);
@@ -170,8 +231,15 @@
 	h4,
 	h5,
 	h6 {
-		font-family: 'Aptos Display', 'Manrope', 'Segoe UI', sans-serif;
-		letter-spacing: -0.03em;
+		font-family: var(--app-font-display);
+		letter-spacing: 0;
+	}
+
+	button,
+	input,
+	textarea,
+	select {
+		font: inherit;
 	}
 
 	::selection {
@@ -292,100 +360,312 @@ html {
 	opacity: 1;
 }
 
-.hero-slide {
+.hero-section {
+	background-color: #f3f8fd;
+	background-image:
+		linear-gradient(rgb(2 132 199 / 0.13) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(2 132 199 / 0.13) 1px, transparent 1px),
+		linear-gradient(rgb(2 132 199 / 0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(2 132 199 / 0.06) 1px, transparent 1px),
+		radial-gradient(ellipse at top, rgb(186 230 253 / 0.55), transparent 60%);
+	background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px, 100% 100%;
+	background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.dark .hero-section {
+	background-color: #0b1a2c;
+	background-image:
+		linear-gradient(rgb(56 189 248 / 0.18) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(56 189 248 / 0.18) 1px, transparent 1px),
+		linear-gradient(rgb(56 189 248 / 0.08) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(56 189 248 / 0.08) 1px, transparent 1px),
+		radial-gradient(ellipse at top, rgb(14 116 144 / 0.36), transparent 60%);
+	background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px, 100% 100%;
+}
+
+.hero-duct-system {
+	--duct-pad: 56px;
+	--duct-corner: 96px;
+	--duct-pipe-h: 200px;
+	--duct-pipe-v: 200px;
+	--duct-reducer: 140px;
 	position: absolute;
 	inset: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	z-index: 20;
+	overflow: hidden;
+	pointer-events: none;
+	color: rgb(2 132 199);
+}
+
+.dark .hero-duct-system {
+	color: rgb(125 211 252);
+}
+
+.duct-piece {
+	position: absolute;
+	pointer-events: auto;
+	cursor: help;
 	opacity: 0;
-	filter: saturate(1.06) contrast(1.02) brightness(0.94);
-	transform: scale(1.035) translateZ(0);
-	transition:
-		opacity 2600ms ease-in-out,
-		transform 8800ms linear;
-	will-change: opacity, transform;
+	animation: duct-appear 0.7s ease-out forwards;
+	animation-delay: var(--duct-delay, 0s);
+	z-index: 20;
 }
 
-.hero-slide-active {
-	opacity: 1;
-	transform: scale(1.01) translateZ(0);
-}
-
-.hero-liquid-glass,
-.hero-liquid-depth {
+.duct-piece::before {
+	content: '';
 	position: absolute;
-	inset: 0;
+	inset: -10px;
+	z-index: 0;
+}
+
+.duct-piece:focus-visible {
+	outline: 2px solid rgb(14 165 233 / 0.7);
+	outline-offset: 4px;
+	border-radius: 6px;
+}
+
+.duct-art {
+	position: relative;
+	z-index: 1;
+	transition: transform 0.22s ease, opacity 0.22s ease;
+	transform-origin: center;
+	display: block;
 	pointer-events: none;
 }
 
-.hero-liquid-glass {
-	z-index: 1;
-	background:
-		linear-gradient(112deg, rgb(15 23 42 / 0.42) 0%, rgb(15 23 42 / 0.34) 36%, rgb(30 41 59 / 0.2) 60%, rgb(14 165 233 / 0.06) 100%),
-		linear-gradient(180deg, rgb(255 255 255 / 0.03), rgb(15 23 42 / 0.04));
-	backdrop-filter: blur(0.8px) saturate(132%);
-	-webkit-backdrop-filter: blur(0.8px) saturate(132%);
+.duct-svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+	pointer-events: none;
 }
 
-.hero-liquid-glass::before {
+.duct-piece:hover {
+	z-index: 80;
+}
+
+.duct-piece:hover .duct-art,
+.duct-piece:focus-visible .duct-art {
+	transform: translateY(-1px);
+	opacity: 0.88;
+}
+
+/* Portal tooltip — renders to <body>, so it always sits above the hero. */
+.duct-tooltip-portal {
+	position: fixed;
+	background: rgb(15 23 42 / 0.96);
+	color: rgb(255 255 255);
+	padding: 8px 12px;
+	border-radius: 10px;
+	width: max-content;
+	max-width: min(240px, calc(100vw - 32px));
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	pointer-events: none;
+	box-shadow: 0 12px 30px -12px rgb(15 23 42 / 0.5);
+	border: 1px solid rgb(56 189 248 / 0.35);
+	z-index: 9999;
+	animation: duct-tooltip-in 0.18s ease-out forwards;
+}
+
+.duct-tooltip-portal-top {
+	transform: translate(-50%, -100%);
+}
+
+.duct-tooltip-portal-bottom {
+	transform: translate(-50%, 0);
+}
+
+.duct-tooltip-portal-left {
+	transform: translate(-100%, -50%);
+}
+
+.duct-tooltip-portal-right {
+	transform: translate(0, -50%);
+}
+
+.duct-tooltip-portal strong {
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+}
+
+.duct-tooltip-portal span {
+	font-size: 10.5px;
+	font-weight: 400;
+	color: rgb(186 230 253);
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.duct-tooltip-portal::after {
 	content: '';
 	position: absolute;
-	inset: 0;
-	background:
-		linear-gradient(128deg, rgb(255 255 255 / 0.12), transparent 28%, rgb(125 211 252 / 0.06) 54%, transparent 78%),
-		linear-gradient(72deg, transparent 8%, rgb(255 255 255 / 0.06) 18%, transparent 34%, rgb(255 255 255 / 0.04) 66%, transparent 82%);
-	mix-blend-mode: screen;
-	opacity: 0.36;
+	left: 50%;
+	transform: translateX(-50%);
+	border: 5px solid transparent;
 }
 
-.hero-liquid-glass::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	background:
-		linear-gradient(90deg, rgb(15 23 42 / 0.34), rgb(15 23 42 / 0.14) 36%, transparent 68%),
-		linear-gradient(180deg, rgb(255 255 255 / 0.02), transparent 42%, rgb(0 0 0 / 0.12));
-	mask-image: linear-gradient(90deg, rgb(0 0 0 / 0.96), rgb(0 0 0 / 0.68) 46%, transparent 84%);
+.duct-tooltip-portal-top::after {
+	top: 100%;
+	border-top-color: rgb(15 23 42 / 0.96);
 }
 
-.hero-liquid-depth {
-	z-index: 2;
-	background:
-		linear-gradient(180deg, rgb(15 23 42 / 0.04), transparent 36%, rgb(0 0 0 / 0.14)),
-		linear-gradient(100deg, rgb(14 165 233 / 0.04), transparent 52%, rgb(56 189 248 / 0.03));
+.duct-tooltip-portal-bottom::after {
+	bottom: 100%;
+	border-bottom-color: rgb(15 23 42 / 0.96);
 }
 
-.dark .hero-liquid-glass {
-	background:
-		linear-gradient(112deg, rgb(15 23 42 / 0.42) 0%, rgb(15 23 42 / 0.34) 36%, rgb(30 41 59 / 0.2) 60%, rgb(14 165 233 / 0.06) 100%),
-		linear-gradient(180deg, rgb(255 255 255 / 0.03), rgb(15 23 42 / 0.04));
+.duct-tooltip-portal-left::after {
+	top: 50%;
+	left: 100%;
+	transform: translateY(-50%);
+	border-left-color: rgb(15 23 42 / 0.96);
 }
 
-.dark .hero-liquid-glass::before {
-	opacity: 0.34;
+.duct-tooltip-portal-right::after {
+	top: 50%;
+	left: auto;
+	right: 100%;
+	transform: translateY(-50%);
+	border-right-color: rgb(15 23 42 / 0.96);
 }
 
-.dark .hero-liquid-glass::after {
-	background:
-		linear-gradient(90deg, rgb(15 23 42 / 0.34), rgb(15 23 42 / 0.14) 36%, transparent 68%),
-		linear-gradient(180deg, rgb(255 255 255 / 0.02), transparent 42%, rgb(0 0 0 / 0.12));
+@keyframes duct-tooltip-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
 }
 
-.dark .hero-liquid-depth {
-	background:
-		linear-gradient(180deg, rgb(15 23 42 / 0.04), transparent 36%, rgb(0 0 0 / 0.14)),
-		linear-gradient(100deg, rgb(14 165 233 / 0.04), transparent 52%, rgb(56 189 248 / 0.03));
+.duct-flow {
+	animation: duct-flow 2.8s linear infinite;
+	opacity: 0.58;
+}
+
+@keyframes duct-flow {
+	to {
+		stroke-dashoffset: -22;
+	}
+}
+
+@keyframes duct-appear {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/*
+ * Layout — every piece chains off a corner using shared geometry constants:
+ *   pad     = --duct-pad     (offset from hero edge to outer flange)
+ *   corner  = --duct-corner  (96 px square)
+ *   pipe-h  = --duct-pipe-h  (horizontal pipe length, 200 px)
+ *   pipe-v  = --duct-pipe-v  (vertical pipe length, 200 px)
+ *   reducer = --duct-reducer (reducer length, 140 px)
+ *
+ * Corners sit at the four edges of the hero. Adjacent pieces have their
+ * flange flush against the corner's matching flange (no gap).
+ */
+
+/* Right side: r1 — cross — r2 — BR */
+.duct-pos-r1 {
+	top: var(--duct-pad);
+	bottom: calc(50% + 48px);
+	right: var(--duct-pad);
+}
+
+.duct-pos-r-cross {
+	top: 50%;
+	right: calc(var(--duct-pad) - 16px);
+	margin-top: -48px;
+}
+
+.duct-pos-r2 {
+	top: calc(50% + 48px);
+	bottom: calc(var(--duct-pad) + var(--duct-corner));
+	right: var(--duct-pad);
+}
+
+/* Bottom row: BL — rectangular duct — reducer — spiral duct — BR */
+.duct-pos-br {
+	bottom: var(--duct-pad);
+	right: var(--duct-pad);
+}
+
+.duct-pos-b-right {
+	bottom: var(--duct-pad);
+	left: calc(50% + 70px);
+	right: calc(var(--duct-pad) + var(--duct-corner));
+}
+
+.duct-pos-b-reducer {
+	bottom: var(--duct-pad);
+	left: 50%;
+	margin-left: -70px;
+}
+
+.duct-pos-b-left {
+	bottom: var(--duct-pad);
+	left: calc(var(--duct-pad) + var(--duct-corner));
+	right: calc(50% + 70px);
+}
+
+.duct-pos-bl {
+	bottom: var(--duct-pad);
+	left: var(--duct-pad);
+}
+
+/* Left side: l1 — cross — l2 — BL */
+.duct-pos-l1 {
+	top: var(--duct-pad);
+	bottom: calc(50% + 48px);
+	left: var(--duct-pad);
+}
+
+.duct-pos-l-cross {
+	top: 50%;
+	left: calc(var(--duct-pad) - 16px);
+	margin-top: -48px;
+}
+
+.duct-pos-l2 {
+	top: calc(50% + 48px);
+	bottom: calc(var(--duct-pad) + var(--duct-corner));
+	left: var(--duct-pad);
+}
+
+@media (max-width: 1279px) {
+	.hero-duct-system { --duct-pad: 36px; }
+}
+
+@media (max-width: 1023px) {
+	.hero-duct-system { --duct-pad: 28px; }
+}
+
+@media (max-width: 767px) {
+	.hero-duct-system { --duct-pad: 20px; }
+
+	.hero-section .hero-duct-system {
+		display: none;
+	}
+
+	.duct-pos-bl,
+	.duct-pos-br {
+		opacity: 0.45;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.hero-slide {
-		transition: opacity 400ms ease;
-		transform: none;
+	.duct-piece {
+		animation: duct-appear 0.4s ease-out forwards;
 	}
 
-	.hero-slide-active {
-		transform: none;
+	.duct-flow {
+		animation: none;
 	}
 }
 
@@ -552,6 +832,18 @@ html {
 	color: white;
 }
 
+.liquid-button-calculator {
+	border-color: rgb(250 204 21 / 0.82);
+	background:
+		linear-gradient(135deg, rgb(254 240 138 / 0.96), rgb(250 204 21 / 0.84)),
+		rgb(250 204 21 / 0.78);
+	color: rgb(66 32 6);
+	box-shadow:
+		inset 0 1px 0 rgb(255 255 255 / 0.58),
+		inset 0 -10px 20px rgb(202 138 4 / 0.16),
+		0 18px 38px -24px rgb(202 138 4 / 0.76);
+}
+
 .liquid-button-icon {
 	padding: 0;
 	width: 2.75rem;
@@ -623,6 +915,14 @@ html {
 		linear-gradient(135deg, rgb(255 255 255 / 0.92), rgb(226 232 240 / 0.78)),
 		rgb(255 255 255 / 0.72);
 	color: rgb(15 23 42);
+}
+
+.dark .liquid-button-calculator {
+	border-color: rgb(250 204 21 / 0.62);
+	background:
+		linear-gradient(135deg, rgb(253 224 71 / 0.92), rgb(234 179 8 / 0.76)),
+		rgb(234 179 8 / 0.66);
+	color: rgb(30 41 59);
 }
 
 .logo-tile {

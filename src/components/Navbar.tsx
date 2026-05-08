@@ -1,9 +1,9 @@
 import { ChevronDown, Menu, MoonStar, Phone, SunMedium, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useTheme } from '../hooks/useTheme'
-import logo from '../assets/logo(1).png'
 import icon from '../assets/icon.png'
+import logo from '../assets/logo(1).png'
+import { useTheme } from '../hooks/useTheme'
 
 const calculatorLinks = [
 	{
@@ -18,9 +18,24 @@ const calculatorLinks = [
 	},
 ]
 
+const aboutLinks = [
+	{
+		label: 'О компании',
+		to: '/about',
+	},
+	{
+		label: 'Наш офис',
+		to: '/about/office',
+	},
+	{
+		label: 'Фото галерея',
+		to: '/about/gallery',
+	},
+]
+
 const navItems = [
 	{ label: 'Калькулятор', type: 'calculator' as const },
-	{ label: 'О компании', href: '/#about', id: 'about' },
+	{ label: 'О компании', type: 'about' as const },
 	{ label: 'Продукция', href: '/#products', id: 'products' },
 	{ label: 'Каталог', to: '/catalog' },
 	{ label: 'Контакты', to: '/contacts' },
@@ -29,6 +44,7 @@ const navItems = [
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [isCalculatorOpen, setIsCalculatorOpen] = useState(false)
+	const [isAboutOpen, setIsAboutOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 	const { theme, toggleTheme } = useTheme()
 	const navigate = useNavigate()
@@ -53,7 +69,7 @@ const Navbar = () => {
 
 	const handleSectionClick = (
 		e: React.MouseEvent<HTMLAnchorElement>,
-		id: string
+		id: string,
 	) => {
 		e.preventDefault()
 		setIsMenuOpen(false)
@@ -79,7 +95,11 @@ const Navbar = () => {
 					<div className='flex items-center justify-between gap-4'>
 						<Link to='/' className='group flex min-w-0 items-center gap-3'>
 							<div className='flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_14px_28px_-20px_rgba(15,23,42,0.35)] transition-transform duration-300 group-hover:scale-105 dark:border-slate-700 dark:bg-slate-900'>
-								<img src={currentLogo} alt='VAC.UZ' className='h-9 w-9 object-contain' />
+								<img
+									src={currentLogo}
+									alt='VAC.UZ'
+									className='h-9 w-9 object-contain'
+								/>
 							</div>
 							<div className='flex h-11 items-center'>
 								<h1 className='text-base font-bold leading-none text-slate-950 md:text-lg dark:text-white'>
@@ -94,7 +114,7 @@ const Navbar = () => {
 									<div key={item.label} className='group relative'>
 										<button
 											type='button'
-											className='liquid-button liquid-button-nav px-4 py-2 text-sm font-medium'
+											className='liquid-button liquid-button-nav liquid-button-calculator px-4 py-2 text-sm font-medium'
 										>
 											{item.label}
 											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
@@ -123,6 +143,34 @@ const Navbar = () => {
 											</div>
 										</div>
 									</div>
+								) : item.type === 'about' ? (
+									<div key={item.label} className='group relative'>
+										<button
+											type='button'
+											className='liquid-button liquid-button-nav px-4 py-2 text-sm font-medium'
+										>
+											{item.label}
+											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
+										</button>
+
+										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[210px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
+											<div className='translate-y-2 rounded-[20px] border border-sky-100 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(44,95,159,0.28)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-slate-700/80 dark:bg-[#122033]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
+												<div className='space-y-1'>
+													{aboutLinks.map(link => (
+														<Link
+															key={link.label}
+															to={link.to}
+															className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+														>
+															<p className='text-sm font-semibold text-slate-900 dark:text-white'>
+																{link.label}
+															</p>
+														</Link>
+													))}
+												</div>
+											</div>
+										</div>
+									</div>
 								) : item.id ? (
 									<a
 										key={item.id}
@@ -140,7 +188,7 @@ const Navbar = () => {
 									>
 										{item.label}
 									</Link>
-								)
+								),
 							)}
 						</div>
 
@@ -150,14 +198,21 @@ const Navbar = () => {
 								className='liquid-button liquid-button-icon liquid-button-nav'
 								aria-label='Сменить тему'
 							>
-								{theme === 'light' ? <MoonStar size={18} /> : <SunMedium size={18} />}
+								{theme === 'light' ? (
+									<MoonStar size={18} />
+								) : (
+									<SunMedium size={18} />
+								)}
 							</button>
 
 							<a
 								href='tel:+998909117272'
 								className='liquid-button liquid-button-primary liquid-button-desktop-xl group px-4 py-2.5 text-sm font-semibold'
 							>
-								<Phone size={18} className='transition-transform group-hover:rotate-12' />
+								<Phone
+									size={18}
+									className='transition-transform group-hover:rotate-12'
+								/>
 								+998 90 911-72-72
 							</a>
 
@@ -182,7 +237,7 @@ const Navbar = () => {
 										<button
 											type='button'
 											onClick={() => setIsCalculatorOpen(!isCalculatorOpen)}
-											className='liquid-button liquid-button-panel justify-between px-3 py-3 text-left text-sm font-medium'
+											className='liquid-button liquid-button-panel liquid-button-calculator justify-between px-3 py-3 text-left text-sm font-medium'
 										>
 											<span>{item.label}</span>
 											<ChevronDown
@@ -215,6 +270,42 @@ const Navbar = () => {
 											</div>
 										)}
 									</div>
+								) : item.type === 'about' ? (
+									<div
+										key={item.label}
+										className='rounded-2xl border border-slate-200/80 bg-white/75 p-2 dark:border-slate-800 dark:bg-slate-900/70'
+									>
+										<button
+											type='button'
+											onClick={() => setIsAboutOpen(!isAboutOpen)}
+											className='liquid-button liquid-button-panel justify-between px-3 py-2.5 text-left text-sm font-medium'
+										>
+											<span>{item.label}</span>
+											<ChevronDown
+												className={`h-4 w-4 transition-transform duration-300 ${isAboutOpen ? 'rotate-180' : ''}`}
+											/>
+										</button>
+
+										{isAboutOpen && (
+											<div className='mt-2 space-y-1 px-1 pb-1'>
+												{aboutLinks.map(link => (
+													<Link
+														key={link.label}
+														to={link.to}
+														onClick={() => {
+															setIsAboutOpen(false)
+															setIsMenuOpen(false)
+														}}
+														className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+													>
+														<p className='text-sm font-semibold text-slate-800 dark:text-white'>
+															{link.label}
+														</p>
+													</Link>
+												))}
+											</div>
+										)}
+									</div>
 								) : item.id ? (
 									<a
 										key={item.id}
@@ -233,7 +324,7 @@ const Navbar = () => {
 									>
 										{item.label}
 									</Link>
-								)
+								),
 							)}
 							<a
 								href='tel:+998909117272'
