@@ -183,7 +183,7 @@ export const Header = () => {
 									))}
 								</div>
 								<a
-									href='https://vac-calculator.uz/'
+									href='https://vac-calculator.uz/dashboard/calculator'
 									target='_blank'
 									rel='noopener noreferrer'
 									className='liquid-button liquid-button-secondary mt-5 px-4 py-2.5 text-sm font-semibold'

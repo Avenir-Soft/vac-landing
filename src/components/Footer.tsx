@@ -41,9 +41,14 @@ export const Footer = () => {
 							Разделы
 						</h4>
 						<div className='mt-5 space-y-3 text-sm text-slate-300'>
-							<Link to='https://vac-calculator/' className='block transition hover:text-white'>
+							<a
+								href='https://vac-calculator.uz/dashboard/calculator'
+								target='_blank'
+								rel='noopener noreferrer'
+								className='block transition hover:text-white'
+							>
 								Калькулятор
-							</Link>
+							</a>
 							<Link to='/' className='block transition hover:text-white'>
 								Главная
 							</Link>

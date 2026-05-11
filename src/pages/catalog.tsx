@@ -1,15 +1,58 @@
-import { CheckCircle2, Download, FileText } from 'lucide-react'
+import {
+	ChevronDown,
+	Download,
+	ExternalLink,
+	Eye,
+	FileText,
+} from 'lucide-react'
+import { useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 
+type CatalogDoc = {
+	id: string
+	title: string
+	description: string
+	src: string
+	downloadName: string
+	badge: string
+}
+
+const documents: CatalogDoc[] = [
+	{
+		id: 'main',
+		title: 'Полный каталог продукции',
+		description:
+			'Все позиции, технические характеристики и комплектующие в одном документе.',
+		src: '/каталог.pdf',
+		downloadName: 'vac-uz-katalog.pdf',
+		badge: 'PDF · большой каталог',
+	},
+	{
+		id: 'products',
+		title: 'Краткий каталог продукции',
+		description:
+			'Сокращённая версия для быстрого ознакомления и отправки заказчику.',
+		src: '/products-catalog.pdf',
+		downloadName: 'products-catalog.pdf',
+		badge: 'PDF · краткий обзор',
+	},
+]
+
 const Catalog = () => {
-	const handleDownload = () => {
+	const [openId, setOpenId] = useState<string | null>(null)
+
+	const handleDownload = (doc: CatalogDoc) => {
 		const link = document.createElement('a')
-		link.href = '/products-catalog.pdf'
-		link.download = 'products-catalog.pdf'
+		link.href = doc.src
+		link.download = doc.downloadName
 		document.body.appendChild(link)
 		link.click()
 		document.body.removeChild(link)
+	}
+
+	const toggle = (id: string) => {
+		setOpenId(prev => (prev === id ? null : id))
 	}
 
 	return (
@@ -18,9 +61,9 @@ const Catalog = () => {
 			<section className='relative min-h-screen overflow-hidden px-4 pt-32 pb-20'>
 				<div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(149,172,197,0.25),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0),rgba(226,234,242,0.65))] dark:bg-[radial-gradient(circle_at_top_right,rgba(149,172,197,0.08),transparent_24%),linear-gradient(180deg,rgba(9,16,27,0),rgba(4,8,15,0.45))]'></div>
 				<div className='section-shell relative z-10'>
-					<div className='surface-card mx-auto max-w-5xl overflow-hidden'>
-						<div className='grid gap-0 lg:grid-cols-[0.95fr_1.05fr]'>
-							<div className='border-b border-slate-200 bg-slate-950 p-8 text-white lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-[#060b13]'>
+					<div className='mx-auto max-w-5xl'>
+						<div className='surface-card overflow-hidden'>
+							<div className='border-b border-slate-200 bg-slate-950 p-8 text-white md:p-10 dark:border-slate-800 dark:bg-[#060b13]'>
 								<div className='flex h-16 w-16 items-center justify-center rounded-3xl border border-white/10 bg-white/8'>
 									<FileText size={34} strokeWidth={1.7} />
 								</div>
@@ -30,47 +73,113 @@ const Catalog = () => {
 								<h1 className='mt-4 text-4xl font-bold leading-tight md:text-5xl'>
 									Каталог продукции VAC.UZ
 								</h1>
-								<p className='mt-5 max-w-md text-base leading-7 text-slate-300'>
-									Полный каталог нашей продукции с подробными характеристиками и
-									позициями для проектных и монтажных задач.
+								<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
+									Просматривайте каталоги прямо на странице или скачивайте PDF —
+									удобно для подбора решений и отправки коллегам.
 								</p>
 							</div>
+						</div>
 
-							<div className='p-8 md:p-10'>
-								<span className='section-kicker'>Скачать PDF</span>
-								<h2 className='mt-4 text-3xl font-bold text-slate-950 md:text-4xl dark:text-white'>
-									Вся продукция в одном документе
-								</h2>
-								<p className='mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300'>
-									Каталог удобно использовать для подбора решений, согласования
-									спецификации и отправки коллегам или заказчику.
-								</p>
+						<div className='mt-8 space-y-5'>
+							{documents.map(doc => {
+								const isOpen = openId === doc.id
+								return (
+									<div
+										key={doc.id}
+										className='surface-card overflow-hidden'
+									>
+										<div className='flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8'>
+											<div className='flex items-start gap-4'>
+												<div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200'>
+													<FileText size={22} strokeWidth={1.8} />
+												</div>
+												<div>
+													<span className='section-kicker'>{doc.badge}</span>
+													<h2 className='mt-2 text-xl font-bold text-slate-950 md:text-2xl dark:text-white'>
+														{doc.title}
+													</h2>
+													<p className='mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300'>
+														{doc.description}
+													</p>
+												</div>
+											</div>
 
-								<div className='mt-8 space-y-4'>
-									{[
-										'Основные категории воздуховодов и комплектующих',
-										'Удобный формат для просмотра и печати',
-										'Подходит для коммерческих и проектных задач',
-									].map(item => (
-										<div key={item} className='flex items-start gap-3'>
-											<CheckCircle2 className='mt-0.5 h-5 w-5 flex-shrink-0 text-slate-950 dark:text-white' />
-											<p className='text-sm leading-6 text-slate-700 dark:text-slate-300'>{item}</p>
+											<div className='flex flex-wrap gap-2 md:flex-shrink-0'>
+												<button
+													type='button'
+													onClick={() => toggle(doc.id)}
+													className='liquid-button liquid-button-panel px-5 py-3 text-sm font-semibold'
+													aria-expanded={isOpen}
+													aria-controls={`pdf-viewer-${doc.id}`}
+												>
+													<Eye size={18} />
+													{isOpen ? 'Скрыть' : 'Просмотреть'}
+													<ChevronDown
+														size={16}
+														className={`transition-transform duration-300 ${
+															isOpen ? 'rotate-180' : ''
+														}`}
+													/>
+												</button>
+												<button
+													type='button'
+													onClick={() => handleDownload(doc)}
+													className='liquid-button liquid-button-primary px-5 py-3 text-sm font-bold'
+												>
+													<Download size={18} />
+													Скачать
+												</button>
+											</div>
 										</div>
-									))}
-								</div>
 
-								<button
-									onClick={handleDownload}
-									className='liquid-button liquid-button-primary mt-10 px-8 py-4 text-base font-bold'
-								>
-									<Download size={22} />
-									Скачать каталог PDF
-								</button>
-
-								<p className='mt-5 text-sm text-slate-500 dark:text-slate-400'>
-									Формат: PDF • Для быстрого доступа к ассортименту
-								</p>
-							</div>
+										{isOpen && (
+											<div
+												id={`pdf-viewer-${doc.id}`}
+												className='border-t border-slate-200 bg-slate-50 p-4 md:p-6 dark:border-slate-800 dark:bg-[#0a121d]'
+											>
+												<div className='mb-3 flex items-center justify-between gap-3'>
+													<p className='text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400'>
+														Просмотр онлайн
+													</p>
+													<a
+														href={doc.src}
+														target='_blank'
+														rel='noopener noreferrer'
+														className='inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 underline-offset-4 hover:underline dark:text-slate-400'
+													>
+														<ExternalLink size={14} />
+														Открыть в новой вкладке
+													</a>
+												</div>
+												<div className='overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-inner dark:border-slate-800 dark:bg-[#060b13]'>
+													<object
+														data={doc.src}
+														type='application/pdf'
+														className='h-[80vh] min-h-[520px] w-full'
+														aria-label={`${doc.title} (PDF)`}
+													>
+														<div className='p-8 text-center'>
+															<p className='text-sm leading-6 text-slate-600 dark:text-slate-300'>
+																Ваш браузер не поддерживает встроенный просмотр
+																PDF.
+															</p>
+															<a
+																href={doc.src}
+																target='_blank'
+																rel='noopener noreferrer'
+																className='liquid-button liquid-button-primary mt-4 inline-flex px-5 py-3 text-sm font-semibold'
+															>
+																<ExternalLink size={18} />
+																Открыть в новой вкладке
+															</a>
+														</div>
+													</object>
+												</div>
+											</div>
+										)}
+									</div>
+								)
+							})}
 						</div>
 					</div>
 				</div>

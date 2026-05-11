@@ -5,18 +5,7 @@ import icon from '../assets/icon.png'
 import logo from '../assets/logo(1).png'
 import { useTheme } from '../hooks/useTheme'
 
-const calculatorLinks = [
-	{
-		label: 'Расчёт прямоугольных воздуховодов',
-		description: 'Параметры, площадь и быстрый предварительный расчёт',
-		href: 'https://vac-calculator.uz/dashboard/calculator/duct_rect',
-	},
-	{
-		label: 'Расчёт круглых воздуховодов',
-		description: 'Подбор круглого сечения для проектных и монтажных задач',
-		href: 'https://vac-calculator.uz/dashboard/calculator/duct_round',
-	},
-]
+const CALCULATOR_URL = 'https://vac-calculator.uz/dashboard/calculator'
 
 const aboutLinks = [
 	{
@@ -34,7 +23,7 @@ const aboutLinks = [
 ]
 
 const navItems = [
-	{ label: 'Калькулятор', type: 'calculator' as const },
+	{ label: 'Калькулятор', external: CALCULATOR_URL },
 	{ label: 'О компании', type: 'about' as const },
 	{ label: 'Продукция', href: '/#products', id: 'products' },
 	{ label: 'Каталог', to: '/catalog' },
@@ -43,7 +32,6 @@ const navItems = [
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
-	const [isCalculatorOpen, setIsCalculatorOpen] = useState(false)
 	const [isAboutOpen, setIsAboutOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 	const { theme, toggleTheme } = useTheme()
@@ -110,39 +98,16 @@ const Navbar = () => {
 
 						<div className='hidden items-center gap-1 lg:flex'>
 							{navItems.map(item =>
-								item.type === 'calculator' ? (
-									<div key={item.label} className='group relative'>
-										<button
-											type='button'
-											className='liquid-button liquid-button-nav liquid-button-calculator px-4 py-2 text-sm font-medium'
-										>
-											{item.label}
-											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
-										</button>
-
-										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[360px] -translate-x-1/2 pt-3 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
-											<div className='translate-y-2 rounded-[26px] border border-sky-100 bg-white/96 p-3 shadow-[0_28px_60px_-32px_rgba(44,95,159,0.28)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-slate-700/80 dark:bg-[#122033]/96 dark:shadow-[0_28px_60px_-32px_rgba(3,10,20,0.78)]'>
-												<div className='space-y-1'>
-													{calculatorLinks.map(link => (
-														<a
-															key={link.label}
-															href={link.href}
-															target='_blank'
-															rel='noopener noreferrer'
-															className='liquid-button liquid-button-panel block px-4 py-3 text-left'
-														>
-															<p className='text-sm font-semibold text-slate-900 dark:text-white'>
-																{link.label}
-															</p>
-															<p className='mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400'>
-																{link.description}
-															</p>
-														</a>
-													))}
-												</div>
-											</div>
-										</div>
-									</div>
+								item.external ? (
+									<a
+										key={item.label}
+										href={item.external}
+										target='_blank'
+										rel='noopener noreferrer'
+										className='liquid-button liquid-button-nav liquid-button-calculator px-4 py-2 text-sm font-medium'
+									>
+										{item.label}
+									</a>
 								) : item.type === 'about' ? (
 									<div key={item.label} className='group relative'>
 										<button
@@ -229,47 +194,17 @@ const Navbar = () => {
 					{isMenuOpen && (
 						<div className='mt-4 space-y-2 border-t border-slate-200/80 pt-4 animate-in fade-in slide-in-from-top-2 duration-300 lg:hidden dark:border-slate-800'>
 							{navItems.map(item =>
-								item.type === 'calculator' ? (
-									<div
+								item.external ? (
+									<a
 										key={item.label}
-										className='rounded-2xl border border-slate-200/80 bg-white/75 p-2 dark:border-slate-800 dark:bg-slate-900/70'
+										href={item.external}
+										target='_blank'
+										rel='noopener noreferrer'
+										onClick={() => setIsMenuOpen(false)}
+										className='liquid-button liquid-button-panel liquid-button-calculator block px-4 py-3 text-sm font-medium'
 									>
-										<button
-											type='button'
-											onClick={() => setIsCalculatorOpen(!isCalculatorOpen)}
-											className='liquid-button liquid-button-panel liquid-button-calculator justify-between px-3 py-3 text-left text-sm font-medium'
-										>
-											<span>{item.label}</span>
-											<ChevronDown
-												className={`h-4 w-4 transition-transform duration-300 ${isCalculatorOpen ? 'rotate-180' : ''}`}
-											/>
-										</button>
-
-										{isCalculatorOpen && (
-											<div className='mt-2 space-y-1 px-1 pb-1'>
-												{calculatorLinks.map(link => (
-													<a
-														key={link.label}
-														href={link.href}
-														target='_blank'
-														rel='noopener noreferrer'
-														onClick={() => {
-															setIsCalculatorOpen(false)
-															setIsMenuOpen(false)
-														}}
-														className='liquid-button liquid-button-panel block px-3 py-3 text-left'
-													>
-														<p className='text-sm font-semibold text-slate-800 dark:text-white'>
-															{link.label}
-														</p>
-														<p className='mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400'>
-															{link.description}
-														</p>
-													</a>
-												))}
-											</div>
-										)}
-									</div>
+										{item.label}
+									</a>
 								) : item.type === 'about' ? (
 									<div
 										key={item.label}
