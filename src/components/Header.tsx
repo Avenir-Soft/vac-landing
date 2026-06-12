@@ -116,9 +116,9 @@ export const Header = () => {
 								<p className='mt-5 text-sm font-semibold uppercase tracking-[0.24em] text-sky-700 dark:text-sky-300'>
 									Производство воздуховодов
 								</p>
-								<h1 className='mt-3 max-w-4xl text-[clamp(2.3rem,4.2vw,4.3rem)] font-bold leading-[0.94] text-slate-950 dark:text-white'>
+								<h1 className='mt-3 max-w-4xl text-[clamp(1.65rem,1.05rem+3vw,4.3rem)] font-bold leading-[1.02] text-slate-950 sm:leading-[0.94] dark:text-white'>
 									Воздуховоды и вентиляционные системы
-									<span className='mt-2 block text-[clamp(1.35rem,2.2vw,2.2rem)] leading-[1.02] text-slate-500 dark:text-slate-300'>
+									<span className='mt-2 block text-[clamp(1.05rem,0.8rem+1.4vw,2.2rem)] leading-[1.25] text-slate-500 sm:leading-[1.02] dark:text-slate-300'>
 										для строительных и промышленных объектов
 									</span>
 								</h1>

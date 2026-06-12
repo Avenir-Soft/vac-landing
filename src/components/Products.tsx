@@ -356,7 +356,7 @@ const Products = () => {
 									<p className='text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400'>
 										Выбранная позиция
 									</p>
-									<h3 className='mt-2 text-2xl font-bold text-slate-950 md:text-3xl dark:text-white'>
+									<h3 className='mt-2 text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold text-slate-950 dark:text-white'>
 										{currentData.title}
 									</h3>
 								</div>

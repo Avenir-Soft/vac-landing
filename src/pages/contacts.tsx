@@ -70,7 +70,7 @@ const Contacts = () => {
 			<section className='px-4 pt-28 pb-14'>
 				<div className='section-shell text-center'>
 					<span className='section-kicker'>Контакты</span>
-					<h1 className='mt-4 text-4xl font-bold text-slate-950 md:text-5xl lg:text-6xl dark:text-white'>
+					<h1 className='mt-4 text-[clamp(2.1rem,1.45rem+3.4vw,3.5rem)] font-bold leading-[1.05] text-slate-950 dark:text-white'>
 						Контакты
 					</h1>
 					<p className='mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300'>
@@ -120,21 +120,21 @@ const Contacts = () => {
 								обновлениями компании.
 							</p>
 
-							<div className='mt-6 grid grid-cols-2 gap-3'>
+							<div className='mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2'>
 								{socialLinks.map(item => (
 									<a
 										key={item.label}
 										href={item.href}
 										target='_blank'
 										rel='noopener noreferrer'
-										className='liquid-button liquid-button-panel justify-start px-4 py-4'
+										className='liquid-button liquid-button-panel min-w-0 justify-start px-3 py-3.5 sm:px-4'
 									>
 										<img
 											src={item.icon}
 											alt={item.label}
-											className='h-8 w-8 object-contain'
+											className='h-6 w-6 shrink-0 object-contain'
 										/>
-										<span className='text-sm font-semibold text-slate-800 dark:text-slate-100'>
+										<span className='min-w-0 truncate text-sm font-semibold text-slate-800 dark:text-slate-100'>
 											{item.label}
 										</span>
 									</a>
@@ -153,8 +153,7 @@ const Contacts = () => {
 							<div className='mt-5 overflow-hidden rounded-[24px] border border-slate-200 dark:border-slate-800'>
 								<iframe
 									src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2995.3557667927794!2d69.3993295!3d41.344620299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38aef790f7135cc9%3A0x7eb96f605ed1b198!2zVkFDLlVaIC0g0JPQvtC70L7QstC90L7QuSDQvtGE0LjRgSDQuCDRhtC10YU!5e0!3m2!1sru!2s!4v1765233041759!5m2!1sru!2s'
-									width='100%'
-									height='390'
+									className='block h-[280px] w-full sm:h-[390px]'
 									style={{ border: 0 }}
 									allowFullScreen
 									loading='lazy'

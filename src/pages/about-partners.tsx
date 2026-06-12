@@ -89,7 +89,7 @@ const AboutPartners = () => {
 						{/* Реализованные объекты */}
 						<div className='surface-card mt-10 overflow-hidden'>
 							<div className='border-b border-slate-200 p-6 md:p-8 dark:border-slate-800'>
-								<h2 className='text-2xl font-bold text-slate-950 md:text-3xl dark:text-white'>
+								<h2 className='text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold text-slate-950 dark:text-white'>
 									Реализованные объекты
 								</h2>
 								<p className='mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300'>
@@ -107,8 +107,8 @@ const AboutPartners = () => {
 									</span>
 								</div>
 
-								{/* Таблица */}
-								<div className='overflow-x-auto'>
+								{/* Таблица — десктоп */}
+								<div className='hidden overflow-x-auto md:block'>
 									<table className='w-full min-w-[620px] text-left text-sm'>
 										<thead>
 											<tr className='border-b border-slate-200 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500 dark:border-slate-800 dark:text-slate-400'>
@@ -136,6 +136,25 @@ const AboutPartners = () => {
 											))}
 										</tbody>
 									</table>
+								</div>
+
+								{/* Карточки — мобилка */}
+								<div className='divide-y divide-slate-100 md:hidden dark:divide-slate-800/70'>
+									{projects.map((row, i) => (
+										<div key={i} className='p-4'>
+											<div className='flex items-start justify-between gap-3'>
+												<p className='text-sm font-semibold leading-5 text-slate-900 dark:text-white'>
+													{row.object}
+												</p>
+												<span className='shrink-0 rounded-full bg-sky-50 px-2.5 py-1 text-xs font-bold text-sky-600 dark:bg-sky-500/10 dark:text-sky-300'>
+													{row.year}
+												</span>
+											</div>
+											<p className='mt-1.5 text-sm leading-5 text-slate-600 dark:text-slate-300'>
+												{row.org}
+											</p>
+										</div>
+									))}
 								</div>
 							</div>
 						</div>

@@ -267,13 +267,8 @@
 
 html {
 	scroll-behavior: smooth;
-	font-size: 17px;
-}
-
-@media (min-width: 768px) {
-	html {
-		font-size: 18px;
-	}
+	/* Плавно тянется от ~16px на узких телефонах до 18px на десктопе */
+	font-size: clamp(16px, 14.9px + 0.45vw, 18px);
 }
 
 @supports (backdrop-filter: blur(20px)) {
@@ -301,7 +296,9 @@ html {
 }
 
 .section-title {
-	@apply text-3xl font-bold tracking-tight text-slate-950 md:text-4xl lg:text-5xl;
+	@apply font-bold tracking-tight text-slate-950;
+	font-size: clamp(1.6rem, 1.18rem + 2.6vw, 3rem);
+	line-height: 1.08;
 }
 
 .dark .section-title {
@@ -309,7 +306,9 @@ html {
 }
 
 .section-subtitle {
-	@apply max-w-3xl text-base leading-7 text-slate-600 md:text-lg;
+	@apply max-w-3xl text-slate-600;
+	font-size: clamp(0.95rem, 0.9rem + 0.35vw, 1.125rem);
+	line-height: 1.6;
 }
 
 .dark .section-subtitle {

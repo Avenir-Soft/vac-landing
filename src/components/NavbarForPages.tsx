@@ -198,10 +198,10 @@ const NavbarForPages = () => {
 										<button
 											type='button'
 											onClick={() => setIsCalcOpen(!isCalcOpen)}
-											className='liquid-button liquid-button-calculator justify-between px-3 py-2.5 text-left text-sm font-semibold'
+											className='liquid-button liquid-button-calculator w-full justify-between px-4 py-3 text-left text-base font-semibold'
 										>
 											<span className='flex items-center gap-2'>
-												<Calculator className='h-4 w-4' />
+												<Calculator className='h-5 w-5' />
 												{link.label}
 											</span>
 											<ChevronDown
@@ -255,7 +255,7 @@ const NavbarForPages = () => {
 										<button
 											type='button'
 											onClick={() => setIsAboutOpen(!isAboutOpen)}
-											className={`liquid-button liquid-button-panel justify-between px-3 py-2.5 text-left text-sm font-medium ${
+											className={`liquid-button liquid-button-panel justify-between px-4 py-3 text-left text-base font-medium ${
 												location.pathname === '/about'
 													? 'liquid-button-active'
 													: ''
@@ -292,7 +292,7 @@ const NavbarForPages = () => {
 										key={link.to}
 										to={link.to!}
 										onClick={() => setIsMenuOpen(false)}
-										className={`liquid-button liquid-button-panel block px-4 py-3 text-sm font-medium ${
+										className={`liquid-button liquid-button-panel block px-4 py-3 text-base font-medium ${
 											location.pathname === link.to
 												? 'liquid-button-active'
 												: ''

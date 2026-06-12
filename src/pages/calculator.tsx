@@ -19,7 +19,7 @@ const CalculatorPage = () => {
 								<p className='mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-slate-300'>
 									Упрощённый расчёт
 								</p>
-								<h1 className='mt-4 text-4xl font-bold leading-tight md:text-5xl'>
+								<h1 className='mt-4 text-[clamp(2rem,1.4rem+3vw,3rem)] font-bold leading-tight'>
 									Калькулятор площади воздуховодов
 								</h1>
 								<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>

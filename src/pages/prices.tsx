@@ -3,6 +3,7 @@ import { ChevronDown, Download, ReceiptText } from 'lucide-react'
 import { useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
+import SharePdf from '../components/SharePdf'
 import priceMain from '../assets/price-vac-2026.pdf?url'
 import priceDealer from '../assets/price-vac-2026-d.pdf?url'
 import priceMainPage1 from '../assets/prices/price-main-1.png'
@@ -66,7 +67,7 @@ const PricesPage = () => {
 								<p className='mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-slate-300'>
 									Прайс-лист
 								</p>
-								<h1 className='mt-4 text-4xl font-bold leading-tight md:text-5xl'>
+								<h1 className='mt-4 text-[clamp(2rem,1.4rem+3vw,3rem)] font-bold leading-tight'>
 									Цены VAC.UZ 2026
 								</h1>
 								<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
@@ -156,6 +157,11 @@ const PricesPage = () => {
 																		<Download size={18} />
 																		Скачать PDF
 																	</button>
+																	<SharePdf
+																		src={doc.src}
+																		title={doc.title}
+																		className='liquid-button liquid-button-panel mt-2 w-full px-5 py-3 text-sm font-bold'
+																	/>
 																</div>
 															</div>
 														</div>

@@ -33,11 +33,11 @@ const About = () => {
 				<div className='section-shell relative z-10'>
 					<div className='grid items-stretch gap-6 lg:grid-cols-[0.9fr_1.1fr]'>
 						<div className='surface-card overflow-hidden p-3'>
-							<div className='relative h-full min-h-[460px] overflow-hidden rounded-[22px] bg-slate-100 dark:bg-slate-950'>
+							<div className='relative h-full min-h-[340px] overflow-hidden rounded-[22px] bg-slate-100 sm:min-h-[460px] dark:bg-slate-950'>
 								<img
 									src={founderPhoto}
 									alt='Основатель VAC.UZ М. К. Усманов'
-									className='h-full min-h-[460px] w-full object-cover grayscale'
+									className='h-full min-h-[340px] w-full object-cover grayscale sm:min-h-[460px]'
 								/>
 								<div className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/86 via-slate-950/52 to-transparent p-6 text-white'>
 									<p className='text-xl font-bold'>М. К. Усманов</p>
@@ -49,7 +49,7 @@ const About = () => {
 						</div>
 
 						<div className='surface-card p-6 md:p-8'>
-							<h1 className='mt-4 text-2xl font-bold leading-tight text-slate-950 md:text-3xl dark:text-white'>
+							<h1 className='mt-4 text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold leading-tight text-slate-950 dark:text-white'>
 								Обращение основателя VAC.UZ
 							</h1>
 							<div className='mt-6 space-y-4 text-sm leading-7 text-slate-700 md:text-base dark:text-slate-300'>
@@ -98,7 +98,7 @@ const About = () => {
 							<p className='text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400'>
 								Команда
 							</p>
-							<h2 className='mt-1 text-2xl font-bold text-slate-950 md:text-3xl dark:text-white'>
+							<h2 className='mt-1 text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold text-slate-950 dark:text-white'>
 								Наша команда
 							</h2>
 						</div>

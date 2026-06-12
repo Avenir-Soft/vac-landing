@@ -8,6 +8,7 @@ import {
 import { useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
+import SharePdf from '../components/SharePdf'
 
 type CatalogDoc = {
 	id: string
@@ -70,7 +71,7 @@ const Catalog = () => {
 								<p className='mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-slate-300'>
 									Catalog
 								</p>
-								<h1 className='mt-4 text-4xl font-bold leading-tight md:text-5xl'>
+								<h1 className='mt-4 text-[clamp(2rem,1.4rem+3vw,3rem)] font-bold leading-tight'>
 									Каталог продукции VAC.UZ
 								</h1>
 								<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
@@ -92,7 +93,7 @@ const Catalog = () => {
 												</div>
 												<div>
 													<span className='section-kicker'>{doc.badge}</span>
-													<h2 className='mt-2 text-xl font-bold text-slate-950 md:text-2xl dark:text-white'>
+													<h2 className='mt-2 text-[clamp(1.2rem,1.05rem+0.7vw,1.5rem)] font-bold text-slate-950 dark:text-white'>
 														{doc.title}
 													</h2>
 													<p className='mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300'>
@@ -101,18 +102,18 @@ const Catalog = () => {
 												</div>
 											</div>
 
-											<div className='flex flex-wrap gap-2 md:flex-shrink-0'>
+											<div className='flex w-full flex-col gap-2 md:w-52 md:flex-shrink-0'>
 												<button
 													type='button'
 													onClick={() => toggle(doc.id)}
-													className='liquid-button liquid-button-panel px-5 py-3 text-sm font-semibold'
+													className='liquid-button liquid-button-panel w-full justify-center px-4 py-3 text-sm font-semibold sm:py-2.5 sm:text-[13px]'
 													aria-expanded={isOpen}
 													aria-controls={`pdf-viewer-${doc.id}`}
 												>
-													<Eye size={18} />
+													<Eye size={16} />
 													{isOpen ? 'Скрыть' : 'Просмотреть'}
 													<ChevronDown
-														size={16}
+														size={15}
 														className={`transition-transform duration-300 ${
 															isOpen ? 'rotate-180' : ''
 														}`}
@@ -121,11 +122,16 @@ const Catalog = () => {
 												<button
 													type='button'
 													onClick={() => handleDownload(doc)}
-													className='liquid-button liquid-button-primary px-5 py-3 text-sm font-bold'
+													className='liquid-button liquid-button-primary w-full justify-center px-4 py-3 text-sm font-bold sm:py-2.5 sm:text-[13px]'
 												>
-													<Download size={18} />
+													<Download size={16} />
 													Скачать
 												</button>
+												<SharePdf
+													src={doc.src}
+													title={doc.title}
+													className='liquid-button liquid-button-panel w-full justify-center px-4 py-3 text-sm font-semibold sm:py-2.5 sm:text-[13px]'
+												/>
 											</div>
 										</div>
 

@@ -17,7 +17,7 @@ export const Footer = () => {
 	const currentLogo = theme === 'dark' ? icon : logo
 
 	return (
-		<footer className='mt-16 bg-slate-950 pt-14 pb-6 text-white dark:bg-[#060b13]'>
+		<footer className='bg-slate-950 pt-14 pb-6 text-white dark:bg-[#060b13]'>
 			<div className='section-shell'>
 				<div className='grid gap-10 lg:grid-cols-[1.2fr_0.7fr_1fr]'>
 					<div>
