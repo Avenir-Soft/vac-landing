@@ -1,16 +1,6 @@
-import {
-	Calculator,
-	ChevronDown,
-	Menu,
-	MoonStar,
-	Phone,
-	SunMedium,
-	X,
-} from 'lucide-react'
+import { Calculator, ChevronDown, Menu, Phone, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useTheme } from '../hooks/useTheme'
-import logo from '../assets/logo(1).png'
 import icon from '../assets/icon.png'
 
 const aboutLinks = [
@@ -51,9 +41,8 @@ const NavbarForPages = () => {
 	const [isAboutOpen, setIsAboutOpen] = useState(false)
 	const [isCalcOpen, setIsCalcOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
-	const { theme, toggleTheme } = useTheme()
 	const location = useLocation()
-	const currentLogo = theme === 'dark' ? icon : logo
+	const currentLogo = icon
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -180,14 +169,6 @@ const NavbarForPages = () => {
 						</div>
 
 						<div className='flex items-center gap-2'>
-							<button
-								onClick={toggleTheme}
-								className='liquid-button liquid-button-icon liquid-button-nav'
-								aria-label='Сменить тему'
-							>
-								{theme === 'light' ? <MoonStar size={18} /> : <SunMedium size={18} />}
-							</button>
-
 							<a
 								href='tel:+998909117272'
 								className='liquid-button liquid-button-primary liquid-button-desktop-xl group px-4 py-2.5 text-sm font-semibold'
