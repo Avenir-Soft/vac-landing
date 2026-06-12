@@ -153,9 +153,9 @@
 }
 
 .dark {
-	--background: oklch(0.23 0.022 252);
+	--background: oklch(0.27 0.004 250);
 	--foreground: oklch(0.96 0.004 255);
-	--card: oklch(0.27 0.02 252);
+	--card: oklch(0.3 0.004 250);
 	--card-foreground: oklch(0.96 0.004 255);
 	--popover: oklch(0.27 0.02 252);
 	--popover-foreground: oklch(0.96 0.004 255);
@@ -213,10 +213,11 @@
 			background-image 240ms ease;
 	}
 
+	/* Графитовый фон сайта (тёмная тема — по умолчанию) */
 	.dark body {
 		background:
-			radial-gradient(circle at top left, rgb(0 112 192 / 0.12), transparent 24%),
-			linear-gradient(180deg, #122034 0%, #18283d 100%);
+			radial-gradient(circle at top left, rgb(255 255 255 / 0.04), transparent 26%),
+			linear-gradient(180deg, #3b3e44 0%, #2c2e33 100%);
 		color: #e8eef8;
 	}
 
@@ -396,13 +397,13 @@ html {
 }
 
 .dark .hero-section {
-	background-color: #0b1a2c;
+	background-color: #303338;
 	background-image:
-		linear-gradient(rgb(122 148 174 / 0.16) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(122 148 174 / 0.16) 1px, transparent 1px),
-		linear-gradient(rgb(122 148 174 / 0.07) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(122 148 174 / 0.07) 1px, transparent 1px),
-		radial-gradient(ellipse at top, rgb(79 113 147 / 0.34), transparent 60%);
+		linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+		linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px),
+		radial-gradient(ellipse at top, rgb(150 160 172 / 0.16), transparent 60%);
 	background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px, 100% 100%;
 }
 
