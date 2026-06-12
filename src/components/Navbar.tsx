@@ -65,7 +65,7 @@ const Navbar = () => {
 	return (
 		<header className='fixed top-0 left-0 right-0 z-50 px-4 pt-4 md:px-6'>
 			<nav
-				className={`mx-auto max-w-6xl rounded-[28px] border transition-all duration-500 ${
+				className={`mx-auto max-w-7xl rounded-[28px] border transition-all duration-500 ${
 					scrolled
 						? 'border-sky-100 bg-white/92 shadow-[0_18px_48px_-28px_rgba(35,82,140,0.18)] backdrop-blur-xl dark:border-slate-700/90 dark:bg-[#1a2b42]/88 dark:shadow-[0_20px_55px_-32px_rgba(8,18,33,0.68)]'
 						: 'border-white/50 bg-white/70 backdrop-blur-md dark:border-slate-700/80 dark:bg-[#1a2b42]/74'
