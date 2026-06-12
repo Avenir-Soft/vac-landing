@@ -15,9 +15,10 @@ export const applyTheme = (theme: Theme) => {
 	if (typeof document === 'undefined') return
 
 	const root = document.documentElement
-	root.classList.toggle('dark', theme === 'dark')
+	// Графит всегда: даже в «светлой» теме используем графитовую (тёмную) раскраску.
+	root.classList.add('dark')
 	root.dataset.theme = theme
-	root.style.colorScheme = theme
+	root.style.colorScheme = 'dark'
 }
 
 export const setTheme = (theme: Theme) => {

@@ -1,17 +1,7 @@
 'use client'
 
-import {
-	ArrowRight,
-	Award,
-	Briefcase,
-	Calculator,
-	CheckCircle2,
-	FileText,
-	Phone,
-	Users,
-} from 'lucide-react'
+import { Award, Briefcase, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import DuctSystem from './DuctSystem'
 import Navbar from './Navbar'
 
@@ -119,8 +109,8 @@ export const Header = () => {
 				<DuctSystem />
 
 				<div className='relative z-10 flex min-h-[600px] items-center px-4 pt-30 pb-6 md:min-h-[580px] md:px-6 md:pt-32'>
-					<div className='mx-auto grid w-full max-w-6xl items-start gap-4 lg:grid-cols-[minmax(0,1fr)_300px]'>
-						<div className='surface-card hero-glass-card relative overflow-hidden p-5 md:p-7 lg:p-8'>
+					<div className='mx-auto w-full max-w-7xl'>
+						<div className='surface-card hero-glass-card relative overflow-hidden p-6 md:p-9 lg:p-12'>
 							<div className='pointer-events-none absolute top-0 right-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(0,112,192,0.14),transparent_70%)] dark:bg-[radial-gradient(circle,rgba(56,189,248,0.12),transparent_70%)]'></div>
 							<div className='relative z-10'>
 								<p className='mt-5 text-sm font-semibold uppercase tracking-[0.24em] text-sky-700 dark:text-sky-300'>
@@ -152,62 +142,6 @@ export const Header = () => {
 											</div>
 										</div>
 									))}
-								</div>
-							</div>
-						</div>
-
-						<div>
-							<div className='surface-card hero-glass-card p-5 transition'>
-								<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-600 text-white'>
-									<Calculator size={20} />
-								</div>
-								<p className='mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400'>
-									Онлайн калькулятор
-								</p>
-								<h2 className='mt-3 text-xl font-bold leading-tight text-slate-950 dark:text-white'>
-									Рассчитать воздуховоды быстрее
-								</h2>
-								
-								<div className='mt-4 space-y-2'>
-									{[
-										'Быстрый предварительный расчёт',
-										'Удобно для клиента и менеджера',
-										'Прямая связка с каталогом',
-									].map(item => (
-										<div key={item} className='flex items-start gap-3'>
-											<CheckCircle2 className='mt-0.5 h-4 w-4 flex-shrink-0 text-sky-600 dark:text-sky-400' />
-											<p className='text-sm leading-6 text-slate-700 dark:text-slate-300'>
-												{item}
-											</p>
-										</div>
-									))}
-								</div>
-								<Link
-									to='/calculator'
-									className='liquid-button liquid-button-secondary mt-5 px-4 py-2.5 text-sm font-semibold'
-								>
-									Открыть калькулятор
-									<ArrowRight size={16} />
-								</Link>
-								<div className='mt-5 grid gap-3'>
-									<Link
-										to='/catalog'
-										className='liquid-button liquid-button-panel justify-between px-4 py-3'
-									>
-										<span className='text-sm font-medium text-slate-800 dark:text-slate-100'>
-											Скачать каталог
-										</span>
-										<FileText size={18} className='text-sky-600 dark:text-sky-400' />
-									</Link>
-									<a
-										href='tel:+998909117272'
-										className='liquid-button liquid-button-panel justify-between px-4 py-3'
-									>
-										<span className='text-sm font-medium text-slate-800 dark:text-slate-100'>
-											Связаться с менеджером
-										</span>
-										<Phone size={18} className='text-sky-600 dark:text-sky-400' />
-									</a>
 								</div>
 							</div>
 						</div>
