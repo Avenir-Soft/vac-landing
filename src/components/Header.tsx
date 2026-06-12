@@ -89,15 +89,15 @@ const LiveVisitors = () => {
 
 	return (
 		<div
-			className='mt-4 inline-flex items-center gap-3 rounded-2xl border border-emerald-200/80 bg-white/82 px-4 py-3 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.46)] backdrop-blur-md dark:border-emerald-400/25 dark:bg-slate-950/40'
+			className='mt-4 inline-flex items-center gap-3 rounded-2xl border border-sky-200/80 bg-white/82 px-4 py-3 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.46)] backdrop-blur-md dark:border-sky-400/25 dark:bg-slate-950/40'
 			aria-live='polite'
 		>
 			<span className='relative flex h-3 w-3'>
-				<span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-55'></span>
-				<span className='relative inline-flex h-3 w-3 rounded-full bg-emerald-500'></span>
+				<span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-55'></span>
+				<span className='relative inline-flex h-3 w-3 rounded-full bg-sky-500'></span>
 			</span>
 			<div className='flex items-center gap-2'>
-				<Users className='h-4 w-4 text-emerald-600 dark:text-emerald-300' />
+				<Users className='h-4 w-4 text-sky-600 dark:text-sky-300' />
 				<p className='text-sm font-semibold text-slate-700 dark:text-slate-100'>
 					Сейчас на сайте{' '}
 					<span className='tabular-nums text-slate-950 dark:text-white'>
@@ -182,15 +182,13 @@ export const Header = () => {
 										</div>
 									))}
 								</div>
-								<a
-									href='https://vac-calculator.uz/dashboard/calculator'
-									target='_blank'
-									rel='noopener noreferrer'
+								<Link
+									to='/calculator'
 									className='liquid-button liquid-button-secondary mt-5 px-4 py-2.5 text-sm font-semibold'
 								>
 									Открыть калькулятор
 									<ArrowRight size={16} />
-								</a>
+								</Link>
 								<div className='mt-5 grid gap-3'>
 									<Link
 										to='/catalog'

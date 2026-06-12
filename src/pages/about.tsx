@@ -1,8 +1,27 @@
-import { CheckCircle2, Factory, Workflow } from 'lucide-react'
+import { CheckCircle2, Factory, Users, Workflow } from 'lucide-react'
 import schema from '../assets/diagram.png'
 import founderPhoto from '../assets/founder-usmanov.png'
+import teamUsmanov from '../assets/team/00-usmanov.png'
+import teamKarimov from '../assets/team/01-karimov.png'
+import teamKasymova from '../assets/team/02-kasymova.png'
+import teamPak from '../assets/team/03-pak.png'
+import teamKasimov from '../assets/team/04-kasimov.png'
+import teamMamatkulov from '../assets/team/05-mamatkulov.png'
+import teamMirzayarov from '../assets/team/06-mirzayarov.png'
+import teamHodjimatova from '../assets/team/07-hodjimatova.png'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
+
+const team = [
+	{ name: 'Усманов Музаффар', photo: teamUsmanov },
+	{ name: 'Каримов Азизбек', photo: teamKarimov },
+	{ name: 'Касымова Малика', photo: teamKasymova },
+	{ name: 'Пак Ирина', photo: teamPak },
+	{ name: 'Касимов Хожиакбар', photo: teamKasimov },
+	{ name: 'Мамткулов Отабек', photo: teamMamatkulov },
+	{ name: 'Мирзаяров Махкам', photo: teamMirzayarov },
+	{ name: 'Ходжиматова Садокат', photo: teamHodjimatova },
+]
 
 const About = () => {
 	return (
@@ -65,6 +84,42 @@ const About = () => {
 								</p>
 							</div>
 						</div>
+					</div>
+				</div>
+			</section>
+
+			<section className='px-4 py-10'>
+				<div className='section-shell'>
+					<div className='mb-8 flex items-center gap-3'>
+						<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950'>
+							<Users size={20} />
+						</div>
+						<div>
+							<p className='text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400'>
+								Команда
+							</p>
+							<h2 className='mt-1 text-2xl font-bold text-slate-950 md:text-3xl dark:text-white'>
+								Наша команда
+							</h2>
+						</div>
+					</div>
+
+					<div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4'>
+						{team.map(member => (
+							<div key={member.name} className='surface-card overflow-hidden p-3'>
+								<div className='overflow-hidden rounded-[20px] bg-slate-100 dark:bg-slate-950'>
+									<img
+										src={member.photo}
+										alt={member.name}
+										className='aspect-[3/4] w-full object-cover'
+										loading='lazy'
+									/>
+								</div>
+								<p className='px-1 pt-3 pb-1 text-sm font-semibold text-slate-900 dark:text-white'>
+									{member.name}
+								</p>
+							</div>
+						))}
 					</div>
 				</div>
 			</section>

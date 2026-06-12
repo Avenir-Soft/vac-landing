@@ -1,11 +1,17 @@
-import { ChevronDown, Menu, MoonStar, Phone, SunMedium, X } from 'lucide-react'
+import {
+	Calculator,
+	ChevronDown,
+	Menu,
+	MoonStar,
+	Phone,
+	SunMedium,
+	X,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import icon from '../assets/icon.png'
 import logo from '../assets/logo(1).png'
 import { useTheme } from '../hooks/useTheme'
-
-const CALCULATOR_URL = 'https://vac-calculator.uz/dashboard/calculator'
 
 const aboutLinks = [
 	{
@@ -13,8 +19,8 @@ const aboutLinks = [
 		to: '/about',
 	},
 	{
-		label: 'Наш офис',
-		to: '/about/office',
+		label: 'Наши партнёры',
+		to: '/about/partners',
 	},
 	{
 		label: 'Фото галерея',
@@ -22,21 +28,29 @@ const aboutLinks = [
 	},
 ]
 
+const calcLinks = [
+	{
+		label: 'Инженерный расчёт',
+		href: 'https://vac-calculator.uz',
+		external: true,
+	},
+	{ label: 'Упрощённый расчёт', to: '/calculator' },
+]
+
 const navItems = [
-	{ label: 'Калькулятор', external: CALCULATOR_URL },
+	{ label: 'Калькулятор', type: 'calc' as const },
 	{ label: 'О компании', type: 'about' as const },
-	{ label: 'Продукция', href: '/#products', id: 'products' },
 	{ label: 'Каталог', to: '/catalog' },
+	{ label: 'Прайс-лист', to: '/prices' },
 	{ label: 'Контакты', to: '/contacts' },
 ]
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [isAboutOpen, setIsAboutOpen] = useState(false)
+	const [isCalcOpen, setIsCalcOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 	const { theme, toggleTheme } = useTheme()
-	const navigate = useNavigate()
-	const location = useLocation()
 	const currentLogo = theme === 'dark' ? icon : logo
 
 	useEffect(() => {
@@ -47,28 +61,6 @@ const Navbar = () => {
 		window.addEventListener('scroll', handleScroll)
 		return () => window.removeEventListener('scroll', handleScroll)
 	}, [])
-
-	const scrollToId = (id: string) => {
-		const element = document.getElementById(id)
-		if (element) {
-			element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-		}
-	}
-
-	const handleSectionClick = (
-		e: React.MouseEvent<HTMLAnchorElement>,
-		id: string,
-	) => {
-		e.preventDefault()
-		setIsMenuOpen(false)
-
-		if (location.pathname === '/') {
-			scrollToId(id)
-			return
-		}
-
-		navigate(`/#${id}`)
-	}
 
 	return (
 		<header className='fixed top-0 left-0 right-0 z-50 px-4 pt-4 md:px-6'>
@@ -98,16 +90,49 @@ const Navbar = () => {
 
 						<div className='hidden items-center gap-1 lg:flex'>
 							{navItems.map(item =>
-								item.external ? (
-									<a
-										key={item.label}
-										href={item.external}
-										target='_blank'
-										rel='noopener noreferrer'
-										className='liquid-button liquid-button-nav liquid-button-calculator px-4 py-2 text-sm font-medium'
-									>
-										{item.label}
-									</a>
+								item.type === 'calc' ? (
+									<div key={item.label} className='group relative'>
+										<button
+											type='button'
+											className='liquid-button liquid-button-calculator px-4 py-2 text-sm font-semibold'
+										>
+											<Calculator className='h-4 w-4' />
+											{item.label}
+											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
+										</button>
+
+										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[230px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
+											<div className='translate-y-2 rounded-[20px] border border-amber-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(176,137,43,0.45)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-amber-500/30 dark:bg-[#122033]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
+												<div className='space-y-1'>
+													{calcLinks.map(link =>
+														link.external ? (
+															<a
+																key={link.label}
+																href={link.href}
+																target='_blank'
+																rel='noopener noreferrer'
+																className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+															>
+																<p className='text-sm font-semibold text-slate-900 dark:text-white'>
+																	{link.label}
+																</p>
+															</a>
+														) : (
+															<Link
+																key={link.label}
+																to={link.to!}
+																className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+															>
+																<p className='text-sm font-semibold text-slate-900 dark:text-white'>
+																	{link.label}
+																</p>
+															</Link>
+														),
+													)}
+												</div>
+											</div>
+										</div>
+									</div>
 								) : item.type === 'about' ? (
 									<div key={item.label} className='group relative'>
 										<button
@@ -136,15 +161,6 @@ const Navbar = () => {
 											</div>
 										</div>
 									</div>
-								) : item.id ? (
-									<a
-										key={item.id}
-										href={item.href}
-										onClick={e => handleSectionClick(e, item.id)}
-										className='liquid-button liquid-button-nav px-4 py-2 text-sm font-medium'
-									>
-										{item.label}
-									</a>
 								) : (
 									<Link
 										key={item.to}
@@ -194,17 +210,63 @@ const Navbar = () => {
 					{isMenuOpen && (
 						<div className='mt-4 space-y-2 border-t border-slate-200/80 pt-4 animate-in fade-in slide-in-from-top-2 duration-300 lg:hidden dark:border-slate-800'>
 							{navItems.map(item =>
-								item.external ? (
-									<a
+								item.type === 'calc' ? (
+									<div
 										key={item.label}
-										href={item.external}
-										target='_blank'
-										rel='noopener noreferrer'
-										onClick={() => setIsMenuOpen(false)}
-										className='liquid-button liquid-button-panel liquid-button-calculator block px-4 py-3 text-sm font-medium'
+										className='rounded-2xl border border-amber-200/80 bg-amber-50/60 p-2 dark:border-amber-500/25 dark:bg-amber-500/5'
 									>
-										{item.label}
-									</a>
+										<button
+											type='button'
+											onClick={() => setIsCalcOpen(!isCalcOpen)}
+											className='liquid-button liquid-button-calculator justify-between px-3 py-2.5 text-left text-sm font-semibold'
+										>
+											<span className='flex items-center gap-2'>
+												<Calculator className='h-4 w-4' />
+												{item.label}
+											</span>
+											<ChevronDown
+												className={`h-4 w-4 transition-transform duration-300 ${isCalcOpen ? 'rotate-180' : ''}`}
+											/>
+										</button>
+
+										{isCalcOpen && (
+											<div className='mt-2 space-y-1 px-1 pb-1'>
+												{calcLinks.map(link =>
+													link.external ? (
+														<a
+															key={link.label}
+															href={link.href}
+															target='_blank'
+															rel='noopener noreferrer'
+															onClick={() => {
+																setIsCalcOpen(false)
+																setIsMenuOpen(false)
+															}}
+															className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+														>
+															<p className='text-sm font-semibold text-slate-800 dark:text-white'>
+																{link.label}
+															</p>
+														</a>
+													) : (
+														<Link
+															key={link.label}
+															to={link.to!}
+															onClick={() => {
+																setIsCalcOpen(false)
+																setIsMenuOpen(false)
+															}}
+															className='liquid-button liquid-button-panel block px-3 py-2.5 text-left'
+														>
+															<p className='text-sm font-semibold text-slate-800 dark:text-white'>
+																{link.label}
+															</p>
+														</Link>
+													),
+												)}
+											</div>
+										)}
+									</div>
 								) : item.type === 'about' ? (
 									<div
 										key={item.label}
@@ -241,15 +303,6 @@ const Navbar = () => {
 											</div>
 										)}
 									</div>
-								) : item.id ? (
-									<a
-										key={item.id}
-										href={item.href}
-										onClick={e => handleSectionClick(e, item.id)}
-										className='liquid-button liquid-button-panel block px-4 py-3 text-sm font-medium'
-									>
-										{item.label}
-									</a>
 								) : (
 									<Link
 										key={item.to}

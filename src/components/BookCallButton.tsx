@@ -138,7 +138,7 @@ const BookCallButton = () => {
 								<form onSubmit={handleSubmit} className='space-y-5'>
 									<div>
 										<label className='mb-2 block font-semibold text-gray-700 dark:text-slate-200'>
-											Ваше имя <span className='text-red-500'>*</span>
+											Ваше имя <span className='text-sky-600'>*</span>
 										</label>
 										<input
 											type='text'
@@ -152,7 +152,7 @@ const BookCallButton = () => {
 
 									<div>
 										<label className='mb-2 block font-semibold text-gray-700 dark:text-slate-200'>
-											Номер телефона <span className='text-red-500'>*</span>
+											Номер телефона <span className='text-sky-600'>*</span>
 										</label>
 										<input
 											type='tel'

@@ -84,10 +84,7 @@ const Catalog = () => {
 							{documents.map(doc => {
 								const isOpen = openId === doc.id
 								return (
-									<div
-										key={doc.id}
-										className='surface-card overflow-hidden'
-									>
+									<div key={doc.id} className='surface-card overflow-hidden'>
 										<div className='flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8'>
 											<div className='flex items-start gap-4'>
 												<div className='flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200'>

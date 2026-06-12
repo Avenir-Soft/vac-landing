@@ -99,9 +99,25 @@
 	--color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* Формальный приглушённый серо-синий акцент (переопределяет палитру sky
+   по всему сайту — кнопки, ссылки, выделения). */
+@theme {
+	--color-sky-50: #f3f6fa;
+	--color-sky-100: #e5ebf2;
+	--color-sky-200: #ccd8e6;
+	--color-sky-300: #a7bacf;
+	--color-sky-400: #7894b2;
+	--color-sky-500: #4f7193;
+	--color-sky-600: #41607d;
+	--color-sky-700: #354d64;
+	--color-sky-800: #2f4154;
+	--color-sky-900: #2a3848;
+	--color-sky-950: #1b2531;
+}
+
 :root {
-	--app-font-sans: 'Noto Sans Mono', 'DejaVu Sans Mono', 'IBM Plex Sans', monospace;
-	--app-font-display: 'IBM Plex Sans Condensed', 'Noto Sans Mono', 'DejaVu Sans Mono', monospace;
+	--app-font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--app-font-display: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--radius: 0.625rem;
 	--background: oklch(0.985 0.003 250);
 	--foreground: oklch(0.26 0.024 255);
@@ -250,6 +266,13 @@
 
 html {
 	scroll-behavior: smooth;
+	font-size: 17px;
+}
+
+@media (min-width: 768px) {
+	html {
+		font-size: 18px;
+	}
 }
 
 @supports (backdrop-filter: blur(20px)) {
@@ -269,15 +292,15 @@ html {
 }
 
 .section-kicker {
-	@apply inline-flex items-center rounded-full border border-sky-200 bg-sky-50/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.28em] text-sky-700 backdrop-blur-sm;
+	@apply inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-sky-700;
 }
 
 .dark .section-kicker {
-	@apply border-sky-800 bg-sky-950/45 text-sky-200;
+	@apply border-sky-900/60 bg-sky-950/40 text-sky-200;
 }
 
 .section-title {
-	@apply text-3xl font-bold text-slate-950 md:text-4xl lg:text-5xl;
+	@apply text-3xl font-bold tracking-tight text-slate-950 md:text-4xl lg:text-5xl;
 }
 
 .dark .section-title {
@@ -293,11 +316,11 @@ html {
 }
 
 .surface-card {
-	@apply rounded-[28px] border border-slate-200/80 bg-white/95 shadow-[0_18px_50px_-34px_rgba(18,40,67,0.18)] backdrop-blur-md transition-colors duration-300;
+	@apply rounded-3xl border border-slate-200/70 bg-white shadow-[0_10px_30px_-24px_rgba(18,40,67,0.16)] transition-colors duration-300;
 }
 
 .dark .surface-card {
-	@apply border-slate-700/90 bg-slate-900/72 shadow-[0_22px_62px_-38px_rgba(8,18,33,0.72)];
+	@apply border-slate-800 bg-slate-900/85 shadow-[0_14px_36px_-30px_rgba(0,0,0,0.7)];
 }
 
 .hero-glass-card {
@@ -375,11 +398,11 @@ html {
 .dark .hero-section {
 	background-color: #0b1a2c;
 	background-image:
-		linear-gradient(rgb(56 189 248 / 0.18) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(56 189 248 / 0.18) 1px, transparent 1px),
-		linear-gradient(rgb(56 189 248 / 0.08) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(56 189 248 / 0.08) 1px, transparent 1px),
-		radial-gradient(ellipse at top, rgb(14 116 144 / 0.36), transparent 60%);
+		linear-gradient(rgb(122 148 174 / 0.16) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(122 148 174 / 0.16) 1px, transparent 1px),
+		linear-gradient(rgb(122 148 174 / 0.07) 1px, transparent 1px),
+		linear-gradient(90deg, rgb(122 148 174 / 0.07) 1px, transparent 1px),
+		radial-gradient(ellipse at top, rgb(79 113 147 / 0.34), transparent 60%);
 	background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px, 100% 100%;
 }
 
@@ -693,69 +716,42 @@ html {
 	align-items: center;
 	justify-content: center;
 	gap: 0.5rem;
-	border-radius: 1rem;
-	border: 1px solid rgb(255 255 255 / 0.42);
-	background:
-		linear-gradient(135deg, rgb(255 255 255 / 0.34), rgb(255 255 255 / 0.1)),
-		linear-gradient(180deg, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.02));
+	border-radius: 0.875rem;
+	border: 1px solid rgb(203 213 225 / 0.8);
+	background: rgb(255 255 255 / 0.92);
 	box-shadow:
-		inset 0 1px 0 rgb(255 255 255 / 0.62),
-		inset 0 -1px 0 rgb(15 23 42 / 0.08),
-		0 18px 38px -26px rgb(15 23 42 / 0.55);
-	backdrop-filter: blur(18px) saturate(170%);
-	-webkit-backdrop-filter: blur(18px) saturate(170%);
+		inset 0 1px 0 rgb(255 255 255 / 0.6),
+		0 1px 2px rgb(15 23 42 / 0.05);
 	transition:
-		transform 240ms ease,
-		border-color 240ms ease,
-		background-color 240ms ease,
-		box-shadow 240ms ease,
-		color 240ms ease;
+		transform 160ms ease,
+		border-color 160ms ease,
+		background-color 160ms ease,
+		box-shadow 160ms ease,
+		color 160ms ease;
 }
 
+/* Естественный мягкий блик: лёгкая засветка сверху, без глянцевых пятен. */
 .liquid-button::before {
 	content: '';
 	position: absolute;
-	inset: 1px;
+	inset: 0;
 	z-index: -1;
 	border-radius: inherit;
-	background:
-		linear-gradient(135deg, rgb(255 255 255 / 0.55), transparent 42%),
-		radial-gradient(circle at 28% 18%, rgb(255 255 255 / 0.62), transparent 28%),
-		radial-gradient(circle at 78% 92%, rgb(14 165 233 / 0.22), transparent 34%);
-	opacity: 0.85;
-	transition:
-		opacity 240ms ease,
-		transform 240ms ease;
-}
-
-.liquid-button::after {
-	content: '';
-	position: absolute;
-	top: -55%;
-	left: -42%;
-	width: 42%;
-	height: 210%;
-	z-index: -1;
-	background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.48), transparent);
-	transform: rotate(24deg) translateX(-140%);
-	transition: transform 620ms ease;
+	background: linear-gradient(180deg, rgb(255 255 255 / 0.16), transparent 58%);
+	opacity: 1;
+	transition: opacity 240ms ease;
 }
 
 .liquid-button:hover {
-	transform: translateY(-2px);
+	transform: translateY(-1px);
 	box-shadow:
-		inset 0 1px 0 rgb(255 255 255 / 0.74),
-		inset 0 -1px 0 rgb(15 23 42 / 0.1),
-		0 22px 48px -26px rgb(14 116 144 / 0.72);
+		inset 0 1px 0 rgb(255 255 255 / 0.5),
+		inset 0 -1px 0 rgb(15 23 42 / 0.08),
+		0 16px 34px -26px rgb(41 56 72 / 0.5);
 }
 
 .liquid-button:hover::before {
-	opacity: 1;
-	transform: scale(1.02);
-}
-
-.liquid-button:hover::after {
-	transform: rotate(24deg) translateX(420%);
+	opacity: 0.85;
 }
 
 .liquid-button:active {
@@ -768,80 +764,94 @@ html {
 	transform: none;
 }
 
+/* Единый видимый фокус (доступность с клавиатуры) */
+.liquid-button:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role='button']:focus-visible {
+	outline: 2px solid #4f7193;
+	outline-offset: 2px;
+	border-radius: 0.5rem;
+}
+
+.dark .liquid-button:focus-visible,
+.dark a:focus-visible,
+.dark button:focus-visible,
+.dark input:focus-visible,
+.dark select:focus-visible,
+.dark textarea:focus-visible,
+.dark [role='button']:focus-visible {
+	outline-color: #7a94ae;
+}
+
 .liquid-button-primary {
-	border-color: rgb(125 211 252 / 0.62);
-	background:
-		linear-gradient(135deg, rgb(2 132 199 / 0.92), rgb(14 165 233 / 0.76)),
-		rgb(2 132 199 / 0.72);
+	border-color: rgb(63 92 121 / 0.9);
+	background: linear-gradient(180deg, rgb(90 125 159), rgb(58 84 110));
 	color: white;
 	box-shadow:
-		inset 0 1px 0 rgb(255 255 255 / 0.36),
-		inset 0 -10px 22px rgb(3 105 161 / 0.24),
-		0 20px 42px -24px rgb(2 132 199 / 0.88);
+		inset 0 1px 0 rgb(255 255 255 / 0.22),
+		0 14px 30px -22px rgb(41 56 72 / 0.7);
 }
 
 .liquid-button-primary::before {
-	background:
-		linear-gradient(135deg, rgb(255 255 255 / 0.34), transparent 45%),
-		radial-gradient(circle at 32% 20%, rgb(255 255 255 / 0.44), transparent 30%),
-		radial-gradient(circle at 82% 88%, rgb(186 230 253 / 0.35), transparent 36%);
+	background: linear-gradient(180deg, rgb(255 255 255 / 0.18), transparent 60%);
+}
+
+.liquid-button-primary:hover {
+	background: linear-gradient(180deg, rgb(80 113 146), rgb(50 73 97));
 }
 
 .liquid-button-secondary {
-	border-color: rgb(125 211 252 / 0.54);
-	background:
-		linear-gradient(135deg, rgb(240 249 255 / 0.84), rgb(255 255 255 / 0.48)),
-		rgb(255 255 255 / 0.52);
-	color: rgb(7 89 133);
+	border-color: rgb(165 186 207 / 0.8);
+	background: rgb(255 255 255 / 0.95);
+	color: rgb(53 77 100);
 }
 
 .liquid-button-neutral {
-	border-color: rgb(203 213 225 / 0.72);
-	background:
-		linear-gradient(135deg, rgb(255 255 255 / 0.82), rgb(248 250 252 / 0.5)),
-		rgb(255 255 255 / 0.58);
+	border-color: rgb(203 213 225 / 0.8);
+	background: rgb(255 255 255 / 0.95);
 	color: rgb(15 23 42);
 }
 
 .liquid-button-nav {
 	border-radius: 0.875rem;
-	border-color: rgb(226 232 240 / 0.58);
-	background:
-		linear-gradient(135deg, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.18)),
-		rgb(255 255 255 / 0.2);
+	border-color: rgb(226 232 240 / 0.7);
+	background: rgb(255 255 255 / 0.8);
 	color: rgb(71 85 105);
-	box-shadow:
-		inset 0 1px 0 rgb(255 255 255 / 0.48),
-		0 14px 28px -24px rgb(15 23 42 / 0.44);
+	box-shadow: none;
 }
 
 .liquid-button-panel {
 	width: 100%;
-	border-color: rgb(226 232 240 / 0.74);
-	background:
-		linear-gradient(135deg, rgb(255 255 255 / 0.74), rgb(241 245 249 / 0.5)),
-		rgb(248 250 252 / 0.72);
+	border-color: rgb(226 232 240 / 0.85);
+	background: rgb(248 250 252 / 0.9);
 	color: rgb(30 41 59);
 }
 
 .liquid-button-active {
-	border-color: rgb(125 211 252 / 0.64);
-	background:
-		linear-gradient(135deg, rgb(15 23 42 / 0.96), rgb(30 41 59 / 0.82)),
-		rgb(15 23 42 / 0.86);
+	border-color: rgb(63 92 121 / 0.5);
+	background: rgb(30 41 59);
 	color: white;
 }
 
 .liquid-button-calculator {
-	border-color: rgb(250 204 21 / 0.82);
-	background:
-		linear-gradient(135deg, rgb(254 240 138 / 0.96), rgb(250 204 21 / 0.84)),
-		rgb(250 204 21 / 0.78);
-	color: rgb(66 32 6);
+	border-color: rgb(176 137 43 / 0.95);
+	background: linear-gradient(180deg, rgb(233 198 96), rgb(193 148 42));
+	color: rgb(48 36 8);
 	box-shadow:
-		inset 0 1px 0 rgb(255 255 255 / 0.58),
-		inset 0 -10px 20px rgb(202 138 4 / 0.16),
-		0 18px 38px -24px rgb(202 138 4 / 0.76);
+		inset 0 1px 0 rgb(255 255 255 / 0.45),
+		0 14px 30px -20px rgb(176 137 43 / 0.85);
+}
+
+.liquid-button-calculator::before {
+	background: linear-gradient(180deg, rgb(255 255 255 / 0.4), transparent 60%);
+}
+
+.liquid-button-calculator:hover {
+	background: linear-gradient(180deg, rgb(240 209 118), rgb(204 159 52));
 }
 
 .liquid-button-icon {
@@ -891,11 +901,13 @@ html {
 }
 
 .dark .liquid-button-primary {
-	border-color: rgb(125 211 252 / 0.4);
-	background:
-		linear-gradient(135deg, rgb(14 165 233 / 0.72), rgb(56 189 248 / 0.54)),
-		rgb(14 165 233 / 0.48);
+	border-color: rgb(122 148 174 / 0.45);
+	background: linear-gradient(180deg, rgb(74 105 136), rgb(48 70 93));
 	color: white;
+}
+
+.dark .liquid-button-primary:hover {
+	background: linear-gradient(180deg, rgb(84 117 150), rgb(54 78 102));
 }
 
 .dark .liquid-button-secondary {
@@ -918,11 +930,13 @@ html {
 }
 
 .dark .liquid-button-calculator {
-	border-color: rgb(250 204 21 / 0.62);
-	background:
-		linear-gradient(135deg, rgb(253 224 71 / 0.92), rgb(234 179 8 / 0.76)),
-		rgb(234 179 8 / 0.66);
-	color: rgb(30 41 59);
+	border-color: rgb(196 156 56 / 0.6);
+	background: linear-gradient(180deg, rgb(216 178 76), rgb(176 132 36));
+	color: rgb(38 28 6);
+}
+
+.dark .liquid-button-calculator:hover {
+	background: linear-gradient(180deg, rgb(226 190 92), rgb(188 144 44));
 }
 
 .logo-tile {
@@ -937,15 +951,9 @@ html {
 	position: relative;
 	isolation: isolate;
 	overflow: hidden;
-	border: 1px solid rgb(255 255 255 / 0.48);
-	background:
-		linear-gradient(135deg, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.28)),
-		rgb(240 249 255 / 0.35);
-	box-shadow:
-		inset 0 1px 0 rgb(255 255 255 / 0.72),
-		0 24px 64px -42px rgb(15 23 42 / 0.38);
-	backdrop-filter: blur(22px) saturate(165%);
-	-webkit-backdrop-filter: blur(22px) saturate(165%);
+	border: 1px solid rgb(226 232 240 / 0.8);
+	background: rgb(248 250 252 / 0.7);
+	box-shadow: 0 10px 30px -26px rgb(15 23 42 / 0.2);
 }
 
 .partners-glass-shell::before {

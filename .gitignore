@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Claude Code local settings (personal, machine-specific)
+.claude/settings.local.json
+
+# graphify knowledge-graph output (generated artifacts)
+graphify-out/
+
+# Playwright MCP browser session snapshots
+.playwright-mcp/
+
+# Большие каталоги (хранятся на сервере, локально для dev)
+public/каталог.pdf
+public/products-catalog.pdf

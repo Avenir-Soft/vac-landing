@@ -3,10 +3,12 @@ import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-route
 // import Preloader from './components/Preloader';
 import About from './pages/about';
 import AboutGallery from './pages/about-gallery';
-import AboutOffice from './pages/about-office';
+import AboutPartners from './pages/about-partners';
+import CalculatorPage from './pages/calculator';
 import Catalog from './pages/catalog';
 import Contacts from './pages/contacts';
 import Home from './pages/home';
+import Prices from './pages/prices';
 
 function ScrollToHash() {
   const location = useLocation();
@@ -58,9 +60,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/about/office" element={<AboutOffice />} />
+          <Route path="/about/partners" element={<AboutPartners />} />
           <Route path="/about/gallery" element={<AboutGallery />} />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="/calculator" element={<CalculatorPage />} />
+          <Route path="/prices" element={<Prices />} />
           <Route path="/contacts" element={<Contacts />} />
         </Routes>
       </Router>
