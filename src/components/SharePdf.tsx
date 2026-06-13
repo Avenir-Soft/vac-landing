@@ -39,11 +39,12 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 
 	const fileUrl = new URL(src, window.location.origin).href
-	const siteUrl = window.location.origin
+	// Ссылка именно на текущую страницу (чистый URL, без кириллицы в имени файла)
+	const pageUrl = window.location.origin + window.location.pathname
 	const fileName =
 		downloadName || decodeURIComponent(fileUrl.split('/').pop() || 'vac-uz.pdf')
-	// Текст сообщения: название + ссылка на сайт
-	const text = `${title} — VAC.UZ\n${siteUrl}`
+	// Текст сообщения: название + ссылка на страницу
+	const text = `${title} — VAC.UZ\n${pageUrl}`
 
 	useEffect(() => {
 		if (!open) return
@@ -93,11 +94,11 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 				})
 
 				if (nav.canShare && nav.canShare({ files: [file] })) {
-					// Отправляем сам PDF + текст со ссылкой на сайт
-					await nav.share({ files: [file], title, text })
+					// Отправляем сам PDF + текст со ссылкой на страницу
+					await nav.share({ files: [file], title, text, url: pageUrl })
 				} else {
-					// Файлы не поддерживаются — делимся ссылками (на сайт + на PDF)
-					await nav.share({ title, text: `${text}\n${fileUrl}` })
+					// Файлы не поддерживаются — делимся ссылкой на страницу
+					await nav.share({ title, text, url: pageUrl })
 				}
 				setBusy(false)
 				return
@@ -114,7 +115,7 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 
 	const copy = async () => {
 		try {
-			await navigator.clipboard.writeText(fileUrl)
+			await navigator.clipboard.writeText(pageUrl)
 			setCopied(true)
 			setTimeout(() => setCopied(false), 1800)
 		} catch {
@@ -123,12 +124,12 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 		setOpen(false)
 	}
 
-	// Прямые ссылки: и на сайт, и на PDF
-	const shareMessage = `${title} — VAC.UZ ${siteUrl} ${fileUrl}`
+	// Прямые ссылки ведут на текущую страницу
+	const shareMessage = `${title} — VAC.UZ ${pageUrl}`
 	const targets = [
 		{
 			label: 'Telegram',
-			href: `https://t.me/share/url?url=${encodeURIComponent(fileUrl)}&text=${encodeURIComponent(`${title} — VAC.UZ ${siteUrl}`)}`,
+			href: `https://t.me/share/url?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(`${title} — VAC.UZ`)}`,
 			icon: Send,
 		},
 		{
@@ -138,7 +139,7 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 		},
 		{
 			label: 'Email',
-			href: `mailto:?subject=${encodeURIComponent(`${title} — VAC.UZ`)}&body=${encodeURIComponent(`${title}\nСайт: ${siteUrl}\nPDF: ${fileUrl}`)}`,
+			href: `mailto:?subject=${encodeURIComponent(`${title} — VAC.UZ`)}&body=${encodeURIComponent(`${title}\n${pageUrl}`)}`,
 			icon: Mail,
 		},
 	]
