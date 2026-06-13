@@ -160,6 +160,7 @@ const PricesPage = () => {
 																	<SharePdf
 																		src={doc.src}
 																		title={doc.title}
+																		downloadName={doc.downloadName}
 																		className='liquid-button liquid-button-panel mt-2 w-full px-5 py-3 text-sm font-bold'
 																	/>
 																</div>
