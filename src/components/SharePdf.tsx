@@ -1,13 +1,4 @@
-import {
-	Check,
-	Copy,
-	Download,
-	Loader2,
-	Mail,
-	MessageCircle,
-	Send,
-	Share2,
-} from 'lucide-react'
+import { Check, Copy, Mail, MessageCircle, Send, Share2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -15,106 +6,72 @@ type Props = {
 	src: string
 	/** Заголовок документа — попадёт в текст сообщения */
 	title: string
-	/** Имя файла при шеринге/скачивании */
-	downloadName?: string
 	/** Классы триггер-кнопки (по умолчанию — стиль panel) */
 	className?: string
 }
 
-const MENU_WIDTH = 240
+const MENU_WIDTH = 224
 
 /**
  * Кнопка «Поделиться» для PDF.
- *
- * На телефонах с поддержкой Web Share API уровня 2 отправляет САМ ФАЙЛ (PDF)
- * через системное окно — пользователь выбирает Telegram/WhatsApp/почту, и туда
- * уходит документ + текст со ссылкой на сайт. Где файл прикрепить нельзя
- * (десктоп) — показывает меню с прямыми ссылками и кнопкой «Скачать».
+ * На устройствах с Web Share API (телефоны, Chrome/Safari) открывает системное
+ * окно — там сразу Telegram, WhatsApp, почта и т.д. На остальных показывает
+ * собственное меню с прямыми ссылками. Меню позиционируется fixed, чтобы его
+ * не обрезал overflow-hidden родительской карточки.
  */
-const SharePdf = ({ src, title, downloadName, className }: Props) => {
+const SharePdf = ({ src, title, className }: Props) => {
 	const [open, setOpen] = useState(false)
 	const [copied, setCopied] = useState(false)
-	const [busy, setBusy] = useState(false)
 	const [pos, setPos] = useState({ top: 0, left: 0 })
 	const btnRef = useRef<HTMLButtonElement>(null)
 
-	const fileUrl = new URL(src, window.location.origin).href
-	const siteUrl = window.location.origin
-	const fileName =
-		downloadName || decodeURIComponent(fileUrl.split('/').pop() || 'vac-uz.pdf')
-	// Текст сообщения: название + ссылка на сайт
-	const text = `${title} — VAC.UZ\n${siteUrl}`
+	const shareUrl = new URL(src, window.location.origin).href
+	const text = `${title} — VAC.UZ`
+
+	const canNativeShare =
+		typeof navigator !== 'undefined' && typeof navigator.share === 'function'
 
 	useEffect(() => {
 		if (!open) return
+		const close = () => setOpen(false)
 		const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+		window.addEventListener('scroll', close, true)
+		window.addEventListener('resize', close)
 		window.addEventListener('keydown', onKey)
-		return () => window.removeEventListener('keydown', onKey)
+		return () => {
+			window.removeEventListener('scroll', close, true)
+			window.removeEventListener('resize', close)
+			window.removeEventListener('keydown', onKey)
+		}
 	}, [open])
+
+	const nativeShare = async () => {
+		try {
+			await navigator.share({ title, text, url: shareUrl })
+		} catch {
+			/* пользователь отменил — ничего не делаем */
+		}
+	}
 
 	const openMenu = () => {
 		const r = btnRef.current?.getBoundingClientRect()
 		if (r) {
 			setPos({
 				top: r.bottom + 8,
-				left: Math.max(
-					8,
-					Math.min(r.right - MENU_WIDTH, window.innerWidth - MENU_WIDTH - 8),
-				),
+				left: Math.max(8, Math.min(r.right - MENU_WIDTH, window.innerWidth - MENU_WIDTH - 8)),
 			})
 		}
 		setOpen(true)
 	}
 
-	const download = () => {
-		const a = document.createElement('a')
-		a.href = fileUrl
-		a.download = fileName
-		document.body.appendChild(a)
-		a.click()
-		a.remove()
-		setOpen(false)
-	}
-
-	// Главное действие: попытаться отправить сам файл, иначе — меню со ссылками
-	const handleTrigger = async () => {
-		const nav = navigator as Navigator & {
-			canShare?: (data?: ShareData) => boolean
-		}
-
-		if (typeof nav.share === 'function') {
-			try {
-				setBusy(true)
-				const res = await fetch(fileUrl)
-				if (!res.ok) throw new Error('fetch failed')
-				const blob = await res.blob()
-				const file = new File([blob], fileName, {
-					type: blob.type || 'application/pdf',
-				})
-
-				if (nav.canShare && nav.canShare({ files: [file] })) {
-					// Отправляем сам PDF + текст со ссылкой на сайт
-					await nav.share({ files: [file], title, text })
-				} else {
-					// Файлы не поддерживаются — делимся ссылками (на сайт + на PDF)
-					await nav.share({ title, text: `${text}\n${fileUrl}` })
-				}
-				setBusy(false)
-				return
-			} catch (e) {
-				setBusy(false)
-				// Пользователь закрыл системное окно — не открываем меню
-				if ((e as Error)?.name === 'AbortError') return
-				// Иначе (нет поддержки/ошибка сети) — показываем меню
-			}
-		}
-
-		openMenu()
+	const handleTrigger = () => {
+		if (canNativeShare) nativeShare()
+		else openMenu()
 	}
 
 	const copy = async () => {
 		try {
-			await navigator.clipboard.writeText(fileUrl)
+			await navigator.clipboard.writeText(shareUrl)
 			setCopied(true)
 			setTimeout(() => setCopied(false), 1800)
 		} catch {
@@ -123,22 +80,20 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 		setOpen(false)
 	}
 
-	// Прямые ссылки: и на сайт, и на PDF
-	const shareMessage = `${title} — VAC.UZ ${siteUrl} ${fileUrl}`
 	const targets = [
 		{
 			label: 'Telegram',
-			href: `https://t.me/share/url?url=${encodeURIComponent(fileUrl)}&text=${encodeURIComponent(`${title} — VAC.UZ ${siteUrl}`)}`,
+			href: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(text)}`,
 			icon: Send,
 		},
 		{
 			label: 'WhatsApp',
-			href: `https://wa.me/?text=${encodeURIComponent(shareMessage)}`,
+			href: `https://wa.me/?text=${encodeURIComponent(`${text} ${shareUrl}`)}`,
 			icon: MessageCircle,
 		},
 		{
 			label: 'Email',
-			href: `mailto:?subject=${encodeURIComponent(`${title} — VAC.UZ`)}&body=${encodeURIComponent(`${title}\nСайт: ${siteUrl}\nPDF: ${fileUrl}`)}`,
+			href: `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(`${title}:\n${shareUrl}`)}`,
 			icon: Mail,
 		},
 	]
@@ -149,7 +104,6 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 				ref={btnRef}
 				type='button'
 				onClick={handleTrigger}
-				disabled={busy}
 				className={
 					className ??
 					'liquid-button liquid-button-panel px-5 py-3 text-sm font-semibold'
@@ -157,11 +111,7 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 				aria-haspopup='menu'
 				aria-expanded={open}
 			>
-				{busy ? (
-					<Loader2 size={18} className='animate-spin' />
-				) : (
-					<Share2 size={18} />
-				)}
+				<Share2 size={18} />
 				Поделиться
 			</button>
 
@@ -176,7 +126,7 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 					<div
 						role='menu'
 						style={{ top: pos.top, left: pos.left, width: MENU_WIDTH }}
-						className='fixed z-50 rounded-2xl border border-slate-200 bg-white p-2 text-left shadow-[0_22px_46px_-26px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-[#122033]'
+						className='fixed z-50 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_22px_46px_-26px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-[#122033]'
 					>
 						{targets.map(t => (
 							<a
@@ -192,15 +142,6 @@ const SharePdf = ({ src, title, downloadName, className }: Props) => {
 								{t.label}
 							</a>
 						))}
-						<button
-							type='button'
-							onClick={download}
-							role='menuitem'
-							className='flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-800/70'
-						>
-							<Download size={18} />
-							Скачать файл
-						</button>
 						<button
 							type='button'
 							onClick={copy}

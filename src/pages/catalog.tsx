@@ -130,7 +130,6 @@ const Catalog = () => {
 												<SharePdf
 													src={doc.src}
 													title={doc.title}
-													downloadName={doc.downloadName}
 													className='liquid-button liquid-button-panel w-full justify-center px-4 py-3 text-sm font-semibold sm:py-2.5 sm:text-[13px]'
 												/>
 											</div>
