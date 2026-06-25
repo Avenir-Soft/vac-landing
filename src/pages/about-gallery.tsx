@@ -57,10 +57,10 @@ const AboutGallery = () => {
 					<div className='mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between'>
 						<div>
 							<span className='section-kicker'>Фото галерея</span>
-							<h1 className='mt-4 text-[clamp(2.1rem,1.45rem+3.4vw,3.5rem)] font-bold leading-tight text-slate-950 dark:text-white'>
+							<h1 className='mt-4 text-[clamp(2.1rem,1.45rem+3.4vw,3.5rem)] font-bold leading-tight text-white'>
 								Производство, детали и рабочий процесс
 							</h1>
-							<p className='mt-5 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300'>
+							<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
 								Фотографии производства VAC.UZ, рабочих зон и элементов
 								вентиляционных систем.
 							</p>

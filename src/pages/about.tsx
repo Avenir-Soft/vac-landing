@@ -82,14 +82,14 @@ const About = () => {
 			<section className='px-4 py-10'>
 				<div className='section-shell'>
 					<div className='mb-8 flex items-center gap-3'>
-						<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2c2e33] text-white dark:bg-white dark:text-slate-950'>
+						<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-slate-900'>
 							<Users size={20} />
 						</div>
 						<div>
-							<p className='text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400'>
+							<p className='text-xs font-semibold uppercase tracking-[0.24em] text-slate-400'>
 								Команда
 							</p>
-							<h2 className='mt-1 text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold text-slate-950 dark:text-white'>
+							<h2 className='mt-1 text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold text-white'>
 								Наша команда
 							</h2>
 						</div>

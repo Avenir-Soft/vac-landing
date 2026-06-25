@@ -3,21 +3,16 @@ export type Theme = 'light' | 'dark'
 export const THEME_STORAGE_KEY = 'vac-theme'
 export const THEME_EVENT = 'vac-theme-change'
 
-export const getStoredTheme = (): Theme => {
-	if (typeof window === 'undefined') return 'light'
+// Тёмная тема убрана — на сайте только одна тема (светлые карточки на графите).
+export const getStoredTheme = (): Theme => 'light'
 
-	// Светлая тема — по умолчанию; графит (тёмная) только если выбран явно.
-	const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
-	return savedTheme === 'dark' ? 'dark' : 'light'
-}
-
-export const applyTheme = (theme: Theme) => {
+export const applyTheme = (_theme: Theme = 'light') => {
 	if (typeof document === 'undefined') return
 
 	const root = document.documentElement
-	root.classList.toggle('dark', theme === 'dark')
-	root.dataset.theme = theme
-	root.style.colorScheme = theme
+	root.classList.remove('dark')
+	root.dataset.theme = 'light'
+	root.style.colorScheme = 'light'
 }
 
 export const setTheme = (theme: Theme) => {

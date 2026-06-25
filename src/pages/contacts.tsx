@@ -5,6 +5,7 @@ import instagramLogo from '../assets/instagram-logo.png'
 import telegramLogo from '../assets/tg-logo.png'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
+import { Stagger, StaggerItem } from '../components/motion/Reveal'
 
 const Contacts = () => {
 	const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent)
@@ -70,10 +71,10 @@ const Contacts = () => {
 			<section className='px-4 pt-28 pb-14'>
 				<div className='section-shell text-center'>
 					<span className='section-kicker'>Контакты</span>
-					<h1 className='mt-4 text-[clamp(2.1rem,1.45rem+3.4vw,3.5rem)] font-bold leading-[1.05] text-slate-950 dark:text-white'>
+					<h1 className='mt-4 text-[clamp(2.1rem,1.45rem+3.4vw,3.5rem)] font-bold leading-[1.05] text-white'>
 						Контакты
 					</h1>
-					<p className='mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300'>
+					<p className='mx-auto mt-4 max-w-2xl text-lg text-slate-300'>
 						Мы всегда рады ответить на ваши вопросы по продукции, расчёту заказа
 						и комплектации объекта.
 					</p>
@@ -82,10 +83,10 @@ const Contacts = () => {
 
 			<section className='px-4 pb-20'>
 				<div className='section-shell'>
-					<div className='grid gap-6 lg:grid-cols-3'>
+					<Stagger className='grid gap-6 lg:grid-cols-3'>
 						{contacts.map(item => (
+							<StaggerItem key={item.title}>
 							<a
-								key={item.title}
 								href={item.href}
 								target={item.external ? '_blank' : undefined}
 								rel={item.external ? 'noopener noreferrer' : undefined}
@@ -104,8 +105,9 @@ const Contacts = () => {
 									{item.description}
 								</p>
 							</a>
+						</StaggerItem>
 						))}
-					</div>
+					</Stagger>
 
 					<div className='mt-8 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]'>
 						<div className='surface-card p-8'>

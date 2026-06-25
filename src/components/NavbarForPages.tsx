@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -5,7 +6,6 @@ import icon from '../assets/icon.png'
 import logoLight from '../assets/logo(1).png'
 import { useTheme } from '../hooks/useTheme'
 import { NavDocsMenu, NavDocsMobile, docsPaths } from './NavDocsMenu'
-import ThemeToggle from './ThemeToggle'
 
 const aboutLinks = [
 	{
@@ -184,20 +184,35 @@ const NavbarForPages = () => {
 								+998 90 911-72-72
 							</a>
 
-							<ThemeToggle />
-
 							<button
 								onClick={() => setIsMenuOpen(!isMenuOpen)}
 								className='liquid-button liquid-button-icon liquid-button-nav liquid-button-mobile'
 								aria-label='Открыть меню'
 							>
-								{isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+								<AnimatePresence mode='wait' initial={false}>
+									<motion.span
+										key={isMenuOpen ? 'x' : 'menu'}
+										initial={{ rotate: -90, opacity: 0 }}
+										animate={{ rotate: 0, opacity: 1 }}
+										exit={{ rotate: 90, opacity: 0 }}
+										transition={{ duration: 0.2 }}
+										className='flex items-center justify-center'
+									>
+										{isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+									</motion.span>
+								</AnimatePresence>
 							</button>
 						</div>
 					</div>
 
+					<AnimatePresence initial={false}>
 					{isMenuOpen && (
-						<div className='mt-4 space-y-2 border-t border-slate-200/80 pt-4 animate-in fade-in slide-in-from-top-2 duration-300 lg:hidden dark:border-slate-800'>
+						<motion.div
+							initial={{ height: 0, opacity: 0 }}
+							animate={{ height: 'auto', opacity: 1 }}
+							exit={{ height: 0, opacity: 0 }}
+							transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+							className='mt-4 space-y-2 overflow-hidden border-t border-slate-200/80 pt-4 lg:hidden dark:border-slate-800'>
 							{links.map(link =>
 								link.type === 'calc' ? (
 									<div
@@ -321,8 +336,9 @@ const NavbarForPages = () => {
 							>
 								+998 90 911-72-72
 							</a>
-						</div>
+						</motion.div>
 					)}
+					</AnimatePresence>
 				</div>
 			</nav>
 		</header>
