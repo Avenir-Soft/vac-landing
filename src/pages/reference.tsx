@@ -51,8 +51,8 @@ const Reference = () => {
 			<section className='relative min-h-screen overflow-hidden px-4 pt-32 pb-20'>
 				<div className='section-shell relative z-10'>
 					<div className='mx-auto max-w-5xl'>
-						<div className='surface-card overflow-hidden'>
-							<div className='border-b border-slate-200 bg-[#2c2e33] p-8 text-white md:p-10 dark:border-slate-800 dark:bg-[#1c1d21]'>
+						<div className='surface-card overflow-hidden border-transparent dark:border-transparent'>
+							<div className='bg-[#2c2e33] p-8 text-white md:p-10 dark:bg-[#1c1d21]'>
 								<div className='flex h-16 w-16 items-center justify-center rounded-3xl border border-white/10 bg-white/8'>
 									<BookOpen size={34} strokeWidth={1.7} />
 								</div>
