@@ -138,7 +138,7 @@ const VariantCard = ({
 			)}
 
 			{/* Итого */}
-			<div className='mt-6 flex flex-wrap items-center gap-x-10 gap-y-2 rounded-3xl bg-slate-950 px-6 py-5 text-white dark:bg-[#060b13]'>
+			<div className='mt-6 flex flex-wrap items-center gap-x-10 gap-y-2 rounded-3xl bg-[#2c2e33] px-6 py-5 text-white dark:bg-[#1c1d21]'>
 				<div>
 					<p className='text-xs text-slate-400'>Итого, {qtyNum} шт</p>
 					<p className='text-2xl font-bold'>{formatNumber(areaTotal)} м²</p>
@@ -149,7 +149,8 @@ const VariantCard = ({
 }
 
 const Calculator = () => {
-	const [openCat, setOpenCat] = useState<string>(CALC_CATEGORIES[0].id)
+	// Все драверы изначально закрыты — пользователь раскрывает нужный сам.
+	const [openCat, setOpenCat] = useState<string>('')
 
 	const toggleCat = (cat: CalcCategory) =>
 		setOpenCat(prev => (prev === cat.id ? '' : cat.id))
@@ -167,7 +168,7 @@ const Calculator = () => {
 							className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors md:px-6 ${
 								isOpen
 									? 'bg-sky-600 text-white'
-									: 'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700'
+									: 'bg-[#2c2e33] text-white hover:bg-[#3a3d44] dark:bg-slate-800 dark:hover:bg-slate-700'
 							}`}
 						>
 							<span className='text-sm font-bold uppercase tracking-wide md:text-base'>

@@ -1,24 +1,32 @@
-import { Camera, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import banner3 from '../assets/banner3.jpg'
-import banner5 from '../assets/banner5.jpg'
-import banner7 from '../assets/banner7.jpg'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 
-const galleryImages = [
-	{ src: banner3, label: 'Изготовление воздуховодов' },
-	{ src: banner5, label: 'Комплектующие и детали' },
-	{ src: banner7, label: 'Рабочий процесс' },
-]
+// Фото лежат в public/gallery (g-1.png … g-30.png).
+const GALLERY_COUNT = 30
+const galleryImages = Array.from({ length: GALLERY_COUNT }, (_, i) => ({
+	src: `/gallery/g-${i + 1}.png`,
+	label: `Производство VAC.UZ — фото ${i + 1}`,
+}))
 
 const AboutGallery = () => {
-	const [activeImage, setActiveImage] = useState<(typeof galleryImages)[number] | null>(null)
+	const [activeIndex, setActiveIndex] = useState<number | null>(null)
+	const touchStartX = useRef<number | null>(null)
+
+	const showPrev = () =>
+		setActiveIndex(i =>
+			i === null ? i : (i - 1 + galleryImages.length) % galleryImages.length,
+		)
+	const showNext = () =>
+		setActiveIndex(i => (i === null ? i : (i + 1) % galleryImages.length))
 
 	useEffect(() => {
-		if (!activeImage) return
+		if (activeIndex === null) return
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') setActiveImage(null)
+			if (event.key === 'Escape') setActiveIndex(null)
+			else if (event.key === 'ArrowLeft') showPrev()
+			else if (event.key === 'ArrowRight') showNext()
 		}
 		document.body.style.overflow = 'hidden'
 		window.addEventListener('keydown', onKeyDown)
@@ -26,7 +34,18 @@ const AboutGallery = () => {
 			document.body.style.overflow = ''
 			window.removeEventListener('keydown', onKeyDown)
 		}
-	}, [activeImage])
+	}, [activeIndex])
+
+	const onTouchStart = (e: React.TouchEvent) => {
+		touchStartX.current = e.touches[0].clientX
+	}
+	const onTouchEnd = (e: React.TouchEvent) => {
+		if (touchStartX.current === null) return
+		const delta = e.changedTouches[0].clientX - touchStartX.current
+		if (delta > 50) showPrev()
+		else if (delta < -50) showNext()
+		touchStartX.current = null
+	}
 
 	return (
 		<div className='min-h-screen'>
@@ -46,59 +65,85 @@ const AboutGallery = () => {
 								вентиляционных систем.
 							</p>
 						</div>
-						<div className='flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950'>
-							<Camera size={26} />
-						</div>
+						
 					</div>
 
-					<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-						{galleryImages.map(item => (
+					<div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+						{galleryImages.map((item, index) => (
 							<button
-								key={item.label}
+								key={item.src}
 								type='button'
-								onClick={() => setActiveImage(item)}
-								className='surface-card group overflow-hidden p-3 text-left transition duration-300 hover:-translate-y-1'
+								onClick={() => setActiveIndex(index)}
+								className='surface-card group overflow-hidden p-2 transition duration-300 hover:-translate-y-1'
+								aria-label={item.label}
 							>
 								<img
 									src={item.src}
 									alt={item.label}
-									className='aspect-[4/3] w-full rounded-[20px] object-cover transition duration-300 group-hover:scale-[1.02]'
+									loading='lazy'
+									className='aspect-[4/3] w-full rounded-[18px] object-cover transition duration-300 group-hover:scale-[1.03]'
 								/>
-								<p className='px-2 pt-3 text-sm font-semibold text-slate-800 dark:text-slate-100'>
-									{item.label}
-								</p>
 							</button>
 						))}
 					</div>
 				</div>
 			</section>
 
-			{activeImage ? (
+			{activeIndex !== null ? (
 				<div
-					className='fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/88 p-4 backdrop-blur-sm'
+					className='fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm'
 					role='dialog'
 					aria-modal='true'
-					aria-label={activeImage.label}
-					onClick={() => setActiveImage(null)}
+					aria-label={galleryImages[activeIndex].label}
+					onClick={() => setActiveIndex(null)}
 				>
-					<div className='relative w-full max-w-6xl' onClick={event => event.stopPropagation()}>
+					<button
+						type='button'
+						onClick={event => {
+							event.stopPropagation()
+							showPrev()
+						}}
+						className='absolute left-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 md:left-6'
+						aria-label='Предыдущее фото'
+					>
+						<ChevronLeft size={26} />
+					</button>
+
+					<div
+						className='relative w-full max-w-6xl'
+						onClick={event => event.stopPropagation()}
+						onTouchStart={onTouchStart}
+						onTouchEnd={onTouchEnd}
+					>
 						<button
 							type='button'
-							onClick={() => setActiveImage(null)}
+							onClick={() => setActiveIndex(null)}
 							className='absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20'
 							aria-label='Закрыть фото'
 						>
 							<X size={22} />
 						</button>
 						<img
-							src={activeImage.src}
-							alt={activeImage.label}
+							src={galleryImages[activeIndex].src}
+							alt={galleryImages[activeIndex].label}
 							className='max-h-[82vh] w-full rounded-[22px] object-contain shadow-2xl'
 						/>
-						<p className='mt-3 text-center text-sm font-semibold text-white'>
-							{activeImage.label}
+						<p className='mt-3 text-center text-sm font-semibold tabular-nums text-white/80'>
+							{activeIndex + 1} / {galleryImages.length}
 						</p>
 					</div>
+
+					<button
+						type='button'
+						onClick={event => {
+							event.stopPropagation()
+							showNext()
+						}}
+						className='absolute right-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 md:right-6'
+						aria-label='Следующее фото'
+					>
+						<ChevronRight size={26} />
+					</button>
 				</div>
 			) : null}
 

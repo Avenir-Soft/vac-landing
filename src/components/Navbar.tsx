@@ -1,7 +1,11 @@
-import { Calculator, ChevronDown, Menu, Phone, X } from 'lucide-react'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import icon from '../assets/icon.png'
+import logoLight from '../assets/logo(1).png'
+import { useTheme } from '../hooks/useTheme'
+import { NavDocsMenu, NavDocsMobile } from './NavDocsMenu'
+import ThemeToggle from './ThemeToggle'
 
 const aboutLinks = [
 	{
@@ -30,8 +34,7 @@ const calcLinks = [
 const navItems = [
 	{ label: 'Калькулятор', type: 'calc' as const },
 	{ label: 'О компании', type: 'about' as const },
-	{ label: 'Каталог', to: '/catalog' },
-	{ label: 'Прайс-лист', to: '/prices' },
+	{ label: 'Документы', type: 'docs' as const },
 	{ label: 'Контакты', to: '/contacts' },
 ]
 
@@ -40,7 +43,8 @@ const Navbar = () => {
 	const [isAboutOpen, setIsAboutOpen] = useState(false)
 	const [isCalcOpen, setIsCalcOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
-	const currentLogo = icon
+	const { theme } = useTheme()
+	const currentLogo = theme === 'dark' ? icon : logoLight
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -56,8 +60,8 @@ const Navbar = () => {
 			<nav
 				className={`mx-auto max-w-7xl rounded-[28px] border transition-all duration-500 ${
 					scrolled
-						? 'border-sky-100 bg-white/92 shadow-[0_18px_48px_-28px_rgba(35,82,140,0.18)] backdrop-blur-xl dark:border-slate-700/90 dark:bg-[#1a2b42]/88 dark:shadow-[0_20px_55px_-32px_rgba(8,18,33,0.68)]'
-						: 'border-white/50 bg-white/70 backdrop-blur-md dark:border-slate-700/80 dark:bg-[#1a2b42]/74'
+						? 'border-slate-200 bg-white/92 shadow-[0_18px_48px_-28px_rgba(20,24,30,0.22)] backdrop-blur-xl dark:border-[#3a3d44] dark:bg-[#26282d]/90 dark:shadow-[0_20px_55px_-32px_rgba(6,8,11,0.72)]'
+						: 'border-slate-200/70 bg-white/70 backdrop-blur-md dark:border-[#34373d] dark:bg-[#26282d]/76'
 				}`}
 			>
 				<div className='px-5 py-4 md:px-6'>
@@ -85,13 +89,12 @@ const Navbar = () => {
 											type='button'
 											className='liquid-button liquid-button-calculator px-4 py-2 text-sm font-semibold'
 										>
-											<Calculator className='h-4 w-4' />
 											{item.label}
 											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
 										</button>
 
 										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[230px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
-											<div className='translate-y-2 rounded-[20px] border border-amber-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(176,137,43,0.45)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-amber-500/30 dark:bg-[#122033]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
+											<div className='translate-y-2 rounded-[20px] border border-amber-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(176,137,43,0.45)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-amber-500/30 dark:bg-[#26282d]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
 												<div className='space-y-1'>
 													{calcLinks.map(link =>
 														link.external ? (
@@ -133,7 +136,7 @@ const Navbar = () => {
 										</button>
 
 										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[210px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
-											<div className='translate-y-2 rounded-[20px] border border-sky-100 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(44,95,159,0.28)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-slate-700/80 dark:bg-[#122033]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
+											<div className='translate-y-2 rounded-[20px] border border-slate-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(20,24,30,0.28)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-slate-700/80 dark:bg-[#26282d]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
 												<div className='space-y-1'>
 													{aboutLinks.map(link => (
 														<Link
@@ -150,6 +153,8 @@ const Navbar = () => {
 											</div>
 										</div>
 									</div>
+								) : item.type === 'docs' ? (
+									<NavDocsMenu key={item.label} />
 								) : (
 									<Link
 										key={item.to}
@@ -167,12 +172,10 @@ const Navbar = () => {
 								href='tel:+998909117272'
 								className='liquid-button liquid-button-primary liquid-button-desktop-xl group px-4 py-2.5 text-sm font-semibold'
 							>
-								<Phone
-									size={18}
-									className='transition-transform group-hover:rotate-12'
-								/>
 								+998 90 911-72-72
 							</a>
+
+							<ThemeToggle />
 
 							<button
 								onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -198,7 +201,6 @@ const Navbar = () => {
 											className='liquid-button liquid-button-calculator w-full justify-between px-4 py-3 text-left text-base font-semibold'
 										>
 											<span className='flex items-center gap-2'>
-												<Calculator className='h-5 w-5' />
 												{item.label}
 											</span>
 											<ChevronDown
@@ -280,6 +282,11 @@ const Navbar = () => {
 											</div>
 										)}
 									</div>
+								) : item.type === 'docs' ? (
+									<NavDocsMobile
+										key={item.label}
+										onNavigate={() => setIsMenuOpen(false)}
+									/>
 								) : (
 									<Link
 										key={item.to}
@@ -295,7 +302,6 @@ const Navbar = () => {
 								href='tel:+998909117272'
 								className='liquid-button liquid-button-primary mt-2 w-full px-4 py-3 font-semibold'
 							>
-								<Phone size={18} />
 								+998 90 911-72-72
 							</a>
 						</div>

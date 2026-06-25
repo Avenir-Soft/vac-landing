@@ -86,7 +86,7 @@ const BookCallButton = () => {
 		<>
 			<button
 				onClick={() => setIsOpen(true)}
-				className='liquid-button liquid-button-primary liquid-button-fixed group right-6 bottom-6 z-40 h-14 w-14 md:h-16 md:w-16'
+				className='liquid-button liquid-button-cta liquid-button-fixed group right-6 bottom-6 z-40 h-14 w-14 md:h-16 md:w-16'
 				aria-label='Заказать звонок'
 			>
 				<Phone size={28} className='transition-transform group-hover:rotate-12' />
@@ -101,7 +101,7 @@ const BookCallButton = () => {
 						className='w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-slate-950'
 						onClick={e => e.stopPropagation()}
 					>
-						<div className='relative bg-slate-950 p-6 text-white dark:bg-[#060b13]'>
+						<div className='relative bg-[#2c2e33] p-6 text-white dark:bg-[#1c1d21]'>
 							<button
 								onClick={() => setIsOpen(false)}
 								className='liquid-button liquid-button-icon liquid-button-absolute top-4 right-4 h-10 w-10 rounded-full text-white'
@@ -168,7 +168,7 @@ const BookCallButton = () => {
 									<button
 										type='submit'
 										disabled={isSubmitting}
-										className='liquid-button liquid-button-primary w-full py-4 text-lg font-bold disabled:cursor-not-allowed disabled:opacity-50'
+										className='liquid-button liquid-button-cta w-full py-4 text-lg font-bold disabled:cursor-not-allowed disabled:opacity-50'
 									>
 										{isSubmitting ? (
 											<>

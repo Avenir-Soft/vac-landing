@@ -9,6 +9,7 @@ import Catalog from './pages/catalog';
 import Contacts from './pages/contacts';
 import Home from './pages/home';
 import Prices from './pages/prices';
+import Reference from './pages/reference';
 
 function ScrollToHash() {
   const location = useLocation();
@@ -63,6 +64,7 @@ function App() {
           <Route path="/about/partners" element={<AboutPartners />} />
           <Route path="/about/gallery" element={<AboutGallery />} />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="/reference" element={<Reference />} />
           <Route path="/calculator" element={<CalculatorPage />} />
           <Route path="/prices" element={<Prices />} />
           <Route path="/contacts" element={<Contacts />} />

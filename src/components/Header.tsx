@@ -2,8 +2,8 @@
 
 import { Award, Briefcase, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import DuctSystem from './DuctSystem'
 import Navbar from './Navbar'
+import { Stagger, StaggerItem } from './motion/Reveal'
 
 const stats = [
 	{ icon: Briefcase, label: 'Проектов', value: 500, suffix: '+' },
@@ -106,26 +106,30 @@ export const Header = () => {
 			<Navbar />
 
 			<section className='hero-section relative overflow-hidden min-h-screen'>
-				<DuctSystem />
-
 				<div className='relative z-10 flex min-h-[600px] items-center px-4 pt-30 pb-6 md:min-h-[580px] md:px-6 md:pt-32'>
 					<div className='mx-auto w-full max-w-7xl'>
 						<div className='surface-card hero-glass-card relative overflow-hidden p-6 md:p-9 lg:p-12'>
 							<div className='pointer-events-none absolute top-0 right-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(0,112,192,0.14),transparent_70%)] dark:bg-[radial-gradient(circle,rgba(56,189,248,0.12),transparent_70%)]'></div>
-							<div className='relative z-10'>
-								<p className='mt-5 text-sm font-semibold uppercase tracking-[0.24em] text-sky-700 dark:text-sky-300'>
-									Производство воздуховодов
-								</p>
-								<h1 className='mt-3 max-w-4xl text-[clamp(1.65rem,1.05rem+3vw,4.3rem)] font-bold leading-[1.02] text-slate-950 sm:leading-[0.94] dark:text-white'>
-									Воздуховоды и вентиляционные системы
-									<span className='mt-2 block text-[clamp(1.05rem,0.8rem+1.4vw,2.2rem)] leading-[1.25] text-slate-500 sm:leading-[1.02] dark:text-slate-300'>
-										для строительных и промышленных объектов
-									</span>
-								</h1>
+							<Stagger className='relative z-10' stagger={0.12} delay={0.1}>
+								<StaggerItem>
+									<p className='mt-5 text-sm font-semibold uppercase tracking-[0.24em] text-sky-700 dark:text-sky-300'>
+										Производство воздуховодов
+									</p>
+								</StaggerItem>
+								<StaggerItem>
+									<h1 className='mt-3 max-w-4xl text-[clamp(1.65rem,1.05rem+3vw,4.3rem)] font-bold leading-[1.02] text-slate-950 sm:leading-[0.94] dark:text-white'>
+										Воздуховоды и вентиляционные системы
+										<span className='mt-2 block text-[clamp(1.05rem,0.8rem+1.4vw,2.2rem)] leading-[1.25] text-slate-500 sm:leading-[1.02] dark:text-slate-300'>
+											для строительных и промышленных объектов
+										</span>
+									</h1>
+								</StaggerItem>
 
-								<LiveVisitors />
+								<StaggerItem>
+									<LiveVisitors />
+								</StaggerItem>
 
-								<div className='mt-5 grid gap-3 sm:grid-cols-3'>
+								<StaggerItem className='mt-5 grid gap-3 sm:grid-cols-3'>
 									{stats.map(stat => (
 										<div
 											key={stat.label}
@@ -142,8 +146,8 @@ export const Header = () => {
 											</div>
 										</div>
 									))}
-								</div>
-							</div>
+								</StaggerItem>
+							</Stagger>
 						</div>
 					</div>
 				</div>

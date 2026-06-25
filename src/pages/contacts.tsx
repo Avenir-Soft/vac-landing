@@ -91,7 +91,7 @@ const Contacts = () => {
 								rel={item.external ? 'noopener noreferrer' : undefined}
 								className='surface-card block p-8 transition duration-300 hover:-translate-y-1'
 							>
-								<div className='flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950'>
+								<div className='flex h-14 w-14 items-center justify-center rounded-2xl bg-[#2c2e33] text-white dark:bg-white dark:text-slate-950'>
 									<item.icon size={26} />
 								</div>
 								<h3 className='mt-6 text-2xl font-bold text-slate-950 dark:text-white'>

@@ -2,25 +2,14 @@ import { CheckCircle2, Factory, Users, Workflow } from 'lucide-react'
 import schema from '../assets/diagram.png'
 import founderPhoto from '../assets/founder-usmanov.png'
 import teamUsmanov from '../assets/team/00-usmanov.png'
-import teamKarimov from '../assets/team/01-karimov.png'
-import teamKasymova from '../assets/team/02-kasymova.png'
 import teamPak from '../assets/team/03-pak.png'
-import teamKasimov from '../assets/team/04-kasimov.png'
-import teamMamatkulov from '../assets/team/05-mamatkulov.png'
-import teamMirzayarov from '../assets/team/06-mirzayarov.png'
-import teamHodjimatova from '../assets/team/07-hodjimatova.png'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
+import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal'
 
 const team = [
 	{ name: 'Усманов Музаффар', photo: teamUsmanov },
-	{ name: 'Каримов Азизбек', photo: teamKarimov },
-	{ name: 'Касымова Малика', photo: teamKasymova },
 	{ name: 'Пак Ирина', photo: teamPak },
-	{ name: 'Касимов Хожиакбар', photo: teamKasimov },
-	{ name: 'Мамткулов Отабек', photo: teamMamatkulov },
-	{ name: 'Мирзаяров Махкам', photo: teamMirzayarov },
-	{ name: 'Ходжиматова Садокат', photo: teamHodjimatova },
 ]
 
 const About = () => {
@@ -48,42 +37,44 @@ const About = () => {
 							</div>
 						</div>
 
-						<div className='surface-card p-6 md:p-8'>
+						<Reveal direction='left' className='surface-card p-6 md:p-8'>
 							<h1 className='mt-4 text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold leading-tight text-slate-950 dark:text-white'>
 								Обращение основателя VAC.UZ
 							</h1>
 							<div className='mt-6 space-y-4 text-sm leading-7 text-slate-700 md:text-base dark:text-slate-300'>
 								<p>
-									Уважаемые партнеры и коллеги! Благодарим каждого за вклад в
-									становление, укрепление и развитие VAC.UZ.
+									За 12 лет работы мы изготовили тысячи километров воздуховодов и
+									выполнили проекты для более чем 1500 клиентов. Наш путь начался
+									не с производства, а с монтажа вентиляционных систем. Именно
+									практический опыт помог мне понять, каким должен быть
+									качественный воздуховод и что действительно важно для заказчика.
 								</p>
 								<p>
-									За 12 лет VAC.UZ выросла из небольшого производства
-									воздуховодов в динамично развивающуюся компанию с большим
-									производственным заводом.
+									Поэтому сегодня VAC.UZ специализируется на производстве
+									воздуховодов, фасонных изделий и комплектующих для систем
+									вентиляции. Мы знаем требования рынка не по учебникам, а по
+									многолетней работе на реальных объектах.
 								</p>
 								<p>
-									Наши ценности - открытость, объективность, конфиденциальность
-									информации и индивидуальный подход к каждому клиенту.
-								</p>
-								<p>
-									На производственном заводе применяются передовые технологии и
-									современное оборудование, что позволяет выпускать продукцию
-									высокого качества и работать с проектами любой сложности.
+									Прежде чем доверить компании свой проект, рекомендую
+									познакомиться с её производством, людьми и принципами работы.
+									Цена важна, но ещё важнее понимать, кто отвечает за качество,
+									сроки и результат.
 								</p>
 								<p className='font-bold text-slate-950 dark:text-white'>
-									Мы стремимся предоставлять партнерам продукт и сервис мирового
-									стандарта.
+									Для меня репутация всегда была и остаётся важнее любого
+									контракта.
 								</p>
 							</div>
 
-						
 							<div className='mt-7 border-t border-slate-200 pt-5 dark:border-slate-800'>
 								<p className='text-sm font-bold text-slate-950 dark:text-white'>
-									С уважением, основатель VAC.UZ - М. К. Усманов
+									Искренне ваш,
+									<br />
+									Музаффар Усманов
 								</p>
 							</div>
-						</div>
+						</Reveal>
 					</div>
 				</div>
 			</section>
@@ -91,7 +82,7 @@ const About = () => {
 			<section className='px-4 py-10'>
 				<div className='section-shell'>
 					<div className='mb-8 flex items-center gap-3'>
-						<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950'>
+						<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2c2e33] text-white dark:bg-white dark:text-slate-950'>
 							<Users size={20} />
 						</div>
 						<div>
@@ -104,9 +95,17 @@ const About = () => {
 						</div>
 					</div>
 
-					<div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4'>
+					<Stagger
+						className='grid max-w-2xl grid-cols-1 gap-5 sm:grid-cols-2'
+						stagger={0.12}
+					>
 						{team.map(member => (
-							<div key={member.name} className='surface-card overflow-hidden p-3'>
+							<StaggerItem
+								key={member.name}
+								className='surface-card overflow-hidden p-3'
+								whileHover={{ y: -6 }}
+								transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+							>
 								<div className='overflow-hidden rounded-[20px] bg-slate-100 dark:bg-slate-950'>
 									<img
 										src={member.photo}
@@ -118,9 +117,9 @@ const About = () => {
 								<p className='px-1 pt-3 pb-1 text-sm font-semibold text-slate-900 dark:text-white'>
 									{member.name}
 								</p>
-							</div>
+							</StaggerItem>
 						))}
-					</div>
+					</Stagger>
 				</div>
 			</section>
 
@@ -129,7 +128,7 @@ const About = () => {
 					<div className='grid gap-5 lg:grid-cols-[1.05fr_0.95fr]'>
 						<div className='surface-card p-5 md:p-6'>
 							<div className='flex items-center gap-3'>
-								<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950'>
+								<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2c2e33] text-white dark:bg-white dark:text-slate-950'>
 									<Factory size={20} />
 								</div>
 								<div>

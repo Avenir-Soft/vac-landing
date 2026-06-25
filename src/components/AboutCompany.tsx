@@ -39,7 +39,7 @@ export const AboutCompany = () => {
 						}`}
 					>
 						<div className='flex items-center gap-3'>
-							<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950'>
+							<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2c2e33] text-white dark:bg-white dark:text-slate-950'>
 								<Factory size={20} />
 							</div>
 							<div>
@@ -144,7 +144,7 @@ export const AboutCompany = () => {
 							Ролик запускается без звука. Звук можно включить вручную в плеере.
 						</p>
 					</div>
-					<div className='mx-auto overflow-hidden rounded-[26px] border border-slate-200 bg-slate-950 shadow-[0_28px_70px_-44px_rgba(15,23,42,0.72)] md:max-w-2xl dark:border-slate-800'>
+					<div className='mx-auto overflow-hidden rounded-[26px] border border-slate-200 bg-[#2c2e33] shadow-[0_28px_70px_-44px_rgba(15,23,42,0.72)] md:max-w-2xl dark:border-slate-800'>
 						<video
 							src='/cex_oVadzxvV.mp4'
 							className='aspect-[9/16] max-h-[760px] w-full object-cover'

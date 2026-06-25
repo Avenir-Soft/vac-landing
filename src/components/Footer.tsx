@@ -17,7 +17,7 @@ export const Footer = () => {
 	const currentLogo = theme === 'dark' ? icon : logo
 
 	return (
-		<footer className='bg-slate-950 pt-14 pb-6 text-white dark:bg-[#060b13]'>
+		<footer className='bg-[#2c2e33] pt-14 pb-6 text-white dark:bg-[#1c1d21]'>
 			<div className='section-shell'>
 				<div className='grid gap-10 lg:grid-cols-[1.2fr_0.7fr_1fr]'>
 					<div>
@@ -52,6 +52,9 @@ export const Footer = () => {
 							</Link>
 							<Link to='/catalog' className='block transition hover:text-white'>
 								Каталог
+							</Link>
+							<Link to='/reference' className='block transition hover:text-white'>
+								Справочники
 							</Link>
 							<Link to='/contacts' className='block transition hover:text-white'>
 								Контакты

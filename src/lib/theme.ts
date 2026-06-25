@@ -4,21 +4,20 @@ export const THEME_STORAGE_KEY = 'vac-theme'
 export const THEME_EVENT = 'vac-theme-change'
 
 export const getStoredTheme = (): Theme => {
-	if (typeof window === 'undefined') return 'dark'
+	if (typeof window === 'undefined') return 'light'
 
-	// Графит (тёмная тема) — по умолчанию; светлая только если выбрана явно.
+	// Светлая тема — по умолчанию; графит (тёмная) только если выбран явно.
 	const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
-	return savedTheme === 'light' ? 'light' : 'dark'
+	return savedTheme === 'dark' ? 'dark' : 'light'
 }
 
 export const applyTheme = (theme: Theme) => {
 	if (typeof document === 'undefined') return
 
 	const root = document.documentElement
-	// Графит всегда: даже в «светлой» теме используем графитовую (тёмную) раскраску.
-	root.classList.add('dark')
+	root.classList.toggle('dark', theme === 'dark')
 	root.dataset.theme = theme
-	root.style.colorScheme = 'dark'
+	root.style.colorScheme = theme
 }
 
 export const setTheme = (theme: Theme) => {

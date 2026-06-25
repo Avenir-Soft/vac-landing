@@ -99,20 +99,26 @@
 	--color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Формальный приглушённый серо-синий акцент (переопределяет палитру sky
-   по всему сайту — кнопки, ссылки, выделения). */
+/* Профессиональный «доверительный» небесно-синий акцент (палитра sky по всему
+   сайту — кнопки, ссылки, выделения). Рекомендация ui-ux-pro-max: sky-blue trust
+   + тёплый CTA. Primary ≈ #0EA5E9, текст глубокого тона ≈ #0C4A6E. */
 @theme {
-	--color-sky-50: #f3f6fa;
-	--color-sky-100: #e5ebf2;
-	--color-sky-200: #ccd8e6;
-	--color-sky-300: #a7bacf;
-	--color-sky-400: #7894b2;
-	--color-sky-500: #4f7193;
-	--color-sky-600: #41607d;
-	--color-sky-700: #354d64;
-	--color-sky-800: #2f4154;
-	--color-sky-900: #2a3848;
-	--color-sky-950: #1b2531;
+	--color-sky-50: #f0f9ff;
+	--color-sky-100: #e0f2fe;
+	--color-sky-200: #bae6fd;
+	--color-sky-300: #7dd3fc;
+	--color-sky-400: #38bdf8;
+	--color-sky-500: #0ea5e9;
+	--color-sky-600: #0284c7;
+	--color-sky-700: #0369a1;
+	--color-sky-800: #075985;
+	--color-sky-900: #0c4a6e;
+	--color-sky-950: #082f49;
+
+	/* Тёплый CTA-акцент (ui-ux-pro-max: warm CTA ≈ #F97316) */
+	--color-cta-400: #fb923c;
+	--color-cta-500: #f97316;
+	--color-cta-600: #ea580c;
 }
 
 :root {
@@ -260,7 +266,7 @@
 	}
 
 	::selection {
-		background: rgb(51 83 124 / 0.22);
+		background: rgb(14 165 233 / 0.24);
 		color: inherit;
 	}
 }
@@ -772,7 +778,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [role='button']:focus-visible {
-	outline: 2px solid #4f7193;
+	outline: 2px solid #0284c7;
 	outline-offset: 2px;
 	border-radius: 0.5rem;
 }
@@ -788,20 +794,39 @@ textarea:focus-visible,
 }
 
 .liquid-button-primary {
-	border-color: rgb(63 92 121 / 0.9);
-	background: linear-gradient(180deg, rgb(90 125 159), rgb(58 84 110));
+	border-color: rgb(2 132 199 / 0.9);
+	background: linear-gradient(180deg, rgb(14 165 233), rgb(2 132 199));
 	color: white;
 	box-shadow:
-		inset 0 1px 0 rgb(255 255 255 / 0.22),
-		0 14px 30px -22px rgb(41 56 72 / 0.7);
+		inset 0 1px 0 rgb(255 255 255 / 0.24),
+		0 14px 30px -22px rgb(2 132 199 / 0.7);
 }
 
 .liquid-button-primary::before {
-	background: linear-gradient(180deg, rgb(255 255 255 / 0.18), transparent 60%);
+	background: linear-gradient(180deg, rgb(255 255 255 / 0.2), transparent 60%);
 }
 
 .liquid-button-primary:hover {
-	background: linear-gradient(180deg, rgb(80 113 146), rgb(50 73 97));
+	background: linear-gradient(180deg, rgb(56 189 248), rgb(3 105 161));
+}
+
+/* Тёплый CTA — главное действие. Единый янтарный акцент (комплементарен синему),
+   тот же тон, что и кнопка калькулятора → цветовая гармония. */
+.liquid-button-cta {
+	border-color: rgb(180 83 9 / 0.92);
+	background: linear-gradient(180deg, rgb(251 191 36), rgb(217 119 6));
+	color: rgb(58 42 6);
+	box-shadow:
+		inset 0 1px 0 rgb(255 255 255 / 0.4),
+		0 16px 32px -20px rgb(180 83 9 / 0.8);
+}
+
+.liquid-button-cta::before {
+	background: linear-gradient(180deg, rgb(255 255 255 / 0.4), transparent 60%);
+}
+
+.liquid-button-cta:hover {
+	background: linear-gradient(180deg, rgb(252 211 77), rgb(234 134 16));
 }
 
 .liquid-button-secondary {
@@ -832,13 +857,13 @@ textarea:focus-visible,
 }
 
 .liquid-button-active {
-	border-color: rgb(63 92 121 / 0.5);
-	background: rgb(30 41 59);
+	border-color: transparent;
+	background: #2c2e33;
 	color: white;
 }
 
 .liquid-button-calculator {
-	border-color: rgb(176 137 43 / 0.95);
+	border-color: transparent;
 	background: linear-gradient(180deg, rgb(233 198 96), rgb(193 148 42));
 	color: rgb(48 36 8);
 	box-shadow:
@@ -901,13 +926,13 @@ textarea:focus-visible,
 }
 
 .dark .liquid-button-primary {
-	border-color: rgb(122 148 174 / 0.45);
-	background: linear-gradient(180deg, rgb(74 105 136), rgb(48 70 93));
+	border-color: rgb(56 189 248 / 0.4);
+	background: linear-gradient(180deg, rgb(2 132 199), rgb(3 105 161));
 	color: white;
 }
 
 .dark .liquid-button-primary:hover {
-	background: linear-gradient(180deg, rgb(84 117 150), rgb(54 78 102));
+	background: linear-gradient(180deg, rgb(14 165 233), rgb(3 105 161));
 }
 
 .dark .liquid-button-secondary {
@@ -930,7 +955,7 @@ textarea:focus-visible,
 }
 
 .dark .liquid-button-calculator {
-	border-color: rgb(196 156 56 / 0.6);
+	border-color: transparent;
 	background: linear-gradient(180deg, rgb(216 178 76), rgb(176 132 36));
 	color: rgb(38 28 6);
 }
