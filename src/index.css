@@ -391,26 +391,13 @@ html {
 }
 
 .hero-section {
-	background-color: #303338;
-	background-image:
-		linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px),
-		linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px),
-		radial-gradient(ellipse at top, rgb(150 160 172 / 0.16), transparent 60%);
-	background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px, 100% 100%;
-	background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+	/* Тот же графитовый фон, что и на остальных страницах (фон body),
+	   без отдельной сетки — чтобы главная совпадала с «Контактами». */
+	background: transparent;
 }
 
 .dark .hero-section {
-	background-color: #303338;
-	background-image:
-		linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px),
-		linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
-		linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px),
-		radial-gradient(ellipse at top, rgb(150 160 172 / 0.16), transparent 60%);
-	background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px, 100% 100%;
+	background: transparent;
 }
 
 .hero-duct-system {

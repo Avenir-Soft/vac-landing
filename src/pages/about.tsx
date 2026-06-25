@@ -18,7 +18,6 @@ const About = () => {
 			<NavbarForPages />
 
 			<section className='relative flex min-h-screen min-h-[100svh] items-center overflow-hidden px-4 pt-32 pb-14'>
-				<div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.16),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0),rgba(226,234,242,0.62))] dark:bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.1),transparent_26%),linear-gradient(180deg,rgba(9,16,27,0),rgba(4,8,15,0.48))]'></div>
 				<div className='section-shell relative z-10'>
 					<div className='grid items-stretch gap-6 lg:grid-cols-[0.9fr_1.1fr]'>
 						<div className='surface-card overflow-hidden p-3'>
