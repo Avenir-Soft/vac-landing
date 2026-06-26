@@ -63,7 +63,7 @@ const Catalog = () => {
 			<section className='relative min-h-screen overflow-hidden px-4 pt-32 pb-20'>
 				<div className='section-shell relative z-10'>
 					<div className='mx-auto max-w-5xl'>
-						<div className='surface-card overflow-hidden border-transparent dark:border-transparent'>
+						<div className='overflow-hidden rounded-3xl shadow-[0_10px_30px_-24px_rgba(18,40,67,0.16)] dark:shadow-[0_14px_36px_-30px_rgba(0,0,0,0.7)]'>
 							<div className='bg-[#2c2e33] p-8 text-white md:p-10 dark:bg-[#1c1d21]'>
 								<div className='flex h-16 w-16 items-center justify-center rounded-3xl border border-white/10 bg-white/8'>
 									<FileText size={34} strokeWidth={1.7} />

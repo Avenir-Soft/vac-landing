@@ -34,7 +34,7 @@ const calcLinks = [
 const navItems = [
 	{ label: 'Калькулятор', type: 'calc' as const },
 	{ label: 'О компании', type: 'about' as const },
-	{ label: 'Документы', type: 'docs' as const },
+	{ label: 'Продукция', type: 'docs' as const },
 	{ label: 'Контакты', to: '/contacts' },
 ]
 

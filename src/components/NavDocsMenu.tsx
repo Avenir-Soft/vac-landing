@@ -13,7 +13,7 @@ export const docsPaths = docsLinks.map(l => l.to)
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-/** Десктоп: выпадающий список «Документы» (framer-motion). */
+/** Десктоп: выпадающий список «Продукция» (framer-motion). */
 export const NavDocsMenu = ({ active = false }: { active?: boolean }) => {
 	const [open, setOpen] = useState(false)
 
@@ -31,7 +31,7 @@ export const NavDocsMenu = ({ active = false }: { active?: boolean }) => {
 					active ? 'liquid-button-active' : ''
 				}`}
 			>
-				Документы
+				Продукция
 				<ChevronDown
 					className={`h-4 w-4 transition-transform duration-300 ${
 						open ? 'rotate-180' : ''
@@ -70,7 +70,7 @@ export const NavDocsMenu = ({ active = false }: { active?: boolean }) => {
 	)
 }
 
-/** Мобильное меню: раскрывающийся блок «Документы» (framer-motion). */
+/** Мобильное меню: раскрывающийся блок «Продукция» (framer-motion). */
 export const NavDocsMobile = ({ onNavigate }: { onNavigate: () => void }) => {
 	const [open, setOpen] = useState(false)
 
@@ -83,7 +83,7 @@ export const NavDocsMobile = ({ onNavigate }: { onNavigate: () => void }) => {
 				className='liquid-button liquid-button-panel justify-between px-4 py-3 text-left text-base font-medium'
 			>
 				<span className='flex items-center gap-2'>
-					Документы
+					Продукция
 				</span>
 				<ChevronDown
 					className={`h-4 w-4 transition-transform duration-300 ${
