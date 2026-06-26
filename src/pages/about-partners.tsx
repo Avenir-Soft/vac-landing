@@ -192,9 +192,9 @@ const AboutPartners = () => {
 								</p>
 							</div>
 
-							{/* Единая таблица: заголовок один раз сверху, категории идут
-							    подряд полосами, колонки выровнены (table-fixed). */}
-							<div className='overflow-x-auto'>
+							{/* Десктоп: единая таблица (заголовок один раз сверху,
+							    категории идут подряд полосами, колонки выровнены). */}
+							<div className='hidden overflow-x-auto md:block'>
 								<table className='w-full min-w-[680px] table-fixed text-left text-sm'>
 									<colgroup>
 										<col className='w-1/2' />
@@ -243,6 +243,39 @@ const AboutPartners = () => {
 										))}
 									</tbody>
 								</table>
+							</div>
+
+							{/* Мобильные: каждая категория — полоса-заголовок, строки —
+							    вертикальные карточки. Без горизонтального скролла. */}
+							<div className='md:hidden'>
+								{projectCategories.map(cat => (
+									<div key={`m-${cat.title}`}>
+										<div className='flex items-center gap-2 bg-[#2c2e33] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-white dark:bg-[#1c1d21]'>
+											<cat.icon size={16} strokeWidth={1.9} className='shrink-0' />
+											<span className='leading-tight'>{cat.title}</span>
+										</div>
+										<div className='divide-y divide-slate-100 dark:divide-slate-800/70'>
+											{cat.rows.map((row, i) => (
+												<div key={`m-${cat.title}-${i}`} className='px-4 py-4'>
+													<div className='flex items-start justify-between gap-3'>
+														<p className='font-semibold leading-snug text-slate-900 dark:text-white'>
+															{row.object}
+														</p>
+														<span className='mt-0.5 shrink-0 rounded-full bg-sky-50 px-2.5 py-1 text-xs font-bold whitespace-nowrap text-sky-700 dark:bg-sky-500/10 dark:text-sky-300'>
+															{row.year}
+														</span>
+													</div>
+													<p className='mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300'>
+														<span className='text-slate-400 dark:text-slate-500'>
+															Организация:{' '}
+														</span>
+														{row.org}
+													</p>
+												</div>
+											))}
+										</div>
+									</div>
+								))}
 							</div>
 						</div>
 					</div>
