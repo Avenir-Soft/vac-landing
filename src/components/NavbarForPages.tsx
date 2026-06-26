@@ -22,6 +22,10 @@ const aboutLinks = [
 	},
 ]
 
+// Все маршруты под «О компании» — для подсветки активной вкладки
+// (включая /about/partners и /about/gallery, а не только /about).
+const aboutPaths = aboutLinks.map(link => link.to)
+
 const calcLinks = [
 	{
 		label: 'Инженерный расчёт',
@@ -128,7 +132,7 @@ const NavbarForPages = () => {
 										<button
 											type='button'
 											className={`liquid-button liquid-button-nav px-4 py-2 text-sm font-medium ${
-												location.pathname === '/about'
+												aboutPaths.includes(location.pathname)
 													? 'liquid-button-active'
 													: ''
 											}`}
@@ -279,7 +283,7 @@ const NavbarForPages = () => {
 											type='button'
 											onClick={() => setIsAboutOpen(!isAboutOpen)}
 											className={`liquid-button liquid-button-panel justify-between px-4 py-3 text-left text-base font-medium ${
-												location.pathname === '/about'
+												aboutPaths.includes(location.pathname)
 													? 'liquid-button-active'
 													: ''
 											}`}
