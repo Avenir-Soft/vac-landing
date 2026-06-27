@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export const docsLinks = [
+	{ label: 'Прайс-лист', to: '/prices' },
 	{ label: 'Каталог', to: '/catalog' },
 	{ label: 'Справочники', to: '/reference' },
-	{ label: 'Прайс-лист', to: '/prices' },
 ]
 
 export const docsPaths = docsLinks.map(l => l.to)
@@ -25,7 +25,7 @@ export const NavDocsMenu = ({ active = false }: { active?: boolean }) => {
 		>
 			<button
 				type='button'
-				onFocus={() => setOpen(true)}
+				tabIndex={-1}
 				aria-expanded={open}
 				className={`liquid-button liquid-button-nav px-4 py-2 text-sm font-medium ${
 					active ? 'liquid-button-active' : ''

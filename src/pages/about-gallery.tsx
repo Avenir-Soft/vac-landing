@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 
-// Фото лежат в public/gallery (g-1.png … g-30.png).
-const GALLERY_COUNT = 30
+// Фото лежат в public/gallery (g-1.png … g-29.png).
+const GALLERY_COUNT = 29
 const galleryImages = Array.from({ length: GALLERY_COUNT }, (_, i) => ({
 	src: `/gallery/g-${i + 1}.png`,
 	label: `Производство VAC.UZ — фото ${i + 1}`,

@@ -27,12 +27,12 @@ const aboutLinks = [
 const aboutPaths = aboutLinks.map(link => link.to)
 
 const calcLinks = [
+	{ label: 'Упрощённый расчёт', to: '/calculator' },
 	{
 		label: 'Инженерный расчёт',
 		href: 'https://vac-calculator.uz',
 		external: true,
 	},
-	{ label: 'Упрощённый расчёт', to: '/calculator' },
 ]
 
 const links = [
@@ -92,11 +92,11 @@ const NavbarForPages = () => {
 											className='liquid-button liquid-button-calculator px-4 py-2 text-sm font-semibold'
 										>
 											{link.label}
-											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
+											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180' />
 										</button>
 
-										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[230px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
-											<div className='translate-y-2 rounded-[20px] border border-amber-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(176,137,43,0.45)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-amber-500/30 dark:bg-[#26282d]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
+										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[230px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100'>
+											<div className='translate-y-2 rounded-[20px] border border-amber-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(176,137,43,0.45)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 dark:border-amber-500/30 dark:bg-[#26282d]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
 												<div className='space-y-1'>
 													{calcLinks.map(item =>
 														item.external ? (
@@ -138,11 +138,11 @@ const NavbarForPages = () => {
 											}`}
 										>
 											{link.label}
-											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180 group-focus-within:rotate-180' />
+											<ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180' />
 										</button>
 
-										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[210px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100'>
-											<div className='translate-y-2 rounded-[20px] border border-slate-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(20,24,30,0.28)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 dark:border-slate-700/80 dark:bg-[#26282d]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
+										<div className='pointer-events-none invisible absolute top-full left-1/2 z-30 w-[210px] -translate-x-1/2 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100'>
+											<div className='translate-y-2 rounded-[20px] border border-slate-200 bg-white/96 p-2 shadow-[0_22px_46px_-30px_rgba(20,24,30,0.28)] backdrop-blur-xl transition-all duration-300 group-hover:translate-y-0 dark:border-slate-700/80 dark:bg-[#26282d]/96 dark:shadow-[0_22px_46px_-30px_rgba(3,10,20,0.78)]'>
 												<div className='space-y-1'>
 													{aboutLinks.map(item => (
 														<Link
