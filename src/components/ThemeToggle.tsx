@@ -1,10 +1,37 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Moon, Sun } from 'lucide-react'
+import { useLanguage } from '../hooks/useLanguage'
 import { useTheme } from '../hooks/useTheme'
+import type { Lang } from '../i18n/language'
+
+const ru = {
+	enableLight: 'Включить светлую тему',
+	enableDark: 'Включить тёмную тему',
+	lightTheme: 'Светлая тема',
+	darkTheme: 'Тёмная тема',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		enableLight: 'Switch to light theme',
+		enableDark: 'Switch to dark theme',
+		lightTheme: 'Light theme',
+		darkTheme: 'Dark theme',
+	},
+	uz: {
+		enableLight: 'Yorug‘ mavzuni yoqish',
+		enableDark: 'Qorong‘u mavzuni yoqish',
+		lightTheme: 'Yorug‘ mavzu',
+		darkTheme: 'Qorong‘u mavzu',
+	},
+}
 
 /** Переключатель светлой / графитовой темы с плавной сменой иконки. */
 const ThemeToggle = () => {
 	const { theme, toggleTheme } = useTheme()
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const isDark = theme === 'dark'
 
 	return (
@@ -12,8 +39,8 @@ const ThemeToggle = () => {
 			type='button'
 			onClick={toggleTheme}
 			className='liquid-button liquid-button-icon liquid-button-nav'
-			aria-label={isDark ? 'Включить светлую тему' : 'Включить тёмную тему'}
-			title={isDark ? 'Светлая тема' : 'Тёмная тема'}
+			aria-label={isDark ? t.enableLight : t.enableDark}
+			title={isDark ? t.lightTheme : t.darkTheme}
 		>
 			<AnimatePresence mode='wait' initial={false}>
 				<motion.span

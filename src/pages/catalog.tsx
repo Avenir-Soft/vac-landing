@@ -10,39 +10,116 @@ import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 import SharePdf from '../components/SharePdf'
 import { Stagger, StaggerItem } from '../components/motion/Reveal'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 
 type CatalogDoc = {
 	id: string
-	title: string
-	description: string
 	src: string
 	downloadName: string
-	badge: string
 }
 
 const documents: CatalogDoc[] = [
 	{
 		id: 'main',
-		title: 'Полный каталог продукции',
-		description:
-			'Все позиции, технические характеристики и комплектующие в одном документе.',
 		src: '/каталог.pdf',
 		downloadName: 'vac-uz-katalog.pdf',
-		badge: 'PDF · большой каталог',
 	},
 	{
 		id: 'products',
-		title: 'Краткий каталог продукции',
-		description:
-			'Сокращённая версия для быстрого ознакомления и отправки заказчику.',
 		src: '/products-catalog.pdf',
 		downloadName: 'products-catalog.pdf',
-		badge: 'PDF · краткий обзор',
 	},
 ]
 
+const ru = {
+	kicker: 'Catalog',
+	heroTitle: 'Каталог продукции VAC.UZ',
+	heroText:
+		'Просматривайте каталоги прямо на странице или скачивайте PDF — удобно для подбора решений и отправки коллегам.',
+	view: 'Просмотреть',
+	hide: 'Скрыть',
+	download: 'Скачать',
+	viewOnline: 'Просмотр онлайн',
+	openNewTab: 'Открыть в новой вкладке',
+	noPdfSupport: 'Ваш браузер не поддерживает встроенный просмотр PDF.',
+	docs: [
+		{
+			title: 'Полный каталог продукции',
+			description:
+				'Все позиции, технические характеристики и комплектующие в одном документе.',
+			badge: 'PDF · большой каталог',
+		},
+		{
+			title: 'Краткий каталог продукции',
+			description:
+				'Сокращённая версия для быстрого ознакомления и отправки заказчику.',
+			badge: 'PDF · краткий обзор',
+		},
+	],
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		kicker: 'Catalog',
+		heroTitle: 'VAC.UZ product catalog',
+		heroText:
+			'View the catalogs right on the page or download the PDF — convenient for choosing solutions and sending to colleagues.',
+		view: 'View',
+		hide: 'Hide',
+		download: 'Download',
+		viewOnline: 'View online',
+		openNewTab: 'Open in a new tab',
+		noPdfSupport: 'Your browser does not support built-in PDF viewing.',
+		docs: [
+			{
+				title: 'Full product catalog',
+				description:
+					'All items, technical specifications and components in one document.',
+				badge: 'PDF · large catalog',
+			},
+			{
+				title: 'Brief product catalog',
+				description:
+					'A shortened version for quick review and sending to the customer.',
+				badge: 'PDF · brief overview',
+			},
+		],
+	},
+	uz: {
+		kicker: 'Katalog',
+		heroTitle: 'VAC.UZ mahsulotlar katalogi',
+		heroText:
+			'Kataloglarni to‘g‘ridan-to‘g‘ri sahifada ko‘ring yoki PDF’ni yuklab oling — yechimlarni tanlash va hamkasblarga yuborish uchun qulay.',
+		view: 'Ko‘rish',
+		hide: 'Yashirish',
+		download: 'Yuklab olish',
+		viewOnline: 'Onlayn ko‘rish',
+		openNewTab: 'Yangi oynada ochish',
+		noPdfSupport:
+			'Brauzeringiz o‘rnatilgan PDF ko‘rishni qo‘llab-quvvatlamaydi.',
+		docs: [
+			{
+				title: 'To‘liq mahsulotlar katalogi',
+				description:
+					'Barcha pozitsiyalar, texnik xususiyatlar va butlovchi qismlar bitta hujjatda.',
+				badge: 'PDF · katta katalog',
+			},
+			{
+				title: 'Qisqacha mahsulotlar katalogi',
+				description:
+					'Tez tanishish va buyurtmachiga yuborish uchun qisqartirilgan versiya.',
+				badge: 'PDF · qisqacha ko‘rib chiqish',
+			},
+		],
+	},
+}
+
 const Catalog = () => {
 	const [openId, setOpenId] = useState<string | null>(null)
+	const { lang } = useLanguage()
+	const t = content[lang]
 
 	const handleDownload = (doc: CatalogDoc) => {
 		const link = document.createElement('a')
@@ -69,21 +146,21 @@ const Catalog = () => {
 									<FileText size={34} strokeWidth={1.7} />
 								</div>
 								<p className='mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-slate-300'>
-									Catalog
+									{t.kicker}
 								</p>
 								<h1 className='mt-4 text-[clamp(2rem,1.4rem+3vw,3rem)] font-bold leading-tight'>
-									Каталог продукции VAC.UZ
+									{t.heroTitle}
 								</h1>
 								<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
-									Просматривайте каталоги прямо на странице или скачивайте PDF —
-									удобно для подбора решений и отправки коллегам.
+									{t.heroText}
 								</p>
 							</div>
 						</div>
 
 						<Stagger className='mt-8 space-y-5'>
-							{documents.map(doc => {
+							{documents.map((doc, i) => {
 								const isOpen = openId === doc.id
+								const text = t.docs[i]
 								return (
 									<StaggerItem key={doc.id} className='surface-card overflow-hidden'>
 										<div className='flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8'>
@@ -92,12 +169,12 @@ const Catalog = () => {
 													<FileText size={22} strokeWidth={1.8} />
 												</div>
 												<div>
-													<span className='section-kicker'>{doc.badge}</span>
+													<span className='section-kicker'>{text.badge}</span>
 													<h2 className='mt-2 text-[clamp(1.2rem,1.05rem+0.7vw,1.5rem)] font-bold text-slate-950 dark:text-white'>
-														{doc.title}
+														{text.title}
 													</h2>
 													<p className='mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300'>
-														{doc.description}
+														{text.description}
 													</p>
 												</div>
 											</div>
@@ -111,7 +188,7 @@ const Catalog = () => {
 													aria-controls={`pdf-viewer-${doc.id}`}
 												>
 													<Eye size={16} />
-													{isOpen ? 'Скрыть' : 'Просмотреть'}
+													{isOpen ? t.hide : t.view}
 													<ChevronDown
 														size={15}
 														className={`transition-transform duration-300 ${
@@ -125,11 +202,11 @@ const Catalog = () => {
 													className='liquid-button liquid-button-primary w-full justify-center px-4 py-3 text-sm font-bold sm:py-2.5 sm:text-[13px]'
 												>
 													<Download size={16} />
-													Скачать
+													{t.download}
 												</button>
 												<SharePdf
 													src={doc.src}
-													title={doc.title}
+													title={text.title}
 													className='liquid-button liquid-button-panel w-full justify-center px-4 py-3 text-sm font-semibold sm:py-2.5 sm:text-[13px]'
 												/>
 											</div>
@@ -142,7 +219,7 @@ const Catalog = () => {
 											>
 												<div className='mb-3 flex items-center justify-between gap-3'>
 													<p className='text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400'>
-														Просмотр онлайн
+														{t.viewOnline}
 													</p>
 													<a
 														href={doc.src}
@@ -151,7 +228,7 @@ const Catalog = () => {
 														className='inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 underline-offset-4 hover:underline dark:text-slate-400'
 													>
 														<ExternalLink size={14} />
-														Открыть в новой вкладке
+														{t.openNewTab}
 													</a>
 												</div>
 												<div className='overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-inner dark:border-slate-800 dark:bg-[#1c1d21]'>
@@ -159,12 +236,11 @@ const Catalog = () => {
 														data={doc.src}
 														type='application/pdf'
 														className='h-[80vh] min-h-[520px] w-full'
-														aria-label={`${doc.title} (PDF)`}
+														aria-label={`${text.title} (PDF)`}
 													>
 														<div className='p-8 text-center'>
 															<p className='text-sm leading-6 text-slate-600 dark:text-slate-300'>
-																Ваш браузер не поддерживает встроенный просмотр
-																PDF.
+																{t.noPdfSupport}
 															</p>
 															<a
 																href={doc.src}
@@ -173,7 +249,7 @@ const Catalog = () => {
 																className='liquid-button liquid-button-primary mt-4 inline-flex px-5 py-3 text-sm font-semibold'
 															>
 																<ExternalLink size={18} />
-																Открыть в новой вкладке
+																{t.openNewTab}
 															</a>
 														</div>
 													</object>

@@ -1,16 +1,38 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 import {
 	CALC_CATEGORIES,
 	getVariantImage,
+	tCalc,
 	type CalcCategory,
 	type CalcVariant,
 } from '../lib/calculator'
 import CalculatorSchematic from './CalculatorSchematic'
 
-const formatNumber = (n: number, digits = 2) =>
-	n.toLocaleString('ru-RU', {
+const ru = {
+	quantity: 'Количество, шт',
+	total: 'Итого',
+	pcs: 'шт',
+	areaUnit: 'м²',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: { quantity: 'Quantity, pcs', total: 'Total', pcs: 'pcs', areaUnit: 'm²' },
+	uz: { quantity: 'Miqdori, dona', total: 'Jami', pcs: 'dona', areaUnit: 'm²' },
+}
+
+const LOCALES: Record<Lang, string> = {
+	ru: 'ru-RU',
+	en: 'en-US',
+	uz: 'uz-UZ',
+}
+
+const formatNumber = (n: number, lang: Lang, digits = 2) =>
+	n.toLocaleString(LOCALES[lang], {
 		minimumFractionDigits: digits,
 		maximumFractionDigits: digits,
 	})
@@ -34,6 +56,8 @@ const VariantCard = ({
 	category: CalcCategory
 	variant: CalcVariant
 }) => {
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const [values, setValues] = useState<Record<string, string>>({})
 	const [quantity, setQuantity] = useState('1')
 
@@ -58,7 +82,7 @@ const VariantCard = ({
 		<div className='flex flex-col rounded-3xl border border-slate-200 bg-white p-5 md:p-6 dark:border-slate-800 dark:bg-slate-900'>
 			{category.variants.length > 1 && (
 				<h4 className='mb-4 text-sm font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300'>
-					{variant.label}
+					{tCalc(variant.label, lang)}
 				</h4>
 			)}
 
@@ -68,7 +92,7 @@ const VariantCard = ({
 					{getVariantImage(variant.image) ? (
 						<img
 							src={getVariantImage(variant.image)}
-							alt={`${category.label} — ${variant.label}`}
+							alt={`${tCalc(category.label, lang)} — ${tCalc(variant.label, lang)}`}
 							className='max-h-full w-full rounded-2xl bg-white object-contain p-2'
 							loading='lazy'
 						/>
@@ -82,8 +106,8 @@ const VariantCard = ({
 					{variant.fields.map(fld => (
 						<div key={fld.key}>
 							<label className={labelClass} htmlFor={`f-${variant.id}-${fld.key}`}>
-								{fld.label}
-								{fld.unit ? `, ${fld.unit}` : ''}
+								{tCalc(fld.label, lang)}
+								{fld.unit ? `, ${tCalc(fld.unit, lang)}` : ''}
 							</label>
 							{fld.type === 'select' ? (
 								<select
@@ -116,7 +140,7 @@ const VariantCard = ({
 
 					<div>
 						<label className={labelClass} htmlFor={`f-${variant.id}-qty`}>
-							Количество, шт
+							{t.quantity}
 						</label>
 						<input
 							id={`f-${variant.id}-qty`}
@@ -133,15 +157,19 @@ const VariantCard = ({
 
 			{variant.note && (
 				<p className='mt-4 text-xs text-slate-400 dark:text-slate-500'>
-					* {variant.note}
+					* {tCalc(variant.note, lang)}
 				</p>
 			)}
 
 			{/* Итого */}
 			<div className='mt-6 flex flex-wrap items-center gap-x-10 gap-y-2 rounded-3xl bg-[#2c2e33] px-6 py-5 text-white dark:bg-[#1c1d21]'>
 				<div>
-					<p className='text-xs text-slate-400'>Итого, {qtyNum} шт</p>
-					<p className='text-2xl font-bold'>{formatNumber(areaTotal)} м²</p>
+					<p className='text-xs text-slate-400'>
+						{t.total}, {qtyNum} {t.pcs}
+					</p>
+					<p className='text-2xl font-bold'>
+						{formatNumber(areaTotal, lang)} {t.areaUnit}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -149,6 +177,7 @@ const VariantCard = ({
 }
 
 const Calculator = () => {
+	const { lang } = useLanguage()
 	// Все драверы изначально закрыты — пользователь раскрывает нужный сам.
 	const [openCat, setOpenCat] = useState<string>('')
 
@@ -172,7 +201,7 @@ const Calculator = () => {
 							}`}
 						>
 							<span className='text-sm font-bold uppercase tracking-wide md:text-base'>
-								{cat.label}
+								{tCalc(cat.label, lang)}
 							</span>
 							<ChevronDown
 								size={20}

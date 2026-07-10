@@ -3,6 +3,8 @@
 // участков и фасонных частей вентиляции. Реализованы как чистые функции:
 // на вход — размеры в указанных единицах, на выходе — площадь одного изделия в м².
 
+import type { Lang } from '../i18n/language'
+
 export type DiagramKey =
 	| 'ductRound'
 	| 'ductRect'
@@ -524,4 +526,95 @@ export const getVariantImage = (image?: string): string | undefined => {
 		path.endsWith(`/${image}.png`)
 	)
 	return entry?.[1]
+}
+
+// Локализация подписей калькулятора: данные CALC_CATEGORIES остаются на русском
+// (чтобы не трогать формулы), а тексты переводятся на лету по словарю русский→{en,uz}.
+const CALC_I18N: Record<string, { en: string; uz: string }> = {
+	// Категории
+	'Прямой участок': { en: 'Straight duct', uz: 'To‘g‘ri qism' },
+	Отвод: { en: 'Elbow', uz: 'Otvod' },
+	Переход: { en: 'Transition', uz: 'O‘tish' },
+	Врезка: { en: 'Tap-in', uz: 'Vrezka' },
+	Тройник: { en: 'Tee', uz: 'Troynik' },
+	Заглушка: { en: 'Cap', uz: 'Zaglushka' },
+	Утка: { en: 'Offset', uz: 'Utka' },
+	'Вытяжные зонты': { en: 'Exhaust hoods', uz: 'So‘rg‘ich zontlar' },
+	// Варианты сечений
+	'Круглое сечение': { en: 'Round section', uz: 'Doiraviy kesim' },
+	'Прямоугольное сечение': { en: 'Rectangular section', uz: 'To‘rtburchak kesim' },
+	'Круг → круг': { en: 'Round → round', uz: 'Doira → doira' },
+	'Прямоуг. → прямоуг.': { en: 'Rect. → rect.', uz: 'To‘rtb. → to‘rtb.' },
+	'Круг → прямоуг.': { en: 'Round → rect.', uz: 'Doira → to‘rtb.' },
+	'Прямая, круглая': { en: 'Straight, round', uz: 'To‘g‘ri, doiraviy' },
+	'Прямая, прямоугольная': { en: 'Straight, rectangular', uz: 'To‘g‘ri, to‘rtburchak' },
+	'С воротником, круглая': { en: 'With collar, round', uz: 'Manjetli, doiraviy' },
+	'С воротником, прямоугольная': {
+		en: 'With collar, rectangular',
+		uz: 'Manjetli, to‘rtburchak',
+	},
+	'Круг + круглый отвод': { en: 'Round + round branch', uz: 'Doira + doiraviy tarmoq' },
+	'Круг + прямоуг. врезка': { en: 'Round + rect. tap', uz: 'Doira + to‘rtb. vrezka' },
+	'Прямоуг. + круглый отвод': {
+		en: 'Rect. + round branch',
+		uz: 'To‘rtb. + doiraviy tarmoq',
+	},
+	'Прямоуг. + прямоуг. отвод': {
+		en: 'Rect. + rect. branch',
+		uz: 'To‘rtb. + to‘rtb. tarmoq',
+	},
+	Круглая: { en: 'Round', uz: 'Doiraviy' },
+	Прямоугольная: { en: 'Rectangular', uz: 'To‘rtburchak' },
+	'Одно смещение': { en: 'Single offset', uz: 'Bitta siljish' },
+	'Два смещения': { en: 'Double offset', uz: 'Ikkita siljish' },
+	'Зонт остроугольный': { en: 'Sharp-angle hood', uz: 'O‘tkir burchakli zont' },
+	'Зонт тупоугольный': { en: 'Obtuse-angle hood', uz: 'O‘tmas burchakli zont' },
+	// Поля
+	'Длина L': { en: 'Length L', uz: 'Uzunlik L' },
+	'Диаметр D': { en: 'Diameter D', uz: 'Diametr D' },
+	'Ширина A': { en: 'Width A', uz: 'Kenglik A' },
+	'Высота B': { en: 'Height B', uz: 'Balandlik B' },
+	'Угол α': { en: 'Angle α', uz: 'Burchak α' },
+	'Диаметр D1': { en: 'Diameter D1', uz: 'Diametr D1' },
+	'Ширина A1': { en: 'Width A1', uz: 'Kenglik A1' },
+	'Высота B1': { en: 'Height B1', uz: 'Balandlik B1' },
+	'Диаметр воротника D': { en: 'Collar diameter D', uz: 'Manjet diametri D' },
+	'Диаметр врезки d': { en: 'Tap diameter d', uz: 'Vrezka diametri d' },
+	'Длина воротника l1': { en: 'Collar length l1', uz: 'Manjet uzunligi l1' },
+	'Магистраль D': { en: 'Main duct D', uz: 'Magistral D' },
+	'Ответвление D1': { en: 'Branch D1', uz: 'Tarmoq D1' },
+	'Длина L1': { en: 'Length L1', uz: 'Uzunlik L1' },
+	'Ширина врезки A': { en: 'Tap width A', uz: 'Vrezka kengligi A' },
+	'Высота врезки B': { en: 'Tap height B', uz: 'Vrezka balandligi B' },
+	'Длина врезки L1': { en: 'Tap length L1', uz: 'Vrezka uzunligi L1' },
+	'Магистраль A': { en: 'Main duct A', uz: 'Magistral A' },
+	'Магистраль B': { en: 'Main duct B', uz: 'Magistral B' },
+	'Ответвление D': { en: 'Branch D', uz: 'Tarmoq D' },
+	'Ответвление A1': { en: 'Branch A1', uz: 'Tarmoq A1' },
+	'Ответвление B1': { en: 'Branch B1', uz: 'Tarmoq B1' },
+	'Сдвиг H': { en: 'Offset H', uz: 'Siljish H' },
+	'Сдвиг H1': { en: 'Offset H1', uz: 'Siljish H1' },
+	'Низ A': { en: 'Bottom A', uz: 'Past A' },
+	'Низ B': { en: 'Bottom B', uz: 'Past B' },
+	'Верх A1': { en: 'Top A1', uz: 'Tepa A1' },
+	'Верх B1': { en: 'Top B1', uz: 'Tepa B1' },
+	'Высота H': { en: 'Height H', uz: 'Balandlik H' },
+	'Полка C1': { en: 'Flange C1', uz: 'Polka C1' },
+	// Единицы измерения
+	мм: { en: 'mm', uz: 'mm' },
+	м: { en: 'm', uz: 'm' },
+	// Примечания
+	'Приближённый расчёт развёртки.': {
+		en: 'Approximate development area.',
+		uz: 'Yoyilma taxminan hisoblanadi.',
+	},
+	// Подпись на схеме
+	магистраль: { en: 'main', uz: 'magistral' },
+}
+
+/** Перевод подписи калькулятора. Русский — как есть; для en/uz — по словарю. */
+export const tCalc = (text: string | undefined, lang: Lang): string => {
+	if (!text) return ''
+	if (lang === 'ru') return text
+	return CALC_I18N[text]?.[lang] ?? text
 }

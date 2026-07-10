@@ -1,7 +1,27 @@
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
+
 interface Partner {
 	id: number
 	name: string
 	logo: string
+}
+
+const ru = {
+	kicker: 'Партнёры',
+	title: 'Нам доверяют крупные компании',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		kicker: 'Partners',
+		title: 'Trusted by major companies',
+	},
+	uz: {
+		kicker: 'Hamkorlar',
+		title: 'Yirik kompaniyalar bizga ishonishadi',
+	},
 }
 
 const partners: Partner[] = [
@@ -27,12 +47,15 @@ const partners: Partner[] = [
 ]
 
 const TrustedPartners = () => {
+	const { lang } = useLanguage()
+	const t = content[lang]
+
 	return (
 		<section className='py-10 md:py-14'>
 			<div className='section-shell'>
 				<div className='mb-6 max-w-3xl md:mb-8'>
-					<span className='section-kicker'>Партнёры</span>
-					<h2 className='section-title mt-4'>Нам доверяют крупные компании</h2>
+					<span className='section-kicker'>{t.kicker}</span>
+					<h2 className='section-title mt-4'>{t.title}</h2>
 				</div>
 
 				<div className='partners-glass-shell rounded-[32px] p-4 md:p-6'>

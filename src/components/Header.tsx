@@ -2,14 +2,48 @@
 
 import { Award, Briefcase, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 import Navbar from './Navbar'
 import { Stagger, StaggerItem } from './motion/Reveal'
 
-const stats = [
-	{ icon: Briefcase, label: 'Проектов', value: 500, suffix: '+' },
-	{ icon: Users, label: 'Клиентов', value: 404, suffix: '+' },
-	{ icon: Award, label: 'Опыт', value: 12, suffix: ' лет' },
-]
+const ru = {
+	statProjects: 'Проектов',
+	statClients: 'Клиентов',
+	statExperience: 'Опыт',
+	years: ' лет',
+	kicker: 'Производство воздуховодов',
+	titleMain: 'Воздуховоды и вентиляционные системы',
+	titleSub: 'для строительных и промышленных объектов',
+	visitorsBefore: 'Сейчас на сайте',
+	visitorsAfter: 'посетителей',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		statProjects: 'Projects',
+		statClients: 'Clients',
+		statExperience: 'Experience',
+		years: ' years',
+		kicker: 'Air duct manufacturing',
+		titleMain: 'Air ducts and ventilation systems',
+		titleSub: 'for construction and industrial facilities',
+		visitorsBefore: 'Now on the site',
+		visitorsAfter: 'visitors',
+	},
+	uz: {
+		statProjects: 'Loyihalar',
+		statClients: 'Mijozlar',
+		statExperience: 'Tajriba',
+		years: ' yil',
+		kicker: 'Havo o‘tkazgichlar ishlab chiqarish',
+		titleMain: 'Havo o‘tkazgichlar va ventilatsiya tizimlari',
+		titleSub: 'qurilish va sanoat obyektlari uchun',
+		visitorsBefore: 'Hozir saytda',
+		visitorsAfter: 'tashrifchi',
+	},
+}
 
 const AnimatedCounter = ({
 	end,
@@ -52,6 +86,8 @@ const AnimatedCounter = ({
 }
 
 const LiveVisitors = () => {
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const [visitors, setVisitors] = useState(
 		() => 34 + Math.floor(Math.random() * 13),
 	)
@@ -89,11 +125,11 @@ const LiveVisitors = () => {
 			<div className='flex items-center gap-2'>
 				<Users className='h-4 w-4 text-sky-600 dark:text-sky-300' />
 				<p className='text-sm font-semibold text-slate-700 dark:text-slate-100'>
-					Сейчас на сайте{' '}
+					{t.visitorsBefore}{' '}
 					<span className='tabular-nums text-slate-950 dark:text-white'>
 						{visitors}
 					</span>{' '}
-					посетителей
+					{t.visitorsAfter}
 				</p>
 			</div>
 		</div>
@@ -101,6 +137,15 @@ const LiveVisitors = () => {
 }
 
 export const Header = () => {
+	const { lang } = useLanguage()
+	const t = content[lang]
+
+	const stats = [
+		{ icon: Briefcase, value: 500, suffix: '+', label: t.statProjects },
+		{ icon: Users, value: 404, suffix: '+', label: t.statClients },
+		{ icon: Award, value: 12, suffix: t.years, label: t.statExperience },
+	]
+
 	return (
 		<>
 			<Navbar />
@@ -113,14 +158,14 @@ export const Header = () => {
 							<Stagger className='relative z-10' stagger={0.12} delay={0.1}>
 								<StaggerItem>
 									<p className='mt-5 text-sm font-semibold uppercase tracking-[0.24em] text-sky-700 dark:text-sky-300'>
-										Производство воздуховодов
+										{t.kicker}
 									</p>
 								</StaggerItem>
 								<StaggerItem>
 									<h1 className='mt-3 max-w-4xl text-[clamp(1.65rem,1.05rem+3vw,4.3rem)] font-bold leading-[1.02] text-slate-950 sm:leading-[0.94] dark:text-white'>
-										Воздуховоды и вентиляционные системы
+										{t.titleMain}
 										<span className='mt-2 block text-[clamp(1.05rem,0.8rem+1.4vw,2.2rem)] leading-[1.25] text-slate-500 sm:leading-[1.02] dark:text-slate-300'>
-											для строительных и промышленных объектов
+											{t.titleSub}
 										</span>
 									</h1>
 								</StaggerItem>

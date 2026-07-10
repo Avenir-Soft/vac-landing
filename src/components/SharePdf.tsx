@@ -1,5 +1,27 @@
 import { Check, Copy, Mail, MessageCircle, Send, Share2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
+
+const ru = {
+	share: 'Поделиться',
+	copyLink: 'Копировать ссылку',
+	linkCopied: 'Ссылка скопирована',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		share: 'Share',
+		copyLink: 'Copy link',
+		linkCopied: 'Link copied',
+	},
+	uz: {
+		share: 'Ulashish',
+		copyLink: 'Havolani nusxalash',
+		linkCopied: 'Havola nusxalandi',
+	},
+}
 
 type Props = {
 	/** Путь к PDF (относительный или абсолютный) */
@@ -20,6 +42,8 @@ const MENU_WIDTH = 224
  * не обрезал overflow-hidden родительской карточки.
  */
 const SharePdf = ({ src, title, className }: Props) => {
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const [open, setOpen] = useState(false)
 	const [copied, setCopied] = useState(false)
 	const [pos, setPos] = useState({ top: 0, left: 0 })
@@ -112,7 +136,7 @@ const SharePdf = ({ src, title, className }: Props) => {
 				aria-expanded={open}
 			>
 				<Share2 size={18} />
-				Поделиться
+				{t.share}
 			</button>
 
 			{open && (
@@ -128,18 +152,18 @@ const SharePdf = ({ src, title, className }: Props) => {
 						style={{ top: pos.top, left: pos.left, width: MENU_WIDTH }}
 						className='fixed z-50 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_22px_46px_-26px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-[#122033]'
 					>
-						{targets.map(t => (
+						{targets.map(target => (
 							<a
-								key={t.label}
-								href={t.href}
+								key={target.label}
+								href={target.href}
 								target='_blank'
 								rel='noopener noreferrer'
 								role='menuitem'
 								onClick={() => setOpen(false)}
 								className='flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-800/70'
 							>
-								<t.icon size={18} />
-								{t.label}
+								<target.icon size={18} />
+								{target.label}
 							</a>
 						))}
 						<button
@@ -149,7 +173,7 @@ const SharePdf = ({ src, title, className }: Props) => {
 							className='flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-800/70'
 						>
 							{copied ? <Check size={18} /> : <Copy size={18} />}
-							{copied ? 'Ссылка скопирована' : 'Копировать ссылку'}
+							{copied ? t.linkCopied : t.copyLink}
 						</button>
 					</div>
 				</>

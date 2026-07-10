@@ -1,10 +1,52 @@
 import { CheckCircle2, Phone, X } from 'lucide-react'
 import { useState } from 'react'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 
 const TELEGRAM_BOT_TOKEN = '8244935192:AAFf57K5C7lrrPyWLKU6xjE021nLlVlk15s'
 const TELEGRAM_CHAT_ID = '-1003652371972'
 
+const ru = {
+	sendError: 'Ошибка отправки. Попробуйте позже.',
+	orderCall: 'Заказать звонок',
+	close: 'Закрыть',
+	callbackDay: 'Мы перезвоним в течение дня',
+	requestAccepted: 'Заявка принята!',
+	willContact: 'Мы свяжемся с вами в ближайшее время',
+	yourName: 'Ваше имя',
+	phoneNumber: 'Номер телефона',
+	sending: 'Отправка...',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		sendError: 'Sending error. Please try again later.',
+		orderCall: 'Request a call',
+		close: 'Close',
+		callbackDay: 'We will call you back within the day',
+		requestAccepted: 'Request received!',
+		willContact: 'We will contact you shortly',
+		yourName: 'Your name',
+		phoneNumber: 'Phone number',
+		sending: 'Sending...',
+	},
+	uz: {
+		sendError: 'Yuborishda xatolik. Keyinroq urinib ko‘ring.',
+		orderCall: 'Qo‘ng‘iroqqa buyurtma berish',
+		close: 'Yopish',
+		callbackDay: 'Kun davomida sizga qayta qo‘ng‘iroq qilamiz',
+		requestAccepted: 'Ariza qabul qilindi!',
+		willContact: 'Tez orada siz bilan bog‘lanamiz',
+		yourName: 'Ismingiz',
+		phoneNumber: 'Telefon raqami',
+		sending: 'Yuborilmoqda...',
+	},
+}
+
 const BookCallButton = () => {
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const [isOpen, setIsOpen] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [isSuccess, setIsSuccess] = useState(false)
@@ -28,7 +70,7 @@ const BookCallButton = () => {
 			}, 3000)
 		} catch (error) {
 			console.error('Error:', error)
-			alert('Ошибка отправки. Попробуйте позже.')
+			alert(t.sendError)
 		} finally {
 			setIsSubmitting(false)
 		}
@@ -87,7 +129,7 @@ const BookCallButton = () => {
 			<button
 				onClick={() => setIsOpen(true)}
 				className='liquid-button liquid-button-cta liquid-button-fixed group right-6 bottom-6 z-40 h-14 w-14 md:h-16 md:w-16'
-				aria-label='Заказать звонок'
+				aria-label={t.orderCall}
 			>
 				<Phone size={28} className='transition-transform group-hover:rotate-12' />
 			</button>
@@ -105,7 +147,7 @@ const BookCallButton = () => {
 							<button
 								onClick={() => setIsOpen(false)}
 								className='liquid-button liquid-button-icon liquid-button-absolute top-4 right-4 h-10 w-10 rounded-full text-white'
-								aria-label='Закрыть'
+								aria-label={t.close}
 							>
 								<X size={20} />
 							</button>
@@ -115,8 +157,8 @@ const BookCallButton = () => {
 									<Phone size={24} />
 								</div>
 								<div>
-									<h3 className='text-2xl font-bold'>Заказать звонок</h3>
-									<p className='text-sm text-slate-300'>Мы перезвоним в течение дня</p>
+									<h3 className='text-2xl font-bold'>{t.orderCall}</h3>
+									<p className='text-sm text-slate-300'>{t.callbackDay}</p>
 								</div>
 							</div>
 						</div>
@@ -128,17 +170,17 @@ const BookCallButton = () => {
 										<CheckCircle2 size={40} className='text-slate-950 dark:text-white' />
 									</div>
 									<h4 className='mb-2 text-2xl font-bold text-gray-900 dark:text-white'>
-										Заявка принята!
+										{t.requestAccepted}
 									</h4>
 									<p className='text-gray-600 dark:text-slate-300'>
-										Мы свяжемся с вами в ближайшее время
+										{t.willContact}
 									</p>
 								</div>
 							) : (
 								<form onSubmit={handleSubmit} className='space-y-5'>
 									<div>
 										<label className='mb-2 block font-semibold text-gray-700 dark:text-slate-200'>
-											Ваше имя <span className='text-sky-600'>*</span>
+											{t.yourName} <span className='text-sky-600'>*</span>
 										</label>
 										<input
 											type='text'
@@ -152,7 +194,7 @@ const BookCallButton = () => {
 
 									<div>
 										<label className='mb-2 block font-semibold text-gray-700 dark:text-slate-200'>
-											Номер телефона <span className='text-sky-600'>*</span>
+											{t.phoneNumber} <span className='text-sky-600'>*</span>
 										</label>
 										<input
 											type='tel'
@@ -192,12 +234,12 @@ const BookCallButton = () => {
 														d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
 													></path>
 												</svg>
-												Отправка...
+												{t.sending}
 											</>
 										) : (
 											<>
 												<Phone size={20} className='mr-2' />
-												Заказать звонок
+												{t.orderCall}
 											</>
 										)}
 									</button>

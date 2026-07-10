@@ -2,49 +2,155 @@ import { BookOpen, Clock, Download, Eye, FileText } from 'lucide-react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 
 type ReferenceDoc = {
 	id: string
-	title: string
-	description: string
-	badge: string
 }
 
 // Заглушка: настоящих файлов пока нет — карточки помечены «Скоро»,
 // кнопки неактивны. Когда появятся PDF/XLSX, добавьте поле `src` и включите
 // действия (см. страницу «Каталог» как образец).
 const documents: ReferenceDoc[] = [
-	{
-		id: 'sizes',
-		title: 'Справочник типоразмеров воздуховодов',
-		description:
-			'Стандартные сечения, диаметры и длины прямых участков и фасонных изделий.',
-		badge: 'PDF · таблицы',
-	},
-	{
-		id: 'norms',
-		title: 'Нормы и стандарты (ГОСТ, СНиП)',
-		description:
-			'Действующие требования к проектированию и монтажу систем вентиляции.',
-		badge: 'PDF · нормативы',
-	},
-	{
-		id: 'aero',
-		title: 'Таблицы аэродинамического расчёта',
-		description:
-			'Справочные значения для подбора сечений и расчёта потерь давления.',
-		badge: 'XLSX · расчёт',
-	},
-	{
-		id: 'fittings',
-		title: 'Каталог фасонных изделий',
-		description:
-			'Отводы, переходы, тройники, врезки и заглушки с обозначениями.',
-		badge: 'PDF · фасонина',
-	},
+	{ id: 'sizes' },
+	{ id: 'norms' },
+	{ id: 'aero' },
+	{ id: 'fittings' },
 ]
 
+const ru = {
+	kicker: 'Reference',
+	heroTitle: 'Справочники VAC.UZ',
+	heroText:
+		'Технические справочники, нормативы и расчётные таблицы для проектирования вентиляции. Раздел наполняется — документы появятся в ближайшее время.',
+	soon: 'Скоро',
+	preparing:
+		'Документ готовится — скоро будет доступен для просмотра и скачивания.',
+	view: 'Просмотреть',
+	download: 'Скачать',
+	viewUnavailable: 'просмотр недоступен',
+	downloadUnavailable: 'скачивание недоступно',
+	ctaText:
+		'Нужен конкретный справочник прямо сейчас? Напишите нам — пришлём актуальные материалы напрямую.',
+	docs: [
+		{
+			title: 'Справочник типоразмеров воздуховодов',
+			description:
+				'Стандартные сечения, диаметры и длины прямых участков и фасонных изделий.',
+			badge: 'PDF · таблицы',
+		},
+		{
+			title: 'Нормы и стандарты (ГОСТ, СНиП)',
+			description:
+				'Действующие требования к проектированию и монтажу систем вентиляции.',
+			badge: 'PDF · нормативы',
+		},
+		{
+			title: 'Таблицы аэродинамического расчёта',
+			description:
+				'Справочные значения для подбора сечений и расчёта потерь давления.',
+			badge: 'XLSX · расчёт',
+		},
+		{
+			title: 'Каталог фасонных изделий',
+			description:
+				'Отводы, переходы, тройники, врезки и заглушки с обозначениями.',
+			badge: 'PDF · фасонина',
+		},
+	],
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		kicker: 'Reference',
+		heroTitle: 'VAC.UZ reference guides',
+		heroText:
+			'Technical reference guides, regulations and calculation tables for ventilation design. The section is being filled in — documents will appear soon.',
+		soon: 'Soon',
+		preparing:
+			'The document is being prepared — it will soon be available for viewing and download.',
+		view: 'View',
+		download: 'Download',
+		viewUnavailable: 'preview unavailable',
+		downloadUnavailable: 'download unavailable',
+		ctaText:
+			'Need a specific reference guide right now? Write to us — we will send the current materials directly.',
+		docs: [
+			{
+				title: 'Air duct size reference guide',
+				description:
+					'Standard cross-sections, diameters and lengths of straight sections and shaped products.',
+				badge: 'PDF · tables',
+			},
+			{
+				title: 'Norms and standards (GOST, SNiP)',
+				description:
+					'Current requirements for the design and installation of ventilation systems.',
+				badge: 'PDF · regulations',
+			},
+			{
+				title: 'Aerodynamic calculation tables',
+				description:
+					'Reference values for selecting cross-sections and calculating pressure losses.',
+				badge: 'XLSX · calculation',
+			},
+			{
+				title: 'Catalog of shaped products',
+				description:
+					'Elbows, transitions, tees, taps and end caps with designations.',
+				badge: 'PDF · fittings',
+			},
+		],
+	},
+	uz: {
+		kicker: 'Ma’lumotnoma',
+		heroTitle: 'VAC.UZ ma’lumotnomalari',
+		heroText:
+			'Ventilyatsiyani loyihalash uchun texnik ma’lumotnomalar, me’yorlar va hisob jadvallari. Bo‘lim to‘ldirilmoqda — hujjatlar tez orada paydo bo‘ladi.',
+		soon: 'Tez orada',
+		preparing:
+			'Hujjat tayyorlanmoqda — tez orada ko‘rish va yuklab olish uchun mavjud bo‘ladi.',
+		view: 'Ko‘rish',
+		download: 'Yuklab olish',
+		viewUnavailable: 'ko‘rish mavjud emas',
+		downloadUnavailable: 'yuklab olish mavjud emas',
+		ctaText:
+			'Aynan bir ma’lumotnoma hozir kerakmi? Bizga yozing — dolzarb materiallarni to‘g‘ridan-to‘g‘ri yuboramiz.',
+		docs: [
+			{
+				title: 'Havo o‘tkazgichlar o‘lchamlari ma’lumotnomasi',
+				description:
+					'To‘g‘ri qismlar va fasonli mahsulotlarning standart kesimlari, diametrlari va uzunliklari.',
+				badge: 'PDF · jadvallar',
+			},
+			{
+				title: 'Normalar va standartlar (GOST, SNiP)',
+				description:
+					'Ventilyatsiya tizimlarini loyihalash va o‘rnatishga oid amaldagi talablar.',
+				badge: 'PDF · me’yorlar',
+			},
+			{
+				title: 'Aerodinamik hisob jadvallari',
+				description:
+					'Kesimlarni tanlash va bosim yo‘qotishlarini hisoblash uchun ma’lumot qiymatlari.',
+				badge: 'XLSX · hisob',
+			},
+			{
+				title: 'Fasonli mahsulotlar katalogi',
+				description:
+					'Burilishlar, o‘tishlar, troyniklar, ulanishlar va tiqinlar belgilanishlari bilan.',
+				badge: 'PDF · fasonli qismlar',
+			},
+		],
+	},
+}
+
 const Reference = () => {
+	const { lang } = useLanguage()
+	const t = content[lang]
+
 	return (
 		<div>
 			<NavbarForPages />
@@ -57,21 +163,21 @@ const Reference = () => {
 									<BookOpen size={34} strokeWidth={1.7} />
 								</div>
 								<p className='mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-slate-300'>
-									Reference
+									{t.kicker}
 								</p>
 								<h1 className='mt-4 text-[clamp(2rem,1.4rem+3vw,3rem)] font-bold leading-tight'>
-									Справочники VAC.UZ
+									{t.heroTitle}
 								</h1>
 								<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
-									Технические справочники, нормативы и расчётные таблицы для
-									проектирования вентиляции. Раздел наполняется — документы
-									появятся в ближайшее время.
+									{t.heroText}
 								</p>
 							</div>
 						</div>
 
 						<Stagger className='mt-8 space-y-5' stagger={0.08}>
-							{documents.map(doc => (
+							{documents.map((doc, i) => {
+								const text = t.docs[i]
+								return (
 								<StaggerItem key={doc.id} className='surface-card overflow-hidden'>
 									<div className='flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8'>
 										<div className='flex items-start gap-4'>
@@ -80,21 +186,20 @@ const Reference = () => {
 											</div>
 											<div>
 												<div className='flex flex-wrap items-center gap-2'>
-													<span className='section-kicker'>{doc.badge}</span>
+													<span className='section-kicker'>{text.badge}</span>
 													<span className='inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300'>
 														<Clock size={13} />
-														Скоро
+														{t.soon}
 													</span>
 												</div>
 												<h2 className='mt-2 text-[clamp(1.2rem,1.05rem+0.7vw,1.5rem)] font-bold text-slate-950 dark:text-white'>
-													{doc.title}
+													{text.title}
 												</h2>
 												<p className='mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300'>
-													{doc.description}
+													{text.description}
 												</p>
 												<p className='mt-2 text-xs text-slate-400 dark:text-slate-500'>
-													Документ готовится — скоро будет доступен для просмотра и
-													скачивания.
+													{t.preparing}
 												</p>
 											</div>
 										</div>
@@ -104,30 +209,30 @@ const Reference = () => {
 												type='button'
 												disabled
 												className='liquid-button liquid-button-panel w-full cursor-not-allowed justify-center px-4 py-3 text-sm font-semibold opacity-55 sm:py-2.5 sm:text-[13px]'
-												aria-label={`${doc.title} — просмотр недоступен`}
+												aria-label={`${text.title} — ${t.viewUnavailable}`}
 											>
 												<Eye size={16} />
-												Просмотреть
+												{t.view}
 											</button>
 											<button
 												type='button'
 												disabled
 												className='liquid-button liquid-button-panel w-full cursor-not-allowed justify-center px-4 py-3 text-sm font-semibold opacity-55 sm:py-2.5 sm:text-[13px]'
-												aria-label={`${doc.title} — скачивание недоступно`}
+												aria-label={`${text.title} — ${t.downloadUnavailable}`}
 											>
 												<Download size={16} />
-												Скачать
+												{t.download}
 											</button>
 										</div>
 									</div>
 								</StaggerItem>
-							))}
+								)
+							})}
 						</Stagger>
 
 						<Reveal className='surface-card mt-8 p-6 text-center md:p-8'>
 							<p className='text-sm leading-6 text-slate-600 dark:text-slate-300'>
-								Нужен конкретный справочник прямо сейчас? Напишите нам — пришлём
-								актуальные материалы напрямую.
+								{t.ctaText}
 							</p>
 							<a
 								href='tel:+998909117272'

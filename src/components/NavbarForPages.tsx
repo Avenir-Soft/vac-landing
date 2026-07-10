@@ -4,44 +4,59 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import icon from '../assets/icon.png'
 import logoLight from '../assets/logo(1).png'
+import { useLanguage } from '../hooks/useLanguage'
 import { useTheme } from '../hooks/useTheme'
+import type { Lang } from '../i18n/language'
+import LanguageSwitcher from './LanguageSwitcher'
 import { NavDocsMenu, NavDocsMobile, docsPaths } from './NavDocsMenu'
 
-const aboutLinks = [
-	{
-		label: 'О компании',
-		to: '/about',
-	},
-	{
-		label: 'Наши партнёры',
-		to: '/about/partners',
-	},
-	{
-		label: 'Фото галерея',
-		to: '/about/gallery',
-	},
-]
-
-// Все маршруты под «О компании» — для подсветки активной вкладки
+// Маршруты под «О компании» — для подсветки активной вкладки
 // (включая /about/partners и /about/gallery, а не только /about).
-const aboutPaths = aboutLinks.map(link => link.to)
+const aboutPaths = ['/about', '/about/partners', '/about/gallery']
 
-const calcLinks = [
-	{ label: 'Упрощённый расчёт', to: '/calculator' },
-	{
-		label: 'Инженерный расчёт',
-		href: 'https://vac-calculator.uz',
-		external: true,
+const ru = {
+	about: 'О компании',
+	partners: 'Наши партнёры',
+	gallery: 'Фото галерея',
+	calcSimple: 'Упрощённый расчёт',
+	calcEngineering: 'Инженерный расчёт',
+	navHome: 'Главная',
+	navCalc: 'Калькулятор',
+	navAbout: 'О компании',
+	navProducts: 'Продукция',
+	navContacts: 'Контакты',
+	openMenu: 'Открыть меню',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		about: 'About company',
+		partners: 'Our partners',
+		gallery: 'Photo gallery',
+		calcSimple: 'Quick calculation',
+		calcEngineering: 'Engineering calculation',
+		navHome: 'Home',
+		navCalc: 'Calculator',
+		navAbout: 'About',
+		navProducts: 'Products',
+		navContacts: 'Contacts',
+		openMenu: 'Open menu',
 	},
-]
-
-const links = [
-	{ label: 'Главная', to: '/' },
-	{ label: 'Калькулятор', type: 'calc' as const },
-	{ label: 'О компании', type: 'about' as const },
-	{ label: 'Продукция', type: 'docs' as const },
-	{ label: 'Контакты', to: '/contacts' },
-]
+	uz: {
+		about: 'Kompaniya haqida',
+		partners: 'Hamkorlarimiz',
+		gallery: 'Foto galereya',
+		calcSimple: 'Soddalashtirilgan hisob',
+		calcEngineering: 'Muhandislik hisobi',
+		navHome: 'Bosh sahifa',
+		navCalc: 'Kalkulyator',
+		navAbout: 'Kompaniya',
+		navProducts: 'Mahsulotlar',
+		navContacts: 'Kontaktlar',
+		openMenu: 'Menyuni ochish',
+	},
+}
 
 const NavbarForPages = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -50,7 +65,32 @@ const NavbarForPages = () => {
 	const [scrolled, setScrolled] = useState(false)
 	const location = useLocation()
 	const { theme } = useTheme()
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const currentLogo = theme === 'dark' ? icon : logoLight
+
+	const aboutLinks = [
+		{ label: t.about, to: '/about' },
+		{ label: t.partners, to: '/about/partners' },
+		{ label: t.gallery, to: '/about/gallery' },
+	]
+
+	const calcLinks = [
+		{ label: t.calcSimple, to: '/calculator' },
+		{
+			label: t.calcEngineering,
+			href: 'https://vac-calculator.uz',
+			external: true,
+		},
+	]
+
+	const links = [
+		{ label: t.navHome, to: '/' },
+		{ label: t.navCalc, type: 'calc' as const },
+		{ label: t.navAbout, type: 'about' as const },
+		{ label: t.navProducts, type: 'docs' as const },
+		{ label: t.navContacts, to: '/contacts' },
+	]
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -181,6 +221,8 @@ const NavbarForPages = () => {
 						</div>
 
 						<div className='flex items-center gap-2'>
+							<LanguageSwitcher />
+
 							<a
 								href='tel:+998909117272'
 								className='liquid-button liquid-button-primary liquid-button-desktop-xl group px-4 py-2.5 text-sm font-semibold'
@@ -191,7 +233,7 @@ const NavbarForPages = () => {
 							<button
 								onClick={() => setIsMenuOpen(!isMenuOpen)}
 								className='liquid-button liquid-button-icon liquid-button-nav liquid-button-mobile'
-								aria-label='Открыть меню'
+								aria-label={t.openMenu}
 							>
 								<AnimatePresence mode='wait' initial={false}>
 									<motion.span

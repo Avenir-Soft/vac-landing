@@ -9,6 +9,8 @@ import {
 	useState,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 
 type SvgProps = SVGProps<SVGSVGElement>
 
@@ -283,35 +285,81 @@ type Piece = {
 	Component: FC<SvgProps>
 }
 
-const pieces: Piece[] = [
+// Structural data (geometry, positions, SVG components) is language-agnostic;
+// only name/description are localized and merged in by index below.
+type PieceBase = Omit<Piece, 'name' | 'description'>
+
+const pieces: PieceBase[] = [
 	// Right side: vertical duct · cross · vertical duct · BR
-	{ id: 'r1-rect', name: 'Прямоугольный воздуховод', description: 'Вертикальный участок',
-		posClass: 'duct-pos-r1', width: 64, height: 200, heightCss: '100%', Component: RectV },
-	{ id: 'r-cross', name: 'Крестовина', description: 'Боковое соединение линий',
-		posClass: 'duct-pos-r-cross', width: 96, height: 96, Component: Cross },
-	{ id: 'r2-pipe', name: 'Спирально-навивной воздуховод', description: 'Вертикальный участок',
-		posClass: 'duct-pos-r2', width: 64, height: 200, heightCss: '100%', Component: SpiralV },
+	{ id: 'r1-rect', posClass: 'duct-pos-r1', width: 64, height: 200, heightCss: '100%', Component: RectV },
+	{ id: 'r-cross', posClass: 'duct-pos-r-cross', width: 96, height: 96, Component: Cross },
+	{ id: 'r2-pipe', posClass: 'duct-pos-r2', width: 64, height: 200, heightCss: '100%', Component: SpiralV },
 
 	// Bottom row: BL · rectangular duct · reducer · spiral duct · BR
-	{ id: 'br-elbow', name: 'Отвод 90°', description: 'Поворот круглого канала',
-		posClass: 'duct-pos-br', width: 96, height: 96, rotate: 180, Component: Elbow },
-	{ id: 'b-right-spiral', name: 'Спирально-навивной воздуховод', description: 'Нижний круглый участок',
-		posClass: 'duct-pos-b-right', width: 200, height: 64, widthCss: '100%', Component: SpiralH },
-	{ id: 'b-reducer', name: 'Переход', description: 'Изменение сечения на магистрали',
-		posClass: 'duct-pos-b-reducer', width: 140, height: 64, Component: ReducerH },
-	{ id: 'b-left-rect', name: 'Прямоугольный воздуховод', description: 'Нижний прямоугольный участок',
-		posClass: 'duct-pos-b-left', width: 200, height: 64, widthCss: '100%', Component: RectH },
-	{ id: 'bl-elbow', name: 'Отвод 90°', description: 'Поворот круглого канала',
-		posClass: 'duct-pos-bl', width: 96, height: 96, rotate: 270, Component: Elbow },
+	{ id: 'br-elbow', posClass: 'duct-pos-br', width: 96, height: 96, rotate: 180, Component: Elbow },
+	{ id: 'b-right-spiral', posClass: 'duct-pos-b-right', width: 200, height: 64, widthCss: '100%', Component: SpiralH },
+	{ id: 'b-reducer', posClass: 'duct-pos-b-reducer', width: 140, height: 64, Component: ReducerH },
+	{ id: 'b-left-rect', posClass: 'duct-pos-b-left', width: 200, height: 64, widthCss: '100%', Component: RectH },
+	{ id: 'bl-elbow', posClass: 'duct-pos-bl', width: 96, height: 96, rotate: 270, Component: Elbow },
 
 	// Left side: vertical duct · cross · vertical duct · BL
-	{ id: 'l1-pipe', name: 'Спирально-навивной воздуховод', description: 'Вертикальный участок',
-		posClass: 'duct-pos-l1', width: 64, height: 200, heightCss: '100%', Component: SpiralV },
-	{ id: 'l-cross', name: 'Крестовина', description: 'Боковое соединение линий',
-		posClass: 'duct-pos-l-cross', width: 96, height: 96, Component: Cross },
-	{ id: 'l2-rect', name: 'Прямоугольный воздуховод', description: 'Вертикальный участок',
-		posClass: 'duct-pos-l2', width: 64, height: 200, heightCss: '100%', Component: RectV },
+	{ id: 'l1-pipe', posClass: 'duct-pos-l1', width: 64, height: 200, heightCss: '100%', Component: SpiralV },
+	{ id: 'l-cross', posClass: 'duct-pos-l-cross', width: 96, height: 96, Component: Cross },
+	{ id: 'l2-rect', posClass: 'duct-pos-l2', width: 64, height: 200, heightCss: '100%', Component: RectV },
 ]
+
+// Localized labels — one entry per piece above, same order/length across languages.
+type PieceText = { name: string; description: string }
+
+const ru = {
+	pieces: [
+		{ name: 'Прямоугольный воздуховод', description: 'Вертикальный участок' },
+		{ name: 'Крестовина', description: 'Боковое соединение линий' },
+		{ name: 'Спирально-навивной воздуховод', description: 'Вертикальный участок' },
+		{ name: 'Отвод 90°', description: 'Поворот круглого канала' },
+		{ name: 'Спирально-навивной воздуховод', description: 'Нижний круглый участок' },
+		{ name: 'Переход', description: 'Изменение сечения на магистрали' },
+		{ name: 'Прямоугольный воздуховод', description: 'Нижний прямоугольный участок' },
+		{ name: 'Отвод 90°', description: 'Поворот круглого канала' },
+		{ name: 'Спирально-навивной воздуховод', description: 'Вертикальный участок' },
+		{ name: 'Крестовина', description: 'Боковое соединение линий' },
+		{ name: 'Прямоугольный воздуховод', description: 'Вертикальный участок' },
+	] as PieceText[],
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		pieces: [
+			{ name: 'Rectangular air duct', description: 'Vertical section' },
+			{ name: 'Cross fitting', description: 'Side connection of lines' },
+			{ name: 'Spiral-wound air duct', description: 'Vertical section' },
+			{ name: '90° elbow', description: 'Round channel turn' },
+			{ name: 'Spiral-wound air duct', description: 'Lower round section' },
+			{ name: 'Transition', description: 'Cross-section change on the main line' },
+			{ name: 'Rectangular air duct', description: 'Lower rectangular section' },
+			{ name: '90° elbow', description: 'Round channel turn' },
+			{ name: 'Spiral-wound air duct', description: 'Vertical section' },
+			{ name: 'Cross fitting', description: 'Side connection of lines' },
+			{ name: 'Rectangular air duct', description: 'Vertical section' },
+		],
+	},
+	uz: {
+		pieces: [
+			{ name: 'To‘rtburchak havo o‘tkazgich', description: 'Vertikal qism' },
+			{ name: 'Xochsimon birikma', description: 'Liniyalarning yon birikmasi' },
+			{ name: 'Spiral o‘ralgan havo o‘tkazgich', description: 'Vertikal qism' },
+			{ name: '90° tirsak', description: 'Doiraviy kanal burilishi' },
+			{ name: 'Spiral o‘ralgan havo o‘tkazgich', description: 'Pastki doiraviy qism' },
+			{ name: 'O‘tish qismi', description: 'Magistralda kesim o‘zgarishi' },
+			{ name: 'To‘rtburchak havo o‘tkazgich', description: 'Pastki to‘rtburchak qism' },
+			{ name: '90° tirsak', description: 'Doiraviy kanal burilishi' },
+			{ name: 'Spiral o‘ralgan havo o‘tkazgich', description: 'Vertikal qism' },
+			{ name: 'Xochsimon birikma', description: 'Liniyalarning yon birikmasi' },
+			{ name: 'To‘rtburchak havo o‘tkazgich', description: 'Vertikal qism' },
+		],
+	},
+}
 
 const TOOLTIP_GAP = 14
 const TOOLTIP_EDGE_SPACE = 260
@@ -391,6 +439,11 @@ const DuctPiece = memo<{
 DuctPiece.displayName = 'DuctPiece'
 
 export const DuctSystem = () => {
+	const { lang } = useLanguage()
+	const localizedPieces: Piece[] = pieces.map((p, i) => ({
+		...p,
+		...content[lang].pieces[i],
+	}))
 	const [tooltip, setTooltip] = useState<TooltipState>(null)
 	const [mounted, setMounted] = useState(false)
 
@@ -411,7 +464,7 @@ export const DuctSystem = () => {
 
 	return (
 		<div className='hero-duct-system' role='presentation'>
-			{pieces.map((p, i) => (
+			{localizedPieces.map((p, i) => (
 				<DuctPiece
 					key={p.id}
 					piece={p}

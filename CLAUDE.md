@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Marketing landing site for **vac.uz** (VAC.UZ — air-duct / ventilation manufacturer). Single-page React app with a few sub-routes. All UI copy is in Russian (`<html lang="ru">`).
+Marketing landing site for **vac.uz** (VAC.UZ — air-duct / ventilation manufacturer). Single-page React app with a few sub-routes. UI is **trilingual** — Russian (default), English, and Uzbek (Latin). See the language system below.
 
 ## Commands
 
@@ -22,6 +22,7 @@ There is **no test suite**. `npm run build` is the main correctness gate — it 
 - **Stack:** Vite 7 + React 19 + TypeScript (strict), Tailwind CSS v4, react-router-dom v7, framer-motion. `react-hook-form` + `zod` are installed for forms.
 - **Routing** (`src/App.tsx`): `BrowserRouter` with routes `/`, `/about`, `/about/office`, `/about/gallery`, `/catalog`, `/contacts`. Pages live in `src/pages/`, composed from section components in `src/components/`. The `ScrollToHash` helper in `App.tsx` smooth-scrolls to `#anchor` on navigation or to top otherwise — page sections are reached via hash links to element IDs.
 - **Theme system** (`src/lib/theme.ts` + `src/hooks/useTheme.ts`): custom light/dark, persisted in `localStorage['vac-theme']`, toggling the `.dark` class on `<html>`. Cross-component sync is done via a custom `vac-theme-change` window event plus the `storage` event — always change theme through `setTheme`/`useTheme`, never by touching the class directly. `initializeTheme()` runs in `src/main.tsx` *before* render to avoid a flash of the wrong theme.
+- **Language / i18n system** (`src/i18n/language.ts` + `src/hooks/useLanguage.ts`): trilingual `ru`|`en`|`uz` (`Lang` type), Russian default, persisted in `localStorage['vac-lang']`, synced via the `vac-lang-change` custom event + `storage` event (mirrors the theme system). `initializeLang()` runs in `src/main.tsx` and sets `<html lang>`. Switch language only through `useLanguage()` / `setLang`. The `LanguageSwitcher` dropdown lives in both navbars. **Translation pattern:** copy is co-located per component — each file declares `const ru = {...}` then `const content: Record<Lang, typeof ru> = { ru, en:{...}, uz:{...} }`, and the component does `const { lang } = useLanguage(); const t = content[lang]`. `typeof ru` enforces that `en`/`uz` have the same *keys* (but NOT array length — keep localized arrays the same length by hand). The calculator is the exception: `src/lib/calculator.ts` keeps its data/formulas in Russian and exposes `tCalc(text, lang)` (a `ru → {en,uz}` lookup) that `Calculator.tsx` / `CalculatorSchematic.tsx` wrap around each displayed label. Personal names are intentionally left un-transliterated.
 - **Assets:** `public/` files are served at the site root (logos, fonts, `cex_*.mp4`, large PDFs) and referenced by absolute path (e.g. `/vac-logo.png`); `src/assets/` files are imported and bundled/hashed by Vite.
 
 ## Tailwind v4 / shadcn notes

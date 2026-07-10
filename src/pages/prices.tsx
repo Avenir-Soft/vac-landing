@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 import SharePdf from '../components/SharePdf'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 import priceMain from '../assets/price-vac-2026.pdf?url'
 import priceDealer from '../assets/price-vac-2026-d.pdf?url'
 import priceMainPage1 from '../assets/prices/price-main-1.png'
@@ -11,37 +13,97 @@ import priceDealerPage1 from '../assets/prices/price-dealer-1.png'
 
 type PriceDoc = {
 	id: string
-	title: string
-	description: string
 	src: string
 	pages: string[]
 	downloadName: string
-	badge: string
 }
 
 const documents: PriceDoc[] = [
 	{
 		id: 'main',
-		title: 'Прайс-лист VAC 2026',
-		description: 'Актуальные цены на воздуховоды и фасонные изделия.',
 		src: priceMain,
 		pages: [priceMainPage1],
 		downloadName: 'ПРАЙС-ЛИСТ-VAC-2026.pdf',
-		badge: 'PDF · 2026',
 	},
 	{
 		id: 'dealer',
-		title: 'Прайс-лист VAC 2026 (Давальческий)',
-		description: 'Расширенный прайс-лист для отправки заказчику.',
 		src: priceDealer,
 		pages: [priceDealerPage1],
 		downloadName: 'ПРАЙС-ЛИСТ-VAC-2026-Д.pdf',
-		badge: 'PDF · 2026',
 	},
 ]
 
+const ru = {
+	kicker: 'Прайс-лист',
+	heroTitle: 'Цены VAC.UZ 2026',
+	heroText:
+		'Актуальные прайс-листы на воздуховоды и фасонные изделия. Откройте раздел — прайс показан прямо на странице, рядом кнопка для скачивания PDF.',
+	page: 'страница',
+	downloadPdf: 'Скачать PDF',
+	docs: [
+		{
+			title: 'Прайс-лист VAC 2026',
+			description: 'Актуальные цены на воздуховоды и фасонные изделия.',
+			badge: 'PDF · 2026',
+		},
+		{
+			title: 'Прайс-лист VAC 2026 (Давальческий)',
+			description: 'Расширенный прайс-лист для отправки заказчику.',
+			badge: 'PDF · 2026',
+		},
+	],
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		kicker: 'Price list',
+		heroTitle: 'VAC.UZ prices 2026',
+		heroText:
+			'Current price lists for air ducts and shaped products. Open a section — the price list is shown right on the page, with a PDF download button next to it.',
+		page: 'page',
+		downloadPdf: 'Download PDF',
+		docs: [
+			{
+				title: 'VAC 2026 price list',
+				description: 'Current prices for air ducts and shaped products.',
+				badge: 'PDF · 2026',
+			},
+			{
+				title: 'VAC 2026 price list (tolling)',
+				description: 'Extended price list for sending to the customer.',
+				badge: 'PDF · 2026',
+			},
+		],
+	},
+	uz: {
+		kicker: 'Narxlar ro‘yxati',
+		heroTitle: 'VAC.UZ narxlari 2026',
+		heroText:
+			'Havo o‘tkazgichlar va fasonli mahsulotlar uchun dolzarb narxlar ro‘yxati. Bo‘limni oching — narxlar ro‘yxati to‘g‘ridan-to‘g‘ri sahifada ko‘rsatilgan, yonida PDF yuklab olish tugmasi bor.',
+		page: 'sahifa',
+		downloadPdf: 'PDF yuklab olish',
+		docs: [
+			{
+				title: 'VAC 2026 narxlar ro‘yxati',
+				description:
+					'Havo o‘tkazgichlar va fasonli mahsulotlar uchun dolzarb narxlar.',
+				badge: 'PDF · 2026',
+			},
+			{
+				title: 'VAC 2026 narxlar ro‘yxati (davalcheskiy)',
+				description:
+					'Buyurtmachiga yuborish uchun kengaytirilgan narxlar ro‘yxati.',
+				badge: 'PDF · 2026',
+			},
+		],
+	},
+}
+
 const PricesPage = () => {
 	const [open, setOpen] = useState<string>('main')
+	const { lang } = useLanguage()
+	const t = content[lang]
 
 	const download = (doc: PriceDoc) => {
 		const link = document.createElement('a')
@@ -64,22 +126,21 @@ const PricesPage = () => {
 									<ReceiptText size={34} strokeWidth={1.7} />
 								</div>
 								<p className='mt-6 text-xs font-semibold uppercase tracking-[0.28em] text-slate-300'>
-									Прайс-лист
+									{t.kicker}
 								</p>
 								<h1 className='mt-4 text-[clamp(2rem,1.4rem+3vw,3rem)] font-bold leading-tight'>
-									Цены VAC.UZ 2026
+									{t.heroTitle}
 								</h1>
 								<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
-									Актуальные прайс-листы на воздуховоды и фасонные изделия.
-									Откройте раздел — прайс показан прямо на странице, рядом кнопка
-									для скачивания PDF.
+									{t.heroText}
 								</p>
 							</div>
 						</div>
 
 						<div className='mt-8 space-y-4'>
-							{documents.map(doc => {
+							{documents.map((doc, di) => {
 								const isOpen = open === doc.id
+								const text = t.docs[di]
 								return (
 									<div
 										key={doc.id}
@@ -105,7 +166,7 @@ const PricesPage = () => {
 													<ReceiptText size={20} />
 												</span>
 												<span className='text-base font-semibold text-slate-900 md:text-lg dark:text-white'>
-													{doc.title}
+													{text.title}
 												</span>
 											</span>
 											<ChevronDown
@@ -134,7 +195,7 @@ const PricesPage = () => {
 																	<img
 																		key={i}
 																		src={page}
-																		alt={`${doc.title} — страница ${i + 1}`}
+																		alt={`${text.title} — ${t.page} ${i + 1}`}
 																		className='block w-full rounded-xl border border-slate-200 shadow-sm dark:border-slate-700'
 																		loading='lazy'
 																	/>
@@ -144,9 +205,9 @@ const PricesPage = () => {
 															{/* Боковая панель — скачать */}
 															<div className='order-1 md:order-2'>
 																<div className='md:sticky md:top-28'>
-																	<span className='section-kicker'>{doc.badge}</span>
+																	<span className='section-kicker'>{text.badge}</span>
 																	<p className='mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300'>
-																		{doc.description}
+																		{text.description}
 																	</p>
 																	<button
 																		type='button'
@@ -154,11 +215,11 @@ const PricesPage = () => {
 																		className='liquid-button liquid-button-primary mt-4 w-full px-5 py-3 text-sm font-bold'
 																	>
 																		<Download size={18} />
-																		Скачать PDF
+																		{t.downloadPdf}
 																	</button>
 																	<SharePdf
 																		src={doc.src}
-																		title={doc.title}
+																		title={text.title}
 																		className='liquid-button liquid-button-panel mt-2 w-full px-5 py-3 text-sm font-bold'
 																	/>
 																</div>

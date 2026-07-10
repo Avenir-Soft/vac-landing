@@ -2,17 +2,61 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
 
 // Фото лежат в public/gallery (g-1.png … g-29.png).
 const GALLERY_COUNT = 29
-const galleryImages = Array.from({ length: GALLERY_COUNT }, (_, i) => ({
-	src: `/gallery/g-${i + 1}.png`,
-	label: `Производство VAC.UZ — фото ${i + 1}`,
-}))
+const gallerySources = Array.from(
+	{ length: GALLERY_COUNT },
+	(_, i) => `/gallery/g-${i + 1}.png`,
+)
+
+const ru = {
+	kicker: 'Фото галерея',
+	heading: 'Производство, детали и рабочий процесс',
+	subtitle:
+		'Фотографии производства VAC.UZ, рабочих зон и элементов вентиляционных систем.',
+	prevPhoto: 'Предыдущее фото',
+	closePhoto: 'Закрыть фото',
+	nextPhoto: 'Следующее фото',
+	photoLabel: (n: number) => `Производство VAC.UZ — фото ${n}`,
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		kicker: 'Photo gallery',
+		heading: 'Manufacturing, details and the work process',
+		subtitle:
+			'Photographs of VAC.UZ manufacturing, work areas and ventilation system components.',
+		prevPhoto: 'Previous photo',
+		closePhoto: 'Close photo',
+		nextPhoto: 'Next photo',
+		photoLabel: (n: number) => `VAC.UZ manufacturing — photo ${n}`,
+	},
+	uz: {
+		kicker: 'Foto galereya',
+		heading: 'Ishlab chiqarish, tafsilotlar va ish jarayoni',
+		subtitle:
+			'VAC.UZ ishlab chiqarishi, ish zonalari va ventilyatsiya tizimi elementlarining suratlari.',
+		prevPhoto: 'Oldingi foto',
+		closePhoto: 'Fotoni yopish',
+		nextPhoto: 'Keyingi foto',
+		photoLabel: (n: number) => `VAC.UZ ishlab chiqarishi — ${n}-foto`,
+	},
+}
 
 const AboutGallery = () => {
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const [activeIndex, setActiveIndex] = useState<number | null>(null)
 	const touchStartX = useRef<number | null>(null)
+
+	const galleryImages = gallerySources.map((src, i) => ({
+		src,
+		label: t.photoLabel(i + 1),
+	}))
 
 	const showPrev = () =>
 		setActiveIndex(i =>
@@ -55,16 +99,15 @@ const AboutGallery = () => {
 				<div className='section-shell relative z-10'>
 					<div className='mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between'>
 						<div>
-							<span className='section-kicker'>Фото галерея</span>
+							<span className='section-kicker'>{t.kicker}</span>
 							<h1 className='mt-4 text-[clamp(2.1rem,1.45rem+3.4vw,3.5rem)] font-bold leading-tight text-white'>
-								Производство, детали и рабочий процесс
+								{t.heading}
 							</h1>
 							<p className='mt-5 max-w-2xl text-base leading-7 text-slate-300'>
-								Фотографии производства VAC.UZ, рабочих зон и элементов
-								вентиляционных систем.
+								{t.subtitle}
 							</p>
 						</div>
-						
+
 					</div>
 
 					<div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
@@ -103,7 +146,7 @@ const AboutGallery = () => {
 							showPrev()
 						}}
 						className='absolute left-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 md:left-6'
-						aria-label='Предыдущее фото'
+						aria-label={t.prevPhoto}
 					>
 						<ChevronLeft size={26} />
 					</button>
@@ -118,7 +161,7 @@ const AboutGallery = () => {
 							type='button'
 							onClick={() => setActiveIndex(null)}
 							className='absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20'
-							aria-label='Закрыть фото'
+							aria-label={t.closePhoto}
 						>
 							<X size={22} />
 						</button>
@@ -139,7 +182,7 @@ const AboutGallery = () => {
 							showNext()
 						}}
 						className='absolute right-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 md:right-6'
-						aria-label='Следующее фото'
+						aria-label={t.nextPhoto}
 					>
 						<ChevronRight size={26} />
 					</button>

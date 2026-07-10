@@ -1,6 +1,8 @@
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../hooks/useLanguage'
 import { useTheme } from '../hooks/useTheme'
+import type { Lang } from '../i18n/language'
 import email from '../assets/email-logo.png'
 import facebook from '../assets/facebook-logo.png'
 import logo from '../assets/logo(1).png'
@@ -8,8 +10,57 @@ import icon from '../assets/icon.png'
 import instagram from '../assets/instagram-logo.png'
 import telegram from '../assets/tg-logo.png'
 
+const ru = {
+	tagline:
+		'Профессиональные решения для систем вентиляции любой сложности. Работаем с 2014 года и сопровождаем проекты от производства до комплектации.',
+	sections: 'Разделы',
+	navCalc: 'Калькулятор',
+	navHome: 'Главная',
+	navCatalog: 'Каталог',
+	navReference: 'Справочники',
+	navContacts: 'Контакты',
+	contacts: 'Контакты',
+	address:
+		'Узбекистан, г. Ташкент, Мирзо-Улугбекский р-он, Буюк Ипак Йули 434',
+	rights: 'Все права защищены.',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		tagline:
+			'Professional solutions for ventilation systems of any complexity. Working since 2014, we support projects from manufacturing to supply.',
+		sections: 'Sections',
+		navCalc: 'Calculator',
+		navHome: 'Home',
+		navCatalog: 'Catalog',
+		navReference: 'Reference guides',
+		navContacts: 'Contacts',
+		contacts: 'Contacts',
+		address:
+			'Uzbekistan, Tashkent, Mirzo-Ulugbek district, Buyuk Ipak Yuli 434',
+		rights: 'All rights reserved.',
+	},
+	uz: {
+		tagline:
+			'Har qanday murakkablikdagi ventilyatsiya tizimlari uchun professional yechimlar. 2014-yildan beri ishlaymiz va loyihalarni ishlab chiqarishdan butlashgacha kuzatib boramiz.',
+		sections: 'Bo‘limlar',
+		navCalc: 'Kalkulyator',
+		navHome: 'Bosh sahifa',
+		navCatalog: 'Katalog',
+		navReference: 'Ma’lumotnomalar',
+		navContacts: 'Kontaktlar',
+		contacts: 'Kontaktlar',
+		address:
+			'O‘zbekiston, Toshkent sh., Mirzo Ulug‘bek tumani, Buyuk Ipak Yo‘li 434',
+		rights: 'Barcha huquqlar himoyalangan.',
+	},
+}
+
 export const Footer = () => {
 	const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent)
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const { theme } = useTheme()
 	const href = isMobile
 		? 'mailto:info@vac.uz'
@@ -30,41 +81,39 @@ export const Footer = () => {
 							</div>
 						</div>
 						<p className='mt-5 max-w-md text-sm leading-7 text-slate-300'>
-							Профессиональные решения для систем вентиляции любой сложности.
-							Работаем с 2014 года и сопровождаем проекты от производства до
-							комплектации.
+							{t.tagline}
 						</p>
 					</div>
 
 					<div>
 						<h4 className='text-sm font-semibold uppercase tracking-[0.22em] text-slate-400'>
-							Разделы
+							{t.sections}
 						</h4>
 						<div className='mt-5 space-y-3 text-sm text-slate-300'>
 							<Link
 								to='/calculator'
 								className='block transition hover:text-white'
 							>
-								Калькулятор
+								{t.navCalc}
 							</Link>
 							<Link to='/' className='block transition hover:text-white'>
-								Главная
+								{t.navHome}
 							</Link>
 							<Link to='/catalog' className='block transition hover:text-white'>
-								Каталог
+								{t.navCatalog}
 							</Link>
 							<Link to='/reference' className='block transition hover:text-white'>
-								Справочники
+								{t.navReference}
 							</Link>
 							<Link to='/contacts' className='block transition hover:text-white'>
-								Контакты
+								{t.navContacts}
 							</Link>
 						</div>
 					</div>
 
 					<div>
 						<h4 className='text-sm font-semibold uppercase tracking-[0.22em] text-slate-400'>
-							Контакты
+							{t.contacts}
 						</h4>
 						<div className='mt-5 space-y-4 text-sm text-slate-300'>
 							<a href='tel:+998909117272' className='flex items-start gap-3 transition hover:text-white'>
@@ -87,10 +136,7 @@ export const Footer = () => {
 								className='flex items-start gap-3 transition hover:text-white'
 							>
 								<MapPin size={18} className='mt-0.5 flex-shrink-0' />
-								<span>
-									Узбекистан, г. Ташкент, Мирзо-Улугбекский р-он, Буюк Ипак Йули
-									434
-								</span>
+								<span>{t.address}</span>
 							</a>
 
 							<div className='flex gap-3 pt-2'>
@@ -119,7 +165,7 @@ export const Footer = () => {
 
 			<div className='section-shell mt-10 border-t border-white/10 pt-6'>
 				<div className='flex flex-col items-center justify-between gap-4 text-center text-xs text-slate-400 sm:text-sm md:flex-row md:text-left'>
-					<p>&copy; 2026 VAC.UZ. Все права защищены.</p>
+					<p>&copy; 2026 VAC.UZ. {t.rights}</p>
 					<a
 						href='https://avenir.uz/'
 						target='_blank'

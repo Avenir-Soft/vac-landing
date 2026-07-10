@@ -6,8 +6,80 @@ import telegramLogo from '../assets/tg-logo.png'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 import { Stagger, StaggerItem } from '../components/motion/Reveal'
+import { useLanguage } from '../hooks/useLanguage'
+import type { Lang } from '../i18n/language'
+
+const ru = {
+	kicker: 'Контакты',
+	title: 'Контакты',
+	heroText:
+		'Мы всегда рады ответить на ваши вопросы по продукции, расчёту заказа и комплектации объекта.',
+	phoneTitle: 'Телефон',
+	phoneDesc: 'Звоните в рабочее время для быстрой консультации.',
+	emailTitle: 'Email',
+	emailDesc: 'Подходит для коммерческих предложений и заявок.',
+	addressTitle: 'Адрес',
+	addressValue:
+		'Узбекистан, г. Ташкент, Мирзо-Улугбекский р-он, Буюк Ипак Йули 434',
+	addressDesc: 'Открыть локацию и построить маршрут.',
+	socialKicker: 'Социальные сети',
+	socialTitle: 'Мы в соцсетях и мессенджерах',
+	socialText:
+		'Можно связаться с нами удобным для вас способом и следить за обновлениями компании.',
+	mapTitle: 'Мы на карте',
+	mapText:
+		'Офис и производство находятся в Ташкенте. По карте удобно построить маршрут для визита или отгрузки.',
+}
+
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		kicker: 'Contacts',
+		title: 'Contacts',
+		heroText:
+			'We are always happy to answer your questions about products, order calculation and site configuration.',
+		phoneTitle: 'Phone',
+		phoneDesc: 'Call during working hours for a quick consultation.',
+		emailTitle: 'Email',
+		emailDesc: 'Suitable for commercial offers and requests.',
+		addressTitle: 'Address',
+		addressValue:
+			'Uzbekistan, Tashkent, Mirzo-Ulugbek district, Buyuk Ipak Yuli 434',
+		addressDesc: 'Open the location and build a route.',
+		socialKicker: 'Social networks',
+		socialTitle: 'We are on social networks and messengers',
+		socialText:
+			'You can contact us in a way convenient for you and follow the company updates.',
+		mapTitle: 'We are on the map',
+		mapText:
+			'The office and production are located in Tashkent. The map makes it easy to build a route for a visit or shipment.',
+	},
+	uz: {
+		kicker: 'Kontaktlar',
+		title: 'Kontaktlar',
+		heroText:
+			'Mahsulotlar, buyurtma hisob-kitobi va obyektni butlash bo‘yicha savollaringizga javob berishdan doim mamnunmiz.',
+		phoneTitle: 'Telefon',
+		phoneDesc: 'Tezkor maslahat uchun ish vaqtida qo‘ng‘iroq qiling.',
+		emailTitle: 'Email',
+		emailDesc: 'Tijorat takliflari va so‘rovlar uchun mos.',
+		addressTitle: 'Manzil',
+		addressValue:
+			'O‘zbekiston, Toshkent sh., Mirzo Ulug‘bek tumani, Buyuk Ipak Yo‘li 434',
+		addressDesc: 'Manzilni ochish va marshrut qurish.',
+		socialKicker: 'Ijtimoiy tarmoqlar',
+		socialTitle: 'Biz ijtimoiy tarmoqlar va messenjerlardamiz',
+		socialText:
+			'Siz uchun qulay usulda biz bilan bog‘lanishingiz va kompaniya yangiliklarini kuzatib borishingiz mumkin.',
+		mapTitle: 'Biz xaritada',
+		mapText:
+			'Ofis va ishlab chiqarish Toshkentda joylashgan. Xarita yordamida tashrif yoki jo‘natish uchun marshrut qurish qulay.',
+	},
+}
 
 const Contacts = () => {
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent)
 	const href = isMobile
 		? 'mailto:info@vac.uz'
@@ -15,27 +87,26 @@ const Contacts = () => {
 
 	const contacts = [
 		{
-			title: 'Телефон',
+			title: t.phoneTitle,
 			value: '+998 90 911-72-72',
 			href: 'tel:+998909117272',
-			description: 'Звоните в рабочее время для быстрой консультации.',
+			description: t.phoneDesc,
 			icon: Phone,
 			external: false,
 		},
 		{
-			title: 'Email',
+			title: t.emailTitle,
 			value: 'info@vac.uz',
 			href,
-			description: 'Подходит для коммерческих предложений и заявок.',
+			description: t.emailDesc,
 			icon: Mail,
 			external: !isMobile,
 		},
 		{
-			title: 'Адрес',
-			value:
-				'Узбекистан, г. Ташкент, Мирзо-Улугбекский р-он, Буюк Ипак Йули 434',
+			title: t.addressTitle,
+			value: t.addressValue,
 			href: 'https://yandex.uz/maps/-/CLHAYE0~',
-			description: 'Открыть локацию и построить маршрут.',
+			description: t.addressDesc,
 			icon: MapPin,
 			external: true,
 		},
@@ -70,13 +141,12 @@ const Contacts = () => {
 
 			<section className='px-4 pt-28 pb-14'>
 				<div className='section-shell text-center'>
-					<span className='section-kicker'>Контакты</span>
+					<span className='section-kicker'>{t.kicker}</span>
 					<h1 className='mt-4 text-[clamp(2.1rem,1.45rem+3.4vw,3.5rem)] font-bold leading-[1.05] text-white'>
-						Контакты
+						{t.title}
 					</h1>
 					<p className='mx-auto mt-4 max-w-2xl text-lg text-slate-300'>
-						Мы всегда рады ответить на ваши вопросы по продукции, расчёту заказа
-						и комплектации объекта.
+						{t.heroText}
 					</p>
 				</div>
 			</section>
@@ -112,14 +182,13 @@ const Contacts = () => {
 					<div className='mt-8 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]'>
 						<div className='surface-card p-8'>
 							<p className='text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400'>
-								Социальные сети
+								{t.socialKicker}
 							</p>
 							<h3 className='mt-3 text-2xl font-bold text-slate-950 dark:text-white'>
-								Мы в соцсетях и мессенджерах
+								{t.socialTitle}
 							</h3>
 							<p className='mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300'>
-								Можно связаться с нами удобным для вас способом и следить за
-								обновлениями компании.
+								{t.socialText}
 							</p>
 
 							<div className='mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2'>
@@ -146,11 +215,10 @@ const Contacts = () => {
 
 						<div className='surface-card overflow-hidden p-4'>
 							<h2 className='px-4 pt-3 text-2xl font-bold text-slate-950 dark:text-white'>
-								Мы на карте
+								{t.mapTitle}
 							</h2>
 							<p className='px-4 pt-3 text-sm leading-6 text-slate-600 dark:text-slate-300'>
-								Офис и производство находятся в Ташкенте. По карте удобно
-								построить маршрут для визита или отгрузки.
+								{t.mapText}
 							</p>
 							<div className='mt-5 overflow-hidden rounded-[24px] border border-slate-200 dark:border-slate-800'>
 								<iframe

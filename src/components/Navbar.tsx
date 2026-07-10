@@ -4,39 +4,52 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import icon from '../assets/icon.png'
 import logoLight from '../assets/logo(1).png'
+import { useLanguage } from '../hooks/useLanguage'
 import { useTheme } from '../hooks/useTheme'
+import type { Lang } from '../i18n/language'
+import LanguageSwitcher from './LanguageSwitcher'
 import { NavDocsMenu, NavDocsMobile } from './NavDocsMenu'
 
-const aboutLinks = [
-	{
-		label: 'О компании',
-		to: '/about',
-	},
-	{
-		label: 'Наши партнёры',
-		to: '/about/partners',
-	},
-	{
-		label: 'Фото галерея',
-		to: '/about/gallery',
-	},
-]
+const ru = {
+	about: 'О компании',
+	partners: 'Наши партнёры',
+	gallery: 'Фото галерея',
+	calcSimple: 'Упрощённый расчёт',
+	calcEngineering: 'Инженерный расчёт',
+	navCalc: 'Калькулятор',
+	navAbout: 'О компании',
+	navProducts: 'Продукция',
+	navContacts: 'Контакты',
+	openMenu: 'Открыть меню',
+}
 
-const calcLinks = [
-	{ label: 'Упрощённый расчёт', to: '/calculator' },
-	{
-		label: 'Инженерный расчёт',
-		href: 'https://vac-calculator.uz',
-		external: true,
+const content: Record<Lang, typeof ru> = {
+	ru,
+	en: {
+		about: 'About company',
+		partners: 'Our partners',
+		gallery: 'Photo gallery',
+		calcSimple: 'Quick calculation',
+		calcEngineering: 'Engineering calculation',
+		navCalc: 'Calculator',
+		navAbout: 'About',
+		navProducts: 'Products',
+		navContacts: 'Contacts',
+		openMenu: 'Open menu',
 	},
-]
-
-const navItems = [
-	{ label: 'Калькулятор', type: 'calc' as const },
-	{ label: 'О компании', type: 'about' as const },
-	{ label: 'Продукция', type: 'docs' as const },
-	{ label: 'Контакты', to: '/contacts' },
-]
+	uz: {
+		about: 'Kompaniya haqida',
+		partners: 'Hamkorlarimiz',
+		gallery: 'Foto galereya',
+		calcSimple: 'Soddalashtirilgan hisob',
+		calcEngineering: 'Muhandislik hisobi',
+		navCalc: 'Kalkulyator',
+		navAbout: 'Kompaniya',
+		navProducts: 'Mahsulotlar',
+		navContacts: 'Kontaktlar',
+		openMenu: 'Menyuni ochish',
+	},
+}
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -44,7 +57,31 @@ const Navbar = () => {
 	const [isCalcOpen, setIsCalcOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 	const { theme } = useTheme()
+	const { lang } = useLanguage()
+	const t = content[lang]
 	const currentLogo = theme === 'dark' ? icon : logoLight
+
+	const aboutLinks = [
+		{ label: t.about, to: '/about' },
+		{ label: t.partners, to: '/about/partners' },
+		{ label: t.gallery, to: '/about/gallery' },
+	]
+
+	const calcLinks = [
+		{ label: t.calcSimple, to: '/calculator' },
+		{
+			label: t.calcEngineering,
+			href: 'https://vac-calculator.uz',
+			external: true,
+		},
+	]
+
+	const navItems = [
+		{ label: t.navCalc, type: 'calc' as const },
+		{ label: t.navAbout, type: 'about' as const },
+		{ label: t.navProducts, type: 'docs' as const },
+		{ label: t.navContacts, to: '/contacts' },
+	]
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -168,6 +205,8 @@ const Navbar = () => {
 						</div>
 
 						<div className='flex items-center gap-2'>
+							<LanguageSwitcher />
+
 							<a
 								href='tel:+998909117272'
 								className='liquid-button liquid-button-primary liquid-button-desktop-xl group px-4 py-2.5 text-sm font-semibold'
@@ -178,7 +217,7 @@ const Navbar = () => {
 							<button
 								onClick={() => setIsMenuOpen(!isMenuOpen)}
 								className='liquid-button liquid-button-icon liquid-button-nav liquid-button-mobile'
-								aria-label='Открыть меню'
+								aria-label={t.openMenu}
 							>
 								<AnimatePresence mode='wait' initial={false}>
 									<motion.span

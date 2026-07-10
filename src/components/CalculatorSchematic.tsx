@@ -1,4 +1,5 @@
-import type { DiagramKey } from '../lib/calculator'
+import { useLanguage } from '../hooks/useLanguage'
+import { tCalc, type DiagramKey } from '../lib/calculator'
 
 // Собственные технические схемы изделий (оригинальная графика VAC.UZ).
 // Линии — currentColor (тянутся под тему), подписи размеров совпадают с полями.
@@ -36,7 +37,9 @@ const T = ({ x, y, children }: { x: number; y: number; children: string }) => (
 // тонкая выносная/размерная линия
 const dim = { strokeWidth: 1, opacity: 0.7 } as const
 
-const diagrams: Record<DiagramKey, React.ReactNode> = {
+const buildDiagrams = (
+	mainLabel: string
+): Record<DiagramKey, React.ReactNode> => ({
 	ductRound: (
 		<Svg>
 			<ellipse cx={55} cy={70} rx={15} ry={40} />
@@ -112,7 +115,7 @@ const diagrams: Record<DiagramKey, React.ReactNode> = {
 			<path d='M92 78 L92 40 L132 40 L132 78' />
 			<line x1={92} y1={40} x2={132} y2={40} />
 			<T x={112} y={102}>
-				магистраль
+				{mainLabel}
 			</T>
 			<line x1={92} y1={30} x2={132} y2={30} {...dim} />
 			<T x={112} y={22}>
@@ -181,10 +184,12 @@ const diagrams: Record<DiagramKey, React.ReactNode> = {
 			</T>
 		</Svg>
 	),
-}
+})
 
-const CalculatorSchematic = ({ diagram }: { diagram: DiagramKey }) => (
-	<>{diagrams[diagram]}</>
-)
+const CalculatorSchematic = ({ diagram }: { diagram: DiagramKey }) => {
+	const { lang } = useLanguage()
+	const diagrams = buildDiagrams(tCalc('магистраль', lang))
+	return <>{diagrams[diagram]}</>
+}
 
 export default CalculatorSchematic
