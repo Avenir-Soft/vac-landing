@@ -1,34 +1,23 @@
-import { CheckCircle2, Factory, Users, Workflow } from 'lucide-react'
+import { CheckCircle2, Factory, Workflow } from 'lucide-react'
 import schema from '../assets/diagram.png'
 import founderPhoto from '../assets/founder-usmanov.png'
-import teamUsmanov from '../assets/team/00-usmanov.png'
-import teamPak from '../assets/team/03-pak.png'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
-import { Reveal, Stagger, StaggerItem } from '../components/motion/Reveal'
+import { Reveal } from '../components/motion/Reveal'
 import { useLanguage } from '../hooks/useLanguage'
 import type { Lang } from '../i18n/language'
-
-// Фото сотрудников (не зависят от языка); имена локализуются через content.teamNames.
-const team = [
-	{ id: 'usmanov', photo: teamUsmanov },
-	{ id: 'pak', photo: teamPak },
-]
 
 const ru = {
 	founderAlt: 'Основатель VAC.UZ М. К. Усманов',
 	founderRole: 'Основатель VAC.UZ',
 	founderName: 'М. К. Усманов',
 	founderSignature: 'Музаффар Усманов',
-	teamNames: ['Усманов Музаффар', 'Пак Ирина'],
 	heading: 'Обращение основателя VAC.UZ',
 	p1: 'За 12 лет работы мы изготовили тысячи километров воздуховодов и выполнили проекты для более чем 1500 клиентов. Наш путь начался не с производства, а с монтажа вентиляционных систем. Именно практический опыт помог мне понять, каким должен быть качественный воздуховод и что действительно важно для заказчика.',
 	p2: 'Поэтому сегодня VAC.UZ специализируется на производстве воздуховодов, фасонных изделий и комплектующих для систем вентиляции. Мы знаем требования рынка не по учебникам, а по многолетней работе на реальных объектах.',
 	p3: 'Прежде чем доверить компании свой проект, рекомендую познакомиться с её производством, людьми и принципами работы. Цена важна, но ещё важнее понимать, кто отвечает за качество, сроки и результат.',
 	p4: 'Для меня репутация всегда была и остаётся важнее любого контракта.',
 	signOff: 'Искренне ваш,',
-	teamKicker: 'Команда',
-	teamTitle: 'Наша команда',
 	prodKicker: 'Производство',
 	prodTitle: 'Производство и инженерная комплектация',
 	prodP1: 'Производство оснащено необходимым оборудованием для серийных и индивидуальных заказов. Команда помогает с подбором, спецификацией и комплектацией объекта.',
@@ -52,15 +41,12 @@ const content: Record<Lang, typeof ru> = {
 		founderRole: 'Founder of VAC.UZ',
 		founderName: 'M. K. Usmanov',
 		founderSignature: 'Muzaffar Usmanov',
-		teamNames: ['Usmanov Muzaffar', 'Pak Irina'],
 		heading: 'A message from the founder of VAC.UZ',
 		p1: 'Over 12 years of work we have produced thousands of kilometers of air ducts and completed projects for more than 1500 clients. Our journey began not with manufacturing, but with the installation of ventilation systems. It was this hands-on experience that helped me understand what a quality air duct should be and what truly matters to the customer.',
 		p2: 'That is why today VAC.UZ specializes in the production of air ducts, fittings and components for ventilation systems. We know the market requirements not from textbooks, but from years of work on real projects.',
 		p3: 'Before entrusting a company with your project, I recommend getting to know its production, its people and its working principles. Price matters, but it is even more important to understand who is responsible for quality, deadlines and results.',
 		p4: 'For me, reputation has always been and remains more important than any contract.',
 		signOff: 'Sincerely yours,',
-		teamKicker: 'Team',
-		teamTitle: 'Our team',
 		prodKicker: 'Manufacturing',
 		prodTitle: 'Manufacturing and engineering supply',
 		prodP1: 'The production facility is equipped with the machinery needed for both serial and custom orders. The team assists with selection, specification and outfitting of the project.',
@@ -81,15 +67,12 @@ const content: Record<Lang, typeof ru> = {
 		founderRole: 'VAC.UZ asoschisi',
 		founderName: 'M. K. Usmanov',
 		founderSignature: 'Muzaffar Usmanov',
-		teamNames: ['Usmanov Muzaffar', 'Pak Irina'],
 		heading: 'VAC.UZ asoschisining murojaati',
 		p1: 'Ish faoliyatimizning 12 yili davomida biz minglab kilometr havo o‘tkazgichlar ishlab chiqardik va 1500 dan ortiq mijoz uchun loyihalarni amalga oshirdik. Bizning yo‘limiz ishlab chiqarishdan emas, balki ventilyatsiya tizimlarini montaj qilishdan boshlangan. Aynan amaliy tajriba menga sifatli havo o‘tkazgich qanday bo‘lishi va buyurtmachi uchun nima haqiqatan ham muhimligini tushunishga yordam berdi.',
 		p2: 'Shu sababli bugungi kunda VAC.UZ havo o‘tkazgichlar, fasonli buyumlar va ventilyatsiya tizimlari uchun butlovchi qismlar ishlab chiqarishga ixtisoslashgan. Biz bozor talablarini darsliklardan emas, balki real obyektlarda ko‘p yillik ish tajribasidan bilamiz.',
 		p3: 'Kompaniyaga o‘z loyihangizni ishonib topshirishdan oldin, uning ishlab chiqarishi, xodimlari va ish tamoyillari bilan tanishishni tavsiya qilaman. Narx muhim, ammo sifat, muddat va natija uchun kim javob berishini tushunish yanada muhimroqdir.',
 		p4: 'Men uchun obro‘ har doim har qanday shartnomadan muhimroq bo‘lgan va shunday bo‘lib qolmoqda.',
 		signOff: 'Samimiy hurmat bilan,',
-		teamKicker: 'Jamoa',
-		teamTitle: 'Bizning jamoamiz',
 		prodKicker: 'Ishlab chiqarish',
 		prodTitle: 'Ishlab chiqarish va muhandislik butlash',
 		prodP1: 'Ishlab chiqarish seriyali va individual buyurtmalar uchun zarur uskunalar bilan jihozlangan. Jamoa tanlash, spetsifikatsiya va obyektni butlashda yordam beradi.',
@@ -156,50 +139,6 @@ const About = () => {
 							</div>
 						</Reveal>
 					</div>
-				</div>
-			</section>
-
-			<section className='px-4 py-10'>
-				<div className='section-shell'>
-					<div className='mb-8 flex items-center gap-3'>
-						<div className='flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-slate-900'>
-							<Users size={20} />
-						</div>
-						<div>
-							<p className='text-xs font-semibold uppercase tracking-[0.24em] text-slate-400'>
-								{t.teamKicker}
-							</p>
-							<h2 className='mt-1 text-[clamp(1.45rem,1.2rem+1.3vw,1.875rem)] font-bold text-white'>
-								{t.teamTitle}
-							</h2>
-						</div>
-					</div>
-
-					<Stagger
-						className='grid max-w-2xl grid-cols-1 gap-5 sm:grid-cols-2'
-						stagger={0.12}
-					>
-						{team.map((member, i) => (
-							<StaggerItem
-								key={member.id}
-								className='surface-card overflow-hidden p-3'
-								whileHover={{ y: -6 }}
-								transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-							>
-								<div className='overflow-hidden rounded-[20px] bg-slate-100 dark:bg-slate-950'>
-									<img
-										src={member.photo}
-										alt={t.teamNames[i]}
-										className='aspect-[3/4] w-full object-cover'
-										loading='lazy'
-									/>
-								</div>
-								<p className='px-1 pt-3 pb-1 text-sm font-semibold text-slate-900 dark:text-white'>
-									{t.teamNames[i]}
-								</p>
-							</StaggerItem>
-						))}
-					</Stagger>
 				</div>
 			</section>
 
