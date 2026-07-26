@@ -5,12 +5,16 @@ import NavbarForPages from '../components/NavbarForPages'
 import { useLanguage } from '../hooks/useLanguage'
 import type { Lang } from '../i18n/language'
 
-// Фото лежат в public/gallery (g-1.png … g-31.png).
-const GALLERY_COUNT = 31
-const gallerySources = Array.from(
-	{ length: GALLERY_COUNT },
-	(_, i) => `/gallery/g-${i + 1}.png`,
-)
+// Фото лежат в public/gallery (g-1.png … g-31.png, затем g-32.jpg … g-38.jpg).
+const PNG_COUNT = 31
+const JPG_COUNT = 7
+const gallerySources = [
+	...Array.from({ length: PNG_COUNT }, (_, i) => `/gallery/g-${i + 1}.png`),
+	...Array.from(
+		{ length: JPG_COUNT },
+		(_, i) => `/gallery/g-${PNG_COUNT + i + 1}.jpg`,
+	),
+]
 
 const ru = {
 	kicker: 'Фото галерея',
