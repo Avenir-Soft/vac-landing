@@ -5,9 +5,9 @@ import NavbarForPages from '../components/NavbarForPages'
 import { useLanguage } from '../hooks/useLanguage'
 import type { Lang } from '../i18n/language'
 
-// Фото лежат в public/gallery (g-1.png … g-31.png, затем g-32.jpg … g-38.jpg).
+// Фото лежат в public/gallery (g-1.png … g-31.png, затем g-32.jpg … g-39.jpg).
 const PNG_COUNT = 31
-const JPG_COUNT = 7
+const JPG_COUNT = 8
 const gallerySources = [
 	...Array.from({ length: PNG_COUNT }, (_, i) => `/gallery/g-${i + 1}.png`),
 	...Array.from(
