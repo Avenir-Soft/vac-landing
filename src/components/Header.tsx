@@ -142,7 +142,7 @@ export const Header = () => {
 
 	const stats = [
 		{ icon: Briefcase, value: 500, suffix: '+', label: t.statProjects },
-		{ icon: Users, value: 404, suffix: '+', label: t.statClients },
+		{ icon: Users, value: 2509, suffix: '+', label: t.statClients },
 		{ icon: Award, value: 12, suffix: t.years, label: t.statExperience },
 	]
 
