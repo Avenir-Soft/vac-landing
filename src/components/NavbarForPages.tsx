@@ -90,6 +90,7 @@ const NavbarForPages = () => {
 		{ label: t.navAbout, type: 'about' as const },
 		{ label: t.navProducts, type: 'docs' as const },
 		{ label: t.navContacts, to: '/contacts' },
+		{ label: 'ERP', href: 'https://vac-erp.uz', external: true },
 	]
 
 	useEffect(() => {
@@ -204,6 +205,16 @@ const NavbarForPages = () => {
 										key={link.label}
 										active={docsPaths.includes(location.pathname)}
 									/>
+								) : link.external ? (
+									<a
+										key={link.label}
+										href={link.href}
+										target='_blank'
+										rel='noopener noreferrer'
+										className='liquid-button liquid-button-nav px-4 py-2 text-sm font-medium'
+									>
+										{link.label}
+									</a>
 								) : (
 									<Link
 										key={link.to}
@@ -361,6 +372,17 @@ const NavbarForPages = () => {
 										key={link.label}
 										onNavigate={() => setIsMenuOpen(false)}
 									/>
+								) : link.external ? (
+									<a
+										key={link.label}
+										href={link.href}
+										target='_blank'
+										rel='noopener noreferrer'
+										onClick={() => setIsMenuOpen(false)}
+										className='liquid-button liquid-button-panel block px-4 py-3 text-base font-medium'
+									>
+										{link.label}
+									</a>
 								) : (
 									<Link
 										key={link.to}
