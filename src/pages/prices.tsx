@@ -9,6 +9,7 @@ import type { Lang } from '../i18n/language'
 import priceMain from '../assets/price-vac-2026.pdf?url'
 import priceDealer from '../assets/price-vac-2026-d.pdf?url'
 import priceMainPage1 from '../assets/prices/price-main-1.png'
+import priceMainPage2 from '../assets/prices/price-main-2.png'
 import priceDealerPage1 from '../assets/prices/price-dealer-1.png'
 
 type PriceDoc = {
@@ -22,7 +23,7 @@ const documents: PriceDoc[] = [
 	{
 		id: 'main',
 		src: priceMain,
-		pages: [priceMainPage1],
+		pages: [priceMainPage1, priceMainPage2],
 		downloadName: 'ПРАЙС-ЛИСТ-VAC-2026.pdf',
 	},
 	{
