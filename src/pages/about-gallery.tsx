@@ -7,7 +7,7 @@ import type { Lang } from '../i18n/language'
 
 // Фото лежат в public/gallery (g-1.png … g-31.png, затем g-32.jpg … g-39.jpg).
 const PNG_COUNT = 31
-const JPG_COUNT = 8
+const JPG_COUNT = 19
 const gallerySources = [
 	...Array.from({ length: PNG_COUNT }, (_, i) => `/gallery/g-${i + 1}.png`),
 	...Array.from(
