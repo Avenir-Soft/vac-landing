@@ -3,6 +3,7 @@ import { ChevronDown, Download, ReceiptText } from 'lucide-react'
 import { useState } from 'react'
 import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
+import PriceViewer from '../components/PriceViewer'
 import SharePdf from '../components/SharePdf'
 import { useLanguage } from '../hooks/useLanguage'
 import type { Lang } from '../i18n/language'
@@ -17,7 +18,6 @@ const ru = {
 	heroTitle: 'Цены VAC.UZ 2026',
 	heroText:
 		'Актуальные прайс-листы на воздуховоды и фасонные изделия. Откройте раздел — прайс показан прямо на странице, рядом кнопка для скачивания PDF.',
-	page: 'страница',
 	downloadPdf: 'Скачать PDF',
 }
 
@@ -28,7 +28,6 @@ const content: Record<Lang, typeof ru> = {
 		heroTitle: 'VAC.UZ prices 2026',
 		heroText:
 			'Current price lists for air ducts and shaped products. Open a section — the price list is shown right on the page, with a PDF download button next to it.',
-		page: 'page',
 		downloadPdf: 'Download PDF',
 	},
 	uz: {
@@ -36,7 +35,6 @@ const content: Record<Lang, typeof ru> = {
 		heroTitle: 'VAC.UZ narxlari 2026',
 		heroText:
 			'Havo o‘tkazgichlar va fasonli mahsulotlar uchun dolzarb narxlar ro‘yxati. Bo‘limni oching — narxlar ro‘yxati to‘g‘ridan-to‘g‘ri sahifada ko‘rsatilgan, yonida PDF yuklab olish tugmasi bor.',
-		page: 'sahifa',
 		downloadPdf: 'PDF yuklab olish',
 	},
 }
@@ -142,16 +140,8 @@ const PricesPage = () => {
 													<div className='border-t border-slate-100 p-4 md:p-6 dark:border-slate-800'>
 														<div className='grid gap-6 md:grid-cols-[1fr_240px]'>
 															{/* Прайс «как фото» */}
-															<div className='order-2 space-y-3 rounded-2xl bg-slate-100 p-3 md:order-1 dark:bg-slate-950/40'>
-																{doc.pages.map((page, i) => (
-																	<img
-																		key={i}
-																		src={page}
-																		alt={`${text.title} — ${t.page} ${i + 1}`}
-																		className='block w-full rounded-xl border border-slate-200 shadow-sm dark:border-slate-700'
-																		loading='lazy'
-																	/>
-																))}
+															<div className='order-2 rounded-2xl bg-slate-100 p-3 md:order-1 dark:bg-slate-950/40'>
+																<PriceViewer pages={doc.pages} title={text.title} />
 															</div>
 
 															{/* Боковая панель — скачать */}
