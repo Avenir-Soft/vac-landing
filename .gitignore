@@ -35,3 +35,6 @@ graphify-out/
 # Большие каталоги (хранятся на сервере, локально для dev)
 public/каталог.pdf
 public/products-catalog.pdf
+
+# Локальные данные админки (npm run dev:api)
+.dev-data/

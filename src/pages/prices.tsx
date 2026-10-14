@@ -6,33 +6,11 @@ import NavbarForPages from '../components/NavbarForPages'
 import SharePdf from '../components/SharePdf'
 import { useLanguage } from '../hooks/useLanguage'
 import type { Lang } from '../i18n/language'
-import priceMain from '../assets/price-vac-2026.pdf?url'
-import priceDealer from '../assets/price-vac-2026-d.pdf?url'
-import priceMainPage1 from '../assets/prices/price-main-1.png'
-import priceMainPage2 from '../assets/prices/price-main-2.png'
-import priceDealerPage1 from '../assets/prices/price-dealer-1.png'
-
-type PriceDoc = {
-	id: string
-	src: string
-	pages: string[]
-	downloadName: string
-}
-
-const documents: PriceDoc[] = [
-	{
-		id: 'main',
-		src: priceMain,
-		pages: [priceMainPage1, priceMainPage2],
-		downloadName: 'ПРАЙС-ЛИСТ-VAC-2026.pdf',
-	},
-	{
-		id: 'dealer',
-		src: priceDealer,
-		pages: [priceDealerPage1],
-		downloadName: 'ПРАЙС-ЛИСТ-VAC-2026-Д.pdf',
-	},
-]
+import {
+	localized,
+	useSiteContent,
+	type PriceDoc,
+} from '../lib/siteContent'
 
 const ru = {
 	kicker: 'Прайс-лист',
@@ -41,18 +19,6 @@ const ru = {
 		'Актуальные прайс-листы на воздуховоды и фасонные изделия. Откройте раздел — прайс показан прямо на странице, рядом кнопка для скачивания PDF.',
 	page: 'страница',
 	downloadPdf: 'Скачать PDF',
-	docs: [
-		{
-			title: 'Прайс-лист VAC 2026',
-			description: 'Актуальные цены на воздуховоды и фасонные изделия.',
-			badge: 'PDF · 2026',
-		},
-		{
-			title: 'Прайс-лист VAC 2026 (Давальческий)',
-			description: 'Расширенный прайс-лист для отправки заказчику.',
-			badge: 'PDF · 2026',
-		},
-	],
 }
 
 const content: Record<Lang, typeof ru> = {
@@ -64,18 +30,6 @@ const content: Record<Lang, typeof ru> = {
 			'Current price lists for air ducts and shaped products. Open a section — the price list is shown right on the page, with a PDF download button next to it.',
 		page: 'page',
 		downloadPdf: 'Download PDF',
-		docs: [
-			{
-				title: 'VAC 2026 price list',
-				description: 'Current prices for air ducts and shaped products.',
-				badge: 'PDF · 2026',
-			},
-			{
-				title: 'VAC 2026 price list (tolling)',
-				description: 'Extended price list for sending to the customer.',
-				badge: 'PDF · 2026',
-			},
-		],
 	},
 	uz: {
 		kicker: 'Narxlar ro‘yxati',
@@ -84,31 +38,21 @@ const content: Record<Lang, typeof ru> = {
 			'Havo o‘tkazgichlar va fasonli mahsulotlar uchun dolzarb narxlar ro‘yxati. Bo‘limni oching — narxlar ro‘yxati to‘g‘ridan-to‘g‘ri sahifada ko‘rsatilgan, yonida PDF yuklab olish tugmasi bor.',
 		page: 'sahifa',
 		downloadPdf: 'PDF yuklab olish',
-		docs: [
-			{
-				title: 'VAC 2026 narxlar ro‘yxati',
-				description:
-					'Havo o‘tkazgichlar va fasonli mahsulotlar uchun dolzarb narxlar.',
-				badge: 'PDF · 2026',
-			},
-			{
-				title: 'VAC 2026 narxlar ro‘yxati (davalcheskiy)',
-				description:
-					'Buyurtmachiga yuborish uchun kengaytirilgan narxlar ro‘yxati.',
-				badge: 'PDF · 2026',
-			},
-		],
 	},
 }
 
 const PricesPage = () => {
-	const [open, setOpen] = useState<string>('main')
+	const prices = useSiteContent('prices')
+	const docs = prices?.docs ?? []
+	// null — ещё не трогали: по умолчанию раскрыт первый прайс.
+	const [openId, setOpenId] = useState<string | null>(null)
+	const open = openId ?? docs[0]?.id ?? ''
 	const { lang } = useLanguage()
 	const t = content[lang]
 
 	const download = (doc: PriceDoc) => {
 		const link = document.createElement('a')
-		link.href = doc.src
+		link.href = doc.pdf
 		link.download = doc.downloadName
 		document.body.appendChild(link)
 		link.click()
@@ -139,9 +83,16 @@ const PricesPage = () => {
 						</div>
 
 						<div className='mt-8 space-y-4'>
-							{documents.map((doc, di) => {
+							{prices === null ? (
+								<div className='h-[76px] animate-pulse rounded-3xl border border-slate-200 bg-white/70 dark:border-slate-800 dark:bg-slate-900/50' />
+							) : null}
+							{docs.map(doc => {
 								const isOpen = open === doc.id
-								const text = t.docs[di]
+								const text = {
+									title: localized(doc.title, lang),
+									description: localized(doc.description, lang),
+									badge: doc.badge,
+								}
 								return (
 									<div
 										key={doc.id}
@@ -153,7 +104,7 @@ const PricesPage = () => {
 									>
 										<button
 											type='button'
-											onClick={() => setOpen(isOpen ? '' : doc.id)}
+											onClick={() => setOpenId(isOpen ? '' : doc.id)}
 											className='flex w-full items-center justify-between gap-4 px-5 py-4 text-left md:px-6 md:py-5'
 										>
 											<span className='flex items-center gap-3'>
@@ -219,7 +170,7 @@ const PricesPage = () => {
 																		{t.downloadPdf}
 																	</button>
 																	<SharePdf
-																		src={doc.src}
+																		src={doc.pdf}
 																		title={text.title}
 																		className='liquid-button liquid-button-panel mt-2 w-full px-5 py-3 text-sm font-bold'
 																	/>

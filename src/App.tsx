@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 // import Preloader from './components/Preloader';
 import About from './pages/about';
@@ -10,6 +10,9 @@ import Contacts from './pages/contacts';
 import Home from './pages/home';
 import Prices from './pages/prices';
 import Reference from './pages/reference';
+
+// Админка грузится отдельным чанком (в ней pdf.js) — посетителям сайта не нужна.
+const Admin = lazy(() => import('./pages/admin'));
 
 function ScrollToHash() {
   const location = useLocation();
@@ -68,6 +71,14 @@ function App() {
           <Route path="/calculator" element={<CalculatorPage />} />
           <Route path="/prices" element={<Prices />} />
           <Route path="/contacts" element={<Contacts />} />
+          <Route
+            path="/admin"
+            element={
+              <Suspense fallback={null}>
+                <Admin />
+              </Suspense>
+            }
+          />
         </Routes>
       </Router>
     </>

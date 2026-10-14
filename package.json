@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "mkdir -p .dev-data && chmod 777 .dev-data && docker run --rm -p 8080:80 -v \"$PWD/.dev-data:/var/www/html\" -v \"$PWD/public/api:/var/www/html/api:ro\" php:8.3-apache",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

@@ -4,17 +4,7 @@ import Footer from '../components/Footer'
 import NavbarForPages from '../components/NavbarForPages'
 import { useLanguage } from '../hooks/useLanguage'
 import type { Lang } from '../i18n/language'
-
-// Фото лежат в public/gallery (g-1.png … g-31.png, затем g-32.jpg … g-39.jpg).
-const PNG_COUNT = 31
-const JPG_COUNT = 19
-const gallerySources = [
-	...Array.from({ length: PNG_COUNT }, (_, i) => `/gallery/g-${i + 1}.png`),
-	...Array.from(
-		{ length: JPG_COUNT },
-		(_, i) => `/gallery/g-${PNG_COUNT + i + 1}.jpg`,
-	),
-]
+import { useSiteContent } from '../lib/siteContent'
 
 const ru = {
 	kicker: 'Фото галерея',
@@ -56,8 +46,9 @@ const AboutGallery = () => {
 	const t = content[lang]
 	const [activeIndex, setActiveIndex] = useState<number | null>(null)
 	const touchStartX = useRef<number | null>(null)
+	const gallery = useSiteContent('gallery')
 
-	const galleryImages = gallerySources.map((src, i) => ({
+	const galleryImages = (gallery?.photos ?? []).map((src, i) => ({
 		src,
 		label: t.photoLabel(i + 1),
 	}))
@@ -115,6 +106,13 @@ const AboutGallery = () => {
 					</div>
 
 					<div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+						{gallery === null
+							? Array.from({ length: 6 }, (_, i) => (
+									<div key={i} className='surface-card p-2'>
+										<div className='aspect-[4/3] w-full animate-pulse rounded-[18px] bg-slate-200/60 dark:bg-slate-700/40' />
+									</div>
+								))
+							: null}
 						{galleryImages.map((item, index) => (
 							<button
 								key={item.src}
