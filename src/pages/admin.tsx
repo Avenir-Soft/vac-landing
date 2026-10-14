@@ -169,8 +169,8 @@ const Admin = () => {
 	useEffect(() => {
 		if (auth !== 'in' || content) return
 		Promise.all([
-			fetchContent('gallery', { fresh: true }),
-			fetchContent('prices', { fresh: true }),
+			fetchContent('gallery'),
+			fetchContent('prices'),
 		]).then(([gallery, prices]) => setContent({ gallery, prices }))
 	}, [auth, content])
 

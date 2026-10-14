@@ -93,8 +93,6 @@ const defaults: ContentMap = {
 export const defaultContent = <K extends ContentKey>(key: K): ContentMap[K] =>
 	structuredClone(defaults[key])
 
-const cache = new Map<ContentKey, Promise<unknown>>()
-
 const isValid = (key: ContentKey, data: unknown): boolean => {
 	if (!data || typeof data !== 'object') return false
 	if (key === 'gallery') return Array.isArray((data as GalleryContent).photos)
@@ -102,35 +100,36 @@ const isValid = (key: ContentKey, data: unknown): boolean => {
 }
 
 /** Загружает контент с сервера; при любой ошибке — значения по умолчанию. */
-export const fetchContent = <K extends ContentKey>(
-	key: K,
-	{ fresh = false } = {},
-): Promise<ContentMap[K]> => {
-	if (fresh) cache.delete(key)
-	let promise = cache.get(key) as Promise<ContentMap[K]> | undefined
-	if (!promise) {
-		promise = fetch(`/content/${key}.json`, { cache: 'no-cache' })
-			.then(res => (res.ok ? res.json() : null))
-			.then(data => (isValid(key, data) ? data : defaultContent(key)))
-			// SPA-фолбэк хостинга отдаёт index.html вместо 404 — json() упадёт.
-			.catch(() => defaultContent(key))
-		cache.set(key, promise)
-	}
-	return promise
-}
+export const fetchContent = <K extends ContentKey>(key: K): Promise<ContentMap[K]> =>
+	fetch(`/content/${key}.json`, { cache: 'no-cache' })
+		.then(res => (res.ok ? res.json() : null))
+		.then(data => (isValid(key, data) ? data : defaultContent(key)))
+		// SPA-фолбэк хостинга отдаёт index.html вместо 404 — json() упадёт.
+		.catch(() => defaultContent(key))
 
-/** Контент для публичных страниц. `null`, пока идёт загрузка. */
+/**
+ * Контент для публичных страниц. `null`, пока идёт первая загрузка.
+ * Перечитывается при каждом открытии страницы и при возврате на вкладку —
+ * чтобы правки из админки были видны без перезагрузки сайта.
+ */
 export const useSiteContent = <K extends ContentKey>(
 	key: K,
 ): ContentMap[K] | null => {
 	const [data, setData] = useState<ContentMap[K] | null>(null)
 	useEffect(() => {
 		let alive = true
-		fetchContent(key).then(result => {
-			if (alive) setData(result)
-		})
+		const load = () =>
+			fetchContent(key).then(result => {
+				if (alive) setData(result)
+			})
+		const onVisible = () => {
+			if (document.visibilityState === 'visible') load()
+		}
+		load()
+		document.addEventListener('visibilitychange', onVisible)
 		return () => {
 			alive = false
+			document.removeEventListener('visibilitychange', onVisible)
 		}
 	}, [key])
 	return data
