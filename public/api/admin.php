@@ -208,9 +208,10 @@ function handle_upload(): void
 	$id = $_GET['id'] ?? '';
 	$index = (int) ($_GET['index'] ?? -1);
 	$total = (int) ($_GET['total'] ?? 0);
+	$offset = (int) ($_GET['offset'] ?? -1);
 	if (!in_array($kind, UPLOAD_KINDS, true)) fail(400, 'Неизвестный тип загрузки');
 	if (!is_string($id) || !preg_match('/^[a-z0-9]{16,64}$/', $id)) fail(400, 'Некорректный id загрузки');
-	if ($total < 1 || $index < 0 || $index >= $total) fail(400, 'Некорректный номер куска');
+	if ($total < 1 || $index < 0 || $index >= $total || $offset < 0) fail(400, 'Некорректный номер куска');
 
 	$chunk = file_get_contents('php://input');
 	if ($chunk === false || $chunk === '') fail(400, 'Пустой кусок файла');
@@ -219,13 +220,25 @@ function handle_upload(): void
 	$tmpDir = $UPLOADS_DIR . '/.tmp';
 	ensure_dir($tmpDir);
 	$part = $tmpDir . '/' . $id . '.part';
+	$done = $tmpDir . '/' . $id . '.done';
 
-	if ($index === 0) {
-		@unlink($part);
-	} elseif (!is_file($part)) {
+	// Клиент повторяет кусок, если не дождался ответа (сбой сети, лимит
+	// запросов хостинга). Повтор не должен записать данные дважды.
+	if (is_file($done)) {
+		respond(200, ['ok' => true, 'url' => trim((string) file_get_contents($done))]);
+	}
+	clearstatcache(true, $part);
+	$size = is_file($part) ? filesize($part) : 0;
+	if ($offset === 0 && $index === 0) {
+		$written = file_put_contents($part, $chunk, LOCK_EX);
+	} elseif ($size === $offset) {
+		$written = file_put_contents($part, $chunk, FILE_APPEND | LOCK_EX);
+	} elseif ($size === $offset + strlen($chunk)) {
+		$written = strlen($chunk); // этот кусок уже получен
+	} else {
 		fail(409, 'Загрузка прервана, начните заново');
 	}
-	if (file_put_contents($part, $chunk, FILE_APPEND | LOCK_EX) === false) fail(500, 'Не удалось сохранить кусок файла');
+	if ($written === false) fail(500, 'Не удалось сохранить кусок файла — возможно, на хостинге закончилось место');
 	clearstatcache(true, $part);
 	if (filesize($part) > FILE_MAX) {
 		@unlink($part);
@@ -247,7 +260,9 @@ function handle_upload(): void
 	if (!rename($part, $dir . '/' . $name)) fail(500, 'Не удалось сохранить файл');
 	@chmod($dir . '/' . $name, 0644);
 
-	respond(200, ['ok' => true, 'url' => '/uploads/' . $kind . '/' . $name]);
+	$url = '/uploads/' . $kind . '/' . $name;
+	@file_put_contents($done, $url);
+	respond(200, ['ok' => true, 'url' => $url]);
 }
 
 // ---- Контент.

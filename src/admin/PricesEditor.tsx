@@ -9,12 +9,13 @@ import {
 	Plus,
 	Trash2,
 } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { Lang } from '../i18n/language'
 import type { PriceDoc, PricesContent } from '../lib/siteContent'
 import { saveContent, uploadFile } from './api'
 import { renderPdfPages } from './media'
 import SaveBar from './SaveBar'
+import { useFileDrag } from './useFileDrag'
 import {
 	Button,
 	Card,
@@ -28,6 +29,8 @@ import { errorText, move } from './utils'
 
 type Props = {
 	initial: PricesContent
+	/** Вкладка открыта — только тогда реагируем на перетаскивание файлов. */
+	active: boolean
 	onDirtyChange: (dirty: boolean) => void
 }
 
@@ -46,6 +49,66 @@ const emptyDoc = (): PriceDoc => ({
 	pages: [],
 	downloadName: '',
 })
+
+const pickPdf = (files: FileList) =>
+	Array.from(files).find(
+		f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'),
+	) ?? null
+
+/** Зона, куда можно бросить PDF: подсвечивается, пока над окном тащат файл. */
+const PdfDropTarget = ({
+	visible,
+	label,
+	onPdf,
+	onWrongFile,
+	children,
+}: {
+	visible: boolean
+	label: string
+	onPdf: (file: File) => void
+	onWrongFile: () => void
+	children: ReactNode
+}) => {
+	const [over, setOver] = useState(false)
+	return (
+		<div
+			className='relative'
+			onDragOver={e => {
+				if (!visible) return
+				e.preventDefault()
+				setOver(true)
+			}}
+			onDragLeave={e => {
+				if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOver(false)
+			}}
+			onDrop={e => {
+				if (!visible) return
+				e.preventDefault()
+				setOver(false)
+				const pdf = pickPdf(e.dataTransfer.files)
+				if (pdf) onPdf(pdf)
+				else onWrongFile()
+			}}
+		>
+			{children}
+			{visible ? (
+				<div
+					className={`pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed text-center font-bold transition ${
+						over
+							? 'border-sky-300 bg-sky-500/40 text-white'
+							: 'border-sky-400/70 bg-[#1d1f23]/80 text-sky-200'
+					}`}
+				>
+					{/* В высокой раскрытой карточке подсказка держится в поле зрения. */}
+					<span className='sticky top-[45vh] bottom-[45vh] my-4 flex items-center gap-2 rounded-xl bg-[#1d1f23]/90 px-4 py-2'>
+						<FileUp size={20} />
+						{label}
+					</span>
+				</div>
+			) : null}
+		</div>
+	)
+}
 
 const validate = (docs: PriceDoc[]): string | null => {
 	for (const [i, doc] of docs.entries()) {
@@ -129,7 +192,8 @@ const DocEditor = ({
 							<div>
 								<p className='font-semibold text-white'>PDF-файл прайса</p>
 								<p className='text-sm text-slate-400'>
-									Загрузите новый PDF — страницы для сайта нарежутся сами.
+									Загрузите или перетащите сюда новый PDF — страницы для сайта
+									нарежутся сами.
 								</p>
 							</div>
 							<div className='flex flex-wrap gap-2'>
@@ -272,7 +336,7 @@ const DocEditor = ({
 	)
 }
 
-const PricesEditor = ({ initial, onDirtyChange }: Props) => {
+const PricesEditor = ({ initial, active, onDirtyChange }: Props) => {
 	const [saved, setSaved] = useState(initial.docs)
 	const [docs, setDocs] = useState(initial.docs)
 	const [expanded, setExpanded] = useState<string | null>(initial.docs[0]?.id ?? null)
@@ -284,6 +348,10 @@ const PricesEditor = ({ initial, onDirtyChange }: Props) => {
 	useEffect(() => onDirtyChange(dirty), [dirty, onDirtyChange])
 
 	const savedPages = new Set(saved.flatMap(doc => doc.pages))
+	const fileDrag = useFileDrag(active)
+	const canDrop = fileDrag && progress === null
+	const wrongFile = () =>
+		setNotice({ tone: 'error', text: 'Это не PDF. Перетащите файл прайса в формате PDF.' })
 
 	const updateDoc = (id: string, update: (doc: PriceDoc) => PriceDoc) =>
 		setDocs(list => list.map(doc => (doc.id === id ? update(doc) : doc)))
@@ -349,10 +417,11 @@ const PricesEditor = ({ initial, onDirtyChange }: Props) => {
 		}
 	}
 
-	const addDoc = () => {
+	const addDoc = (pdf?: File) => {
 		const doc = emptyDoc()
 		setDocs(list => [...list, doc])
 		setExpanded(doc.id)
+		if (pdf) replacePdf(doc.id, pdf)
 	}
 
 	return (
@@ -371,29 +440,52 @@ const PricesEditor = ({ initial, onDirtyChange }: Props) => {
 				{notice ? <Notice tone={notice.tone}>{notice.text}</Notice> : null}
 
 				{docs.map((doc, index) => (
-					<DocEditor
+					<PdfDropTarget
 						key={doc.id}
-						doc={doc}
-						index={index}
-						count={docs.length}
-						savedPages={savedPages}
-						expanded={expanded === doc.id}
-						busy={progress !== null}
-						onToggle={() => setExpanded(expanded === doc.id ? null : doc.id)}
-						onChange={next => updateDoc(doc.id, () => next)}
-						onMove={to => setDocs(list => move(list, index, to))}
-						onRemove={() => {
-							if (window.confirm(`Удалить прайс «${doc.title.ru || 'без названия'}» с сайта?`))
-								setDocs(list => list.filter(d => d.id !== doc.id))
-						}}
-						onReplacePdf={file => replacePdf(doc.id, file)}
-					/>
+						visible={canDrop}
+						label={
+							doc.pdf
+								? `Отпустите — заменить PDF «${doc.title.ru || 'прайса'}»`
+								: 'Отпустите — загрузить PDF'
+						}
+						onPdf={file => replacePdf(doc.id, file)}
+						onWrongFile={wrongFile}
+					>
+						<DocEditor
+							doc={doc}
+							index={index}
+							count={docs.length}
+							savedPages={savedPages}
+							expanded={expanded === doc.id}
+							busy={progress !== null}
+							onToggle={() => setExpanded(expanded === doc.id ? null : doc.id)}
+							onChange={next => updateDoc(doc.id, () => next)}
+							onMove={to => setDocs(list => move(list, index, to))}
+							onRemove={() => {
+								if (window.confirm(`Удалить прайс «${doc.title.ru || 'без названия'}» с сайта?`))
+									setDocs(list => list.filter(d => d.id !== doc.id))
+							}}
+							onReplacePdf={file => replacePdf(doc.id, file)}
+						/>
+					</PdfDropTarget>
 				))}
 
-				<Button onClick={addDoc} disabled={progress !== null}>
-					<Plus size={16} />
-					Добавить прайс-лист
-				</Button>
+				<PdfDropTarget
+					visible={canDrop}
+					label='Отпустите — новый прайс-лист из этого PDF'
+					onPdf={file => addDoc(file)}
+					onWrongFile={wrongFile}
+				>
+					<button
+						type='button'
+						onClick={() => addDoc()}
+						disabled={progress !== null}
+						className='flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/15 px-6 py-6 text-sm font-semibold text-slate-300 transition hover:border-sky-400/60 hover:bg-white/[0.04] hover:text-white disabled:opacity-50'
+					>
+						<Plus size={18} />
+						Добавить прайс-лист — нажмите или перетащите сюда PDF
+					</button>
+				</PdfDropTarget>
 			</div>
 		</div>
 	)

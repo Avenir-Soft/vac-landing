@@ -11,6 +11,7 @@ import {
 import GalleryEditor from '../admin/GalleryEditor'
 import PricesEditor from '../admin/PricesEditor'
 import { Button, Card, Field, Notice, inputClass } from '../admin/ui'
+import { useFileDrag } from '../admin/useFileDrag'
 import { errorText } from '../admin/utils'
 import {
 	fetchContent,
@@ -145,6 +146,8 @@ const Admin = () => {
 		[],
 	)
 	const anyDirty = Object.values(dirty).some(Boolean)
+	// Файл, брошенный мимо зон загрузки, браузер открыл бы вместо админки.
+	useFileDrag(auth === 'in')
 
 	useEffect(() => {
 		document.title = 'Админ-панель — VAC.UZ'
@@ -244,10 +247,10 @@ const Admin = () => {
 				{content ? (
 					<>
 						<div hidden={tab !== 'gallery'}>
-							<GalleryEditor initial={content.gallery} onDirtyChange={setGalleryDirty} />
+							<GalleryEditor initial={content.gallery} active={tab === 'gallery'} onDirtyChange={setGalleryDirty} />
 						</div>
 						<div hidden={tab !== 'prices'}>
-							<PricesEditor initial={content.prices} onDirtyChange={setPricesDirty} />
+							<PricesEditor initial={content.prices} active={tab === 'prices'} onDirtyChange={setPricesDirty} />
 						</div>
 					</>
 				) : (

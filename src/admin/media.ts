@@ -24,7 +24,16 @@ export const prepareGalleryPhoto = async (
 	file: File,
 	maxSide = 2400,
 ): Promise<Blob> => {
-	const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+	let bitmap: ImageBitmap
+	try {
+		bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+	} catch {
+		throw new Error(
+			/hei[cf]/i.test(file.type) || /\.hei[cf]$/i.test(file.name)
+				? 'формат HEIC (iPhone) этот браузер не открывает — сохраните фото как JPG'
+				: 'файл не открывается как изображение',
+		)
+	}
 	const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
 	const canvas = document.createElement('canvas')
 	canvas.width = Math.round(bitmap.width * scale)
