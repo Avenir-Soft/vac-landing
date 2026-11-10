@@ -686,6 +686,44 @@ html {
 	}
 }
 
+/* Бегущая строка цен (PriceTicker): лента из двух одинаковых половин
+   сдвигается на -50% и бесшовно повторяется. */
+@keyframes price-ticker-scroll {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		transform: translate3d(-50%, 0, 0);
+	}
+}
+
+.price-ticker-viewport {
+	overflow: hidden;
+	mask-image: linear-gradient(to right, transparent, #000 32px, #000 calc(100% - 48px), transparent);
+}
+
+.price-ticker-track {
+	display: flex;
+	width: max-content;
+	animation: price-ticker-scroll var(--ticker-duration, 30s) linear infinite;
+	will-change: transform;
+}
+
+.price-ticker:hover .price-ticker-track {
+	animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	/* Без движения — строку можно прокрутить вручную. */
+	.price-ticker-viewport {
+		overflow-x: auto;
+	}
+
+	.price-ticker-track {
+		animation: none;
+	}
+}
+
 .brand-button {
 	@apply px-5 py-3 font-semibold;
 }

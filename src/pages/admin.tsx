@@ -1,4 +1,4 @@
-import { ExternalLink, Images, KeyRound, LogOut, ReceiptText } from 'lucide-react'
+import { ExternalLink, Images, KeyRound, LogOut, ReceiptText, TrendingUp } from 'lucide-react'
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import {
 	AuthError,
@@ -10,6 +10,7 @@ import {
 } from '../admin/api'
 import GalleryEditor from '../admin/GalleryEditor'
 import PricesEditor from '../admin/PricesEditor'
+import TickerEditor from '../admin/TickerEditor'
 import { Button, Card, Field, Notice, inputClass } from '../admin/ui'
 import { useFileDrag } from '../admin/useFileDrag'
 import { errorText } from '../admin/utils'
@@ -17,16 +18,18 @@ import {
 	fetchContent,
 	type GalleryContent,
 	type PricesContent,
+	type TickerContent,
 } from '../lib/siteContent'
 
 // Админка сайта: /admin (ссылок на неё на сайте нет).
 // Интерфейс только на русском — это внутренний инструмент.
 
-type Tab = 'gallery' | 'prices' | 'settings'
+type Tab = 'gallery' | 'prices' | 'ticker' | 'settings'
 
 const TABS: { id: Tab; label: string; icon: typeof Images }[] = [
 	{ id: 'gallery', label: 'Фото галерея', icon: Images },
 	{ id: 'prices', label: 'Прайс-листы', icon: ReceiptText },
+	{ id: 'ticker', label: 'Бегущая строка', icon: TrendingUp },
 	{ id: 'settings', label: 'Пароль', icon: KeyRound },
 ]
 
@@ -134,6 +137,7 @@ const Admin = () => {
 	const [content, setContent] = useState<{
 		gallery: GalleryContent
 		prices: PricesContent
+		ticker: TickerContent
 	} | null>(null)
 	const [dirty, setDirty] = useState<Record<string, boolean>>({})
 
@@ -143,6 +147,10 @@ const Admin = () => {
 	)
 	const setPricesDirty = useCallback(
 		(value: boolean) => setDirty(d => ({ ...d, prices: value })),
+		[],
+	)
+	const setTickerDirty = useCallback(
+		(value: boolean) => setDirty(d => ({ ...d, ticker: value })),
 		[],
 	)
 	const anyDirty = Object.values(dirty).some(Boolean)
@@ -174,7 +182,8 @@ const Admin = () => {
 		Promise.all([
 			fetchContent('gallery'),
 			fetchContent('prices'),
-		]).then(([gallery, prices]) => setContent({ gallery, prices }))
+			fetchContent('ticker'),
+		]).then(([gallery, prices, ticker]) => setContent({ gallery, prices, ticker }))
 	}, [auth, content])
 
 	useEffect(() => {
@@ -251,6 +260,9 @@ const Admin = () => {
 						</div>
 						<div hidden={tab !== 'prices'}>
 							<PricesEditor initial={content.prices} active={tab === 'prices'} onDirtyChange={setPricesDirty} />
+						</div>
+						<div hidden={tab !== 'ticker'}>
+							<TickerEditor initial={content.ticker} onDirtyChange={setTickerDirty} />
 						</div>
 					</>
 				) : (

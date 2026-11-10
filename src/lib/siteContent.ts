@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Lang } from '../i18n/language'
 
-// Редактируемый контент сайта (галерея, прайс-листы).
+// Редактируемый контент сайта (галерея, прайс-листы, бегущая строка цен).
 // Админка (/admin) сохраняет его в /content/<key>.json на сервере, сайт читает
 // оттуда же. Пока файла нет (или PHP недоступен, например в `npm run dev`) —
 // показываются значения по умолчанию ниже.
@@ -26,9 +26,29 @@ export type PricesContent = {
 	docs: PriceDoc[]
 }
 
+export type TickerTrend = 'up' | 'down' | 'none'
+
+export type TickerItem = {
+	id: string
+	name: LocalizedText
+	/** Цена в сумах (целое число). */
+	price: number
+	/** Единица измерения после «сум/», например «м», «шт», «м²». Пусто — без единицы. */
+	unit: LocalizedText
+	/** Стрелка как на бирже: ▲ подорожало, ▼ подешевело. */
+	trend: TickerTrend
+}
+
+/** Бегущая строка цен на главной. */
+export type TickerContent = {
+	enabled: boolean
+	items: TickerItem[]
+}
+
 type ContentMap = {
 	gallery: GalleryContent
 	prices: PricesContent
+	ticker: TickerContent
 }
 
 export type ContentKey = keyof ContentMap
@@ -88,6 +108,33 @@ const defaults: ContentMap = {
 			},
 		],
 	},
+	// Пример — реальные позиции и цены задаются в админке (вкладка «Бегущая строка»).
+	ticker: {
+		enabled: true,
+		items: [
+			{
+				id: 'shinoreika-20',
+				name: { ru: 'Шинорейка 20 мм', en: 'Flange rail 20 mm', uz: 'Shinoreyka 20 mm' },
+				price: 1000,
+				unit: { ru: 'м', en: 'm', uz: 'm' },
+				trend: 'none',
+			},
+			{
+				id: 'shinoreika-30',
+				name: { ru: 'Шинорейка 30 мм', en: 'Flange rail 30 mm', uz: 'Shinoreyka 30 mm' },
+				price: 1500,
+				unit: { ru: 'м', en: 'm', uz: 'm' },
+				trend: 'none',
+			},
+			{
+				id: 'ugolok-shinoreiki',
+				name: { ru: 'Уголок для шинорейки', en: 'Flange rail corner', uz: 'Shinoreyka burchagi' },
+				price: 500,
+				unit: { ru: 'шт', en: 'pcs', uz: 'dona' },
+				trend: 'none',
+			},
+		],
+	},
 }
 
 export const defaultContent = <K extends ContentKey>(key: K): ContentMap[K] =>
@@ -96,6 +143,7 @@ export const defaultContent = <K extends ContentKey>(key: K): ContentMap[K] =>
 const isValid = (key: ContentKey, data: unknown): boolean => {
 	if (!data || typeof data !== 'object') return false
 	if (key === 'gallery') return Array.isArray((data as GalleryContent).photos)
+	if (key === 'ticker') return Array.isArray((data as TickerContent).items)
 	return Array.isArray((data as PricesContent).docs)
 }
 

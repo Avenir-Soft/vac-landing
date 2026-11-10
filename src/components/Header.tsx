@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import type { Lang } from '../i18n/language'
 import Navbar from './Navbar'
+import PriceTicker from './PriceTicker'
 import { Stagger, StaggerItem } from './motion/Reveal'
 
 const ru = {
@@ -150,8 +151,8 @@ export const Header = () => {
 		<>
 			<Navbar />
 
-			<section className='hero-section relative overflow-hidden min-h-screen'>
-				<div className='relative z-10 flex min-h-[600px] items-center px-4 pt-30 pb-6 md:min-h-[580px] md:px-6 md:pt-32'>
+			<section className='hero-section relative flex min-h-screen flex-col overflow-x-clip'>
+				<div className='relative z-10 flex min-h-[600px] flex-1 items-center px-4 pt-30 pb-6 md:min-h-[580px] md:px-6 md:pt-32'>
 					<div className='mx-auto w-full max-w-7xl'>
 						<div className='surface-card hero-glass-card relative overflow-hidden p-6 md:p-9 lg:p-12'>
 							<div className='pointer-events-none absolute top-0 right-0 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(0,112,192,0.14),transparent_70%)] dark:bg-[radial-gradient(circle,rgba(56,189,248,0.12),transparent_70%)]'></div>
@@ -195,6 +196,10 @@ export const Header = () => {
 							</Stagger>
 						</div>
 					</div>
+				</div>
+				{/* Липнет к низу экрана, пока виден первый экран (overflow-x-clip, а не hidden, — иначе sticky не работает). */}
+				<div className='sticky bottom-0 z-20'>
+					<PriceTicker />
 				</div>
 			</section>
 		</>

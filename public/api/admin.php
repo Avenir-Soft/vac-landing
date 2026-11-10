@@ -2,7 +2,7 @@
 // API админки vac.uz: вход, загрузка файлов, сохранение контента галереи и прайс-листов.
 //
 // Данные живут вне сборки, рядом с сайтом (httpdocs):
-//   content/gallery.json, content/prices.json — читаются сайтом напрямую
+//   content/gallery.json, content/prices.json, content/ticker.json — читаются сайтом напрямую
 //   uploads/gallery/*, uploads/prices/*       — загруженные файлы
 // Деплой (git pull ветки deploy) эти папки не трогает: их нет в сборке.
 
@@ -15,7 +15,7 @@ const TOKEN_TTL = 12 * 3600;
 const COOKIE_NAME = 'vac_admin';
 const CHUNK_MAX = 4 * 1024 * 1024;
 const FILE_MAX = 60 * 1024 * 1024;
-const CONTENT_KEYS = ['gallery', 'prices'];
+const CONTENT_KEYS = ['gallery', 'prices', 'ticker'];
 const UPLOAD_KINDS = ['gallery', 'prices'];
 
 $SITE_ROOT = dirname(__DIR__);
@@ -321,6 +321,30 @@ function validate_prices($data): ?array
 	return ['docs' => $docs];
 }
 
+function validate_ticker($data): ?array
+{
+	if (!is_array($data) || !is_bool($data['enabled'] ?? null) || !is_array($data['items'] ?? null)) return null;
+	if (count($data['items']) > 200) return null;
+	$items = [];
+	foreach (array_values($data['items']) as $item) {
+		if (!is_array($item)) return null;
+		if (!is_string($item['id'] ?? null) || !preg_match('/^[a-z0-9-]{1,64}$/', $item['id'])) return null;
+		if (!validate_localized($item['name'] ?? null) || !validate_localized($item['unit'] ?? null)) return null;
+		$price = $item['price'] ?? null;
+		if (!is_int($price) && !is_float($price)) return null;
+		if ($price < 0 || $price > 1e12) return null;
+		if (!in_array($item['trend'] ?? null, ['up', 'down', 'none'], true)) return null;
+		$items[] = [
+			'id' => $item['id'],
+			'name' => array_intersect_key($item['name'], ['ru' => 1, 'en' => 1, 'uz' => 1]),
+			'price' => (int) round($price),
+			'unit' => array_intersect_key($item['unit'], ['ru' => 1, 'en' => 1, 'uz' => 1]),
+			'trend' => $item['trend'],
+		];
+	}
+	return ['enabled' => $data['enabled'], 'items' => $items];
+}
+
 // Удаляет загруженные файлы, на которые больше не ссылается ни один контент.
 // Свежие файлы (< 1 суток) не трогаем — они могут быть загружены, но ещё не сохранены.
 function collect_garbage(): void
@@ -352,7 +376,10 @@ function handle_save(): void
 	$body = read_json_body();
 	$key = $body['key'] ?? '';
 	if (!in_array($key, CONTENT_KEYS, true)) fail(400, 'Неизвестный раздел');
-	$data = $key === 'gallery' ? validate_gallery($body['data'] ?? null) : validate_prices($body['data'] ?? null);
+	$raw = $body['data'] ?? null;
+	if ($key === 'gallery') $data = validate_gallery($raw);
+	elseif ($key === 'prices') $data = validate_prices($raw);
+	else $data = validate_ticker($raw);
 	if ($data === null) fail(400, 'Некорректные данные');
 
 	$json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
